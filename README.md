@@ -8,7 +8,7 @@
 - [docker-buildx](https://docs.docker.com/buildx/working-with-buildx/)
 - [yq](https://mikefarah.gitbook.io/yq)
 - [toml](https://crates.io/crates/toml-cli)
-- [appmgr](https://github.com/Start9Labs/appmgr)
+- [appmgr](https://github.com/Start9Labs/embassy-os/tree/master/appmgr)
 - [make](https://www.gnu.org/software/make/)
 
 ## Cloning
