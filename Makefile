@@ -1,4 +1,4 @@
-ASSETS := $(shell yq r manifest.yaml assets.*.src)
+ASSETS := $(shell yq e '.assets.[].src' manifest.yaml)
 ASSET_PATHS := $(addprefix assets/,$(ASSETS))
 VERSION := $(shell toml get hello-world/Cargo.toml package.version)
 HELLO_WORLD_SRC := $(shell find ./hello-world/src) hello-world/Cargo.toml hello-world/Cargo.lock
@@ -25,4 +25,4 @@ hello-world/target/armv7-unknown-linux-musleabihf/release/hello-world: $(HELLO_W
 	docker run --rm -it -v ~/.cargo/registry:/root/.cargo/registry -v "$(shell pwd)"/hello-world:/home/rust/src start9/rust-musl-cross:armv7-musleabihf musl-strip target/armv7-unknown-linux-musleabihf/release/hello-world
 
 manifest.yaml: hello-world/Cargo.toml
-	yq w -i manifest.yaml version $(VERSION)
+	yq e -i '.version = $(VERSION)' manifest.yaml
