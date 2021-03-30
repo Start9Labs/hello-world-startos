@@ -49,7 +49,7 @@ cd ~/ && git clone https://github.com/Start9Labs/embassy-os.git
 cd embassy-os/appmgr/
 cargo install --path=. --features=portable && cd ~/
 ```
-Now you ar ready to build your first EmbassyOS service
+Now you are ready to build your first EmbassyOS service
 
 ## Cloning
 
