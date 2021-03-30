@@ -18,6 +18,7 @@ In this example we are using Ubuntu 20.04.
 ```
 curl -fsSL https://get.docker.com -o- | bash
 sudo usermod -aG docker "$USER"
+exec sudo su -l $USER
 ```
 2. Set buildx as the default builder
 ```
