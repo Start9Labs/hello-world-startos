@@ -11,8 +11,8 @@
 - [appmgr](https://github.com/Start9Labs/embassy-os/tree/master/appmgr)
 - [make](https://www.gnu.org/software/make/)
 
-## Prepare your EmbassyOS build enviroment
-In this example we are using Ubuntu 20.04.
+## Build enviroment
+Prepare your EmbassyOS build enviroment. In this example we are using Ubuntu 20.04.
 
 1. Install docker
 ```
