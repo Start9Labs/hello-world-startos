@@ -6,14 +6,74 @@ description:
   short: "A simple, minimal project to serve as a template for creating an app for the Embassy."
   long: "Hello World is a simple, minimal project to serve as a template for creating an app for the Embassy."
 release-notes: Initial release.
+
+# Alerts: omitting these will result in using the default alerts in EmbassyOS, except for start, which has no default.
+install-alert: This is an alert that will present before the user installs this service
+uninstall-alert: This is an alert that will present before the user uninstalls this service
+restore-alert: This is an alert that will present before the user restores this service from Embassy backup
+start-alert: This is an alert that will present before the user starts this service
+
+# Denotes whether this service has an instructions page. If this is true, it will pack in `instructions.md` in the same
+# directory as this manifest.yaml
+has-instructions: true
+
+# Denotes the version required and recommended
+# Required means that the package will not install if unsatisfied
+# Recommended means that the package will not be listed by the registry to instances of EmbassyOS that do not satisfy it
+os-version-required: ">=0.2.12"
+os-version-recommended: ">=0.2.12"
+
+# Port mappings from tor ports to the container port
 ports:
-  - internal: 80
-    tor: 80
+  - internal: 3000
+    tor: 3000
+    # if lan is custom, it will proxy HTTP traffic from the specified lan port to the internal port
+    lan:
+      custom:
+        port: 80
+  - internal: 3001
+    tor: 3001
+    # if lan is standard, it will proxy HTTP traffic from 443 to the internal port
+    lan: standard
+  - internal: 3002
+    tor: 3002
+    # if lan is null it will disable access over the local area network
+    lan: ~
+
+# Do not change this
 image:
   type: tar
+
+# specifies where on the service's file system its persistence directory should be mounted prior to service startup
 mount: /root
-has-instructions: true
-os-version-required: ">=0.2.4"
-os-version-recommended: ">=0.2.4"
-assets: []
+
+# Directory you would like to expose to dependent services, specified relative to the root of the persistence directory.
+# This will be a read-only filesystem for the dependent service
+public: public
+
+# Directory you would like to expose to dependent services, specified relative to the root of the persistence directory.
+# This will be a read-write filesystem for the dependent service
+shared: shared
+
+# Hidden Service version you would like to use for your services .onion url. Allowed options are "v2" and "v3"
 hidden-service-version: v3
+
+# This is a key value map specifying dependency services that you need to be able to function
+# The keys are the service id's on which you depend.
+# NOTE: if you are developing a standalone service, you may delete this entire stanza
+dependencies:
+  hello-world-dep:
+    # The version range that is acceptable for this dependency
+    version: ^0.1.0
+    # if `optional` is omitted, the dependency is required, otherwise it will display this string to explain why the
+    # dependency is optional
+    optional: This dependency is optional because of this reason
+    # Description of the dependency relationship
+    decription: hello-world uses hello-world-dep to demo dependencies
+    # If set to true it will mount the public directory of the dependency to $mount/start9/public/$dependencyId
+    mount-public: true
+    # If set to true it will mount the shared directory of the dependency to $mount/start9/shared/$dependencyId
+    mount-public: true
+    # This is a list of rules that levies requirements on the configuration of the dependency and suggests ways to
+    # remedy any incompatibilities. Documentation of this feature is outside the scope of this example config.
+    config: []
