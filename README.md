@@ -47,7 +47,7 @@ source $HOME/.cargo/env
 ```
 cargo install toml-cli
 ```
-8. Build and install appmgr
+8. Build and install embassy-sdk
 ```
 cd ~/ && git clone https://github.com/Start9Labs/embassy-os.git
 cd embassy-os/appmgr/
