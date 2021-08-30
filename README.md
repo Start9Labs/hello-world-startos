@@ -8,7 +8,7 @@
 - [docker-buildx](https://docs.docker.com/buildx/working-with-buildx/)
 - [yq](https://mikefarah.gitbook.io/yq)
 - [toml](https://crates.io/crates/toml-cli)
-- [appmgr](https://github.com/Start9Labs/embassy-os/tree/master/appmgr)
+- [embassy-sdk](https://github.com/Start9Labs/embassy-os/tree/master/backend)
 - [make](https://www.gnu.org/software/make/)
 
 ## Build enviroment
@@ -47,13 +47,12 @@ source $HOME/.cargo/env
 ```
 cargo install toml-cli
 ```
-8. Build and install appmgr
+8. Build and install embassy-sdk
 ```
 cd ~/ && git clone https://github.com/Start9Labs/embassy-os.git
 cd embassy-os/appmgr/
 cargo install --path=. --features=portable --no-default-features && cd ~/
 ```
-Now you are ready to build your first EmbassyOS service
 
 ## Cloning
 
@@ -63,7 +62,10 @@ Clone the project locally. Note the submodule link to the original project(s).
 git clone https://github.com/Start9Labs/hello-world-wrapper.git
 cd hello-world-wrapper
 ```
-
+During the 0.3.0 beta (you won't need this after merge to main), run:  
+```
+git checkout integration/0.3.0
+```
 ## Building
 
 To build the project, run the following commands:
@@ -76,8 +78,15 @@ make
 
 SSH into an Embassy device.
 `scp` the `.s9pk` to any directory from your local machine.
-Run the following command to determine successful install:
+Run the following command to install the package:
 
 ```
-sudo appmgr install hello-world.s9pk
+embassy-cli auth login
+#Enter your embassy password then run:
+embassy-cli package install /path/to/hello-world.s9pk
 ```
+## Verify Install
+
+Go to your Embassy Services page, select Hello World and start the service.
+
+#Done
