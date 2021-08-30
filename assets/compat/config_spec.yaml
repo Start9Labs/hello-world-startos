@@ -1,0 +1,4 @@
+# These are the configuration options available to the user in the UI on the Service page, under 'Config.'
+# See github.com/Start9Labs/lnd-wrapper for a good example config_spec
+
+{}

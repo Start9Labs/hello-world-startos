@@ -1,6 +1,6 @@
 compat: v0
 id: hello-world
-version: 0.1.0
+version: 0.2.0
 title: hello-world
 description:
   short: "A simple, minimal project to serve as a template for creating an app for the Embassy."
@@ -20,8 +20,8 @@ has-instructions: true
 # Denotes the version required and recommended
 # Required means that the package will not install if unsatisfied
 # Recommended means that the package will not be listed by the registry to instances of EmbassyOS that do not satisfy it
-os-version-required: ">=0.2.12"
-os-version-recommended: ">=0.2.12"
+os-version-required: ">=0.3.0"
+os-version-recommended: ">=0.3.0"
 
 # Port mappings from tor ports to the container port
 ports:
