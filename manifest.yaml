@@ -1,3 +1,100 @@
+# v0.3.0 and up Manifest example
+id: hello-world
+title: "Hello World"
+version: 0.2.0 # Service version
+release-notes: "Upgrade to 2.16.0 and to EmbassyOS v0.3.0"
+license: mit
+wrapper-repo: "https://github.com/Start9Labs/hello-world-wrapper"
+upstream-repo: "https://github.com/Start9Labs/hello-world-wrapper" # There is non upstream repo in this example
+support-site: "https://docs.start9.com/"
+marketing-site: "https://start9.com/"
+build: ["make"] # Series of commands to build into an s9pk, in this case we are using make and all the build commands are in the makefile
+min-os-version: "0.3.0" # Minimum required version of EmbassyOS
+description:
+  short: Example service
+  long: |
+    Hello World is a simple example of a service wrapper that just launches a web interface to say hello and nothing more.
+assets:
+  license: LICENSE 
+  icon: icon.png # assumes icon.png if this field does not exist
+  instructions: instructions.md
+  docker-images: image.tar
+main:
+  type: docker
+  image: main
+  entrypoint: "/usr/local/bin/docker_entrypoint.sh"
+  args: []
+  mounts: {}
+  io-format: yaml
+health-checks: {}
+config: ~
+dependencies: {}
+volumes:
+  main:
+    type: data
+  compat:
+    type: assets
+interfaces:
+  main:
+    name: Network Interface
+    description: Specifies the interface to listen on for HTTP connections.
+    tor-config:
+      port-mapping:
+        80: "80"
+    lan-config:
+      80:
+        ssl: false
+        mapping: 80
+    ui: true
+    protocols:
+      - tcp
+      - http
+alerts: {}
+backup:
+  create:
+    type: docker
+    image: compat
+    system: true
+    entrypoint: compat
+    args:
+      - duplicity
+      - filebrowser
+      - file:///mnt/backup
+      - /root
+    mounts:
+      BACKUP: "/mnt/backup"
+      main: "/root"
+  restore:
+    type: docker
+    image: compat
+    system: true
+    entrypoint: compat
+    args:
+      - duplicity
+      - filebrowser
+      - /root
+      - file:///mnt/backup
+    mounts:
+      BACKUP: "/mnt/backup"
+      main: "/root"
+actions:
+  reset-root-user:
+    name: Reset Root User
+    description: Resets your root user (the first user) to username "admin" and a random password; restores any lost admin privileges.
+    warning: This will invalidate existing sessions and password managers if you have them set up.
+    allowed-statuses:
+      - stopped
+    implementation:
+      type: docker
+      image: main
+      system: true
+      entrypoint: docker_entrypoint.sh
+      args: ["reset-root-user"]
+      mounts:
+        main: "/root"
+
+
+
 compat: v0
 id: hello-world
 version: 0.2.0
@@ -61,19 +158,19 @@ hidden-service-version: v3
 # This is a key value map specifying dependency services that you need to be able to function
 # The keys are the service id's on which you depend.
 # NOTE: if you are developing a standalone service, you may delete this entire stanza
-dependencies:
-  hello-world-dep:
-    # The version range that is acceptable for this dependency
-    version: ^0.1.0
-    # if `optional` is omitted, the dependency is required, otherwise it will display this string to explain why the
-    # dependency is optional
-    optional: This dependency is optional because of this reason
-    # Description of the dependency relationship
-    decription: hello-world uses hello-world-dep to demo dependencies
-    # If set to true it will mount the public directory of the dependency to $mount/start9/public/$dependencyId
-    mount-public: true
-    # If set to true it will mount the shared directory of the dependency to $mount/start9/shared/$dependencyId
-    mount-public: true
-    # This is a list of rules that levies requirements on the configuration of the dependency and suggests ways to
-    # remedy any incompatibilities. Documentation of this feature is outside the scope of this example config.
-    config: []
+dependencies: {}
+#   hello-world-dep:
+#     # The version range that is acceptable for this dependency
+#     version: ^0.1.0
+#     # if `optional` is omitted, the dependency is required, otherwise it will display this string to explain why the
+#     # dependency is optional
+#     optional: This dependency is optional because of this reason
+#     # Description of the dependency relationship
+#     decription: hello-world uses hello-world-dep to demo dependencies
+#     # If set to true it will mount the public directory of the dependency to $mount/start9/public/$dependencyId
+#     mount-public: true
+#     # If set to true it will mount the shared directory of the dependency to $mount/start9/shared/$dependencyId
+#     mount-public: true
+#     # This is a list of rules that levies requirements on the configuration of the dependency and suggests ways to
+#     # remedy any incompatibilities. Documentation of this feature is outside the scope of this example config.
+#     config: []
