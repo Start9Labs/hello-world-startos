@@ -3,10 +3,10 @@
 id: hello-world
 title: "Hello World"
 version: 0.2.0 # Service version
-release-notes: "Upgrade to 2.16.0 and to EmbassyOS v0.3.0"
+release-notes: "Upgrade to EmbassyOS 2.16.0 and then to v0.3.0"
 license: mit
 wrapper-repo: "https://github.com/Start9Labs/hello-world-wrapper"
-upstream-repo: "https://github.com/Start9Labs/hello-world-wrapper" # There is non upstream repo in this example
+upstream-repo: "https://github.com/Start9Labs/hello-world-wrapper" # There is no upstream repo in this example
 support-site: "https://docs.start9.com/"
 marketing-site: "https://start9.com/"
 build: ["make"] # Series of commands to build into an s9pk, in this case we are using make and all the build commands are in the makefile
@@ -18,7 +18,7 @@ description:
 assets:
   license: LICENSE # default = LICENSE.md
   icon: icon.png # default = icon.png
-  instructions: instructions.md # default = INSTRUCTIONS.md
+  instructions: docs/instructions.md # default = INSTRUCTIONS.md
   docker-images: image.tar # default = image.tar
 main:
   type: docker
@@ -136,7 +136,7 @@ backup:
       # See above comments under `backup: -> mounts:`
       BACKUP: "/mnt/backup"
       main: "/root"
-actions: # Commands that can be issued from the UI.  None for hello-world, but see below example (resetting a root user) for format:
+actions: {} # Commands that can be issued from the UI.  None for hello-world, but see below example (resetting a root user) for format:
   # reset-root-user:
   #   name: Reset Root User
   #   description: Resets your root user (the first user) to username "admin" and a random password; restores any lost admin privileges.
