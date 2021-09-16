@@ -2,3 +2,8 @@
 # See github.com/Start9Labs/lnd-wrapper for a good example config_spec
 
 {}
+
+when
+type: pointer
+# interface is the interface in the dependecy's package that you want to connect to - ie control in lnd
+interface: _
