@@ -5,7 +5,7 @@ id: hello-world
  # A human readable service title
 title: "Hello World"
 # Service version - accepts up to four digits, where the last confirms to revisions necessary for EmbassyOS - see documentation: https://github.com/Start9Labs/emver-rs
-version: 0.2.0
+version: 0.3.0
 # Release notes for the update - can be a string, paragraph or URL
 release-notes: "Upgrade to EmbassyOS v0.3.0"
 # The type of license for the project. Include the LICENSE in the root of the project directory. A license is required for a Start9 package.
@@ -53,6 +53,8 @@ main:
   mounts:
     main: /root
 # Health checks 
+# if system = true is not included, it is assumed to be system = false - only needed if using a system image to run health check, which will not be the case if inject = true
+# inject = true - when using the main image for the health check, typically the case, faster as do not need to spin up an additional docker container
 health-checks: {} # Health check config would go here
 config: ~ # Configuration options, none for hello-world, but see below example for format:
 #    get:
@@ -133,6 +135,7 @@ interfaces:
       - tcp
       - http
 alerts: {}
+# for duplicity - backup mount point needs to be something other than `/root` - we default to `/root/data`
 backup:
   create:
     type: docker
