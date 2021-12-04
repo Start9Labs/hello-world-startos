@@ -1,6 +1,6 @@
 ASSETS := $(shell yq e '.assets.[].src' manifest.yaml)
 ASSET_PATHS := $(addprefix assets/,$(ASSETS))
-VERSION := $(shell toml get hello-world/Cargo.toml package.version)
+VERSION := $(shell yq e ".version" manifest.yaml)
 HELLO_WORLD_SRC := $(shell find ./hello-world/src) hello-world/Cargo.toml hello-world/Cargo.lock
 S9PK_PATH=$(shell find . -name hello-world.s9pk -print)
 
@@ -23,7 +23,7 @@ hello-world.s9pk: manifest.yaml assets/compat/config_spec.yaml config_rules.yaml
 		embassy-sdk pack
 
 image.tar: Dockerfile docker_entrypoint.sh hello-world/target/aarch64-unknown-linux-musl/release/hello-world
-		DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --tag start9/hello-world/main:0.3.0 --platform=linux/arm64 -o type=docker,dest=image.tar .
+		DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --tag start9/hello-world/main:$(VERSION) --platform=linux/arm64 -o type=docker,dest=image.tar .
 
 hello-world/target/aarch64-unknown-linux-musl/release/hello-world: $(HELLO_WORLD_SRC)
 		docker run --rm -it -v ~/.cargo/registry:/root/.cargo/registry -v "$(shell pwd)"/hello-world:/home/rust/src start9/rust-musl-cross:aarch64-musl cargo +beta build --release
