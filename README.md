@@ -79,5 +79,5 @@ SSH into an Embassy device.
 Run the following command to determine successful install:
 
 ```
-sudo appmgr install hello-world.s9pk
+sudo embassy-cli package install hello-world.s9pk
 ```
