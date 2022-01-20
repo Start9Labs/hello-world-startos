@@ -12,8 +12,8 @@ verify: hello-world.s9pk $(S9PK_PATH)
 		embassy-sdk verify $(S9PK_PATH)
 
 clean:
-                rm -f image.tar
-                rm -f hello-world.s9pk
+		rm -f image.tar
+		rm -f hello-world.s9pk
 
 # install: hello-world.s9pk
 # 		embassy-cli package install hello-world
