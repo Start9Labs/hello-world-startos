@@ -63,7 +63,10 @@ Clone the project locally. Note the submodule link to the original project(s).
 git clone https://github.com/Start9Labs/hello-world-wrapper.git
 cd hello-world-wrapper
 ```
-
+During the 0.3.0 beta (you won't need this after merge to main), run:  
+```
+git checkout integration/0.3.0
+```
 ## Building
 
 To build the project, run the following commands:
@@ -76,8 +79,15 @@ make
 
 SSH into an Embassy device.
 `scp` the `.s9pk` to any directory from your local machine.
-Run the following command to determine successful install:
+Run the following command to install the package:
 
 ```
+sudo embassy-cli auth login
+#Enter your embassy password then run:
 sudo embassy-cli package install hello-world.s9pk
 ```
+## Verify Install
+
+Go to your Embassy Services page and select Hello World and start the service.
+
+#Done
