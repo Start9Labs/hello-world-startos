@@ -65,7 +65,7 @@ cd hello-world-wrapper
 ```
 During the 0.3.0 beta (you won't need this after merge to main), run:  
 ```
-git pull --rebase origin integration/0.3.0
+git checkout integration/0.3.0
 ```
 ## Building
 
