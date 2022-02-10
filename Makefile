@@ -15,11 +15,11 @@ clean:
 		rm -f image.tar
 		rm -f hello-world.s9pk
 
-# install: hello-world.s9pk
-# 		embassy-cli package install hello-world
+install: hello-world.s9pk
+		embassy-cli package install hello-world
 
 # embassy-sdk pack errors come from here, check your manifest, config, instructions, and icon
-hello-world.s9pk: manifest.yaml assets/compat/config_spec.yaml config_rules.yaml image.tar docs/instructions.md $(ASSET_PATHS)
+hello-world.s9pk: manifest.yaml assets/compat/config_spec.yaml config_rules.yaml image.tar instructions.md $(ASSET_PATHS)
 		embassy-sdk pack
 
 image.tar: Dockerfile docker_entrypoint.sh hello-world/target/aarch64-unknown-linux-musl/release/hello-world

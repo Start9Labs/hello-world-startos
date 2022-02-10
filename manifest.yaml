@@ -1,4 +1,4 @@
-# v0.3.0 and up Manifest example written in .yaml (.toml and .json are also acceptable)
+# v0.3.0 and up Manifest example written in yaml (toml and json are also acceptable)
 
 # The package identifier used by the OS
 id: hello-world 
@@ -36,7 +36,7 @@ assets:
   # Default = icon.png
   icon: icon.png
   # Default = INSTRUCTIONS.md
-  instructions: docs/instructions.md
+  instructions: instructions.md
   # Default = image.tar
   docker-images: image.tar
 # The main action for initializing the service. Currently, the only type of action available is docker.
@@ -49,107 +49,137 @@ main:
   entrypoint: "docker_entrypoint.sh"
   # Any arguments that should be passed into the entrypoint executable 
   args: []
-  # Specifies where to put mount the data volume(s), if there are any. Mounts for pointer dependency volumes are also denoted here. These are necessary if data needs to be read from / written to these volumes. 
+  # Specifies where to mount the data volume(s), if there are any. Mounts for pointer dependency volumes are also denoted here. These are necessary if data needs to be read from / written to these volumes. 
   mounts:
+    # Specifies where on the service's file system its persistence directory should be mounted prior to service startup
     main: /root
 # Health checks 
-# if system = true is not included, it is assumed to be system = false - only needed if using a system image to run health check, which will not be the case if inject = true
-# inject = true - when using the main image for the health check, typically the case, faster as do not need to spin up an additional docker container
-health-checks: {} # Health check config would go here
-config: ~ # Configuration options, none for hello-world, but see below example for format:
-#    get:
-#     type: docker
-#     image: compat
-#     entrypoint: compat
-#     args: 
-#       - "config"
-#       - "get"
-#       - "/root/.hello-world/start9/config.yaml"
-#       - "/mnt/assets/config_spec.yaml"
-#     mounts:
-#       compat: "/mnt/assets"
-#       main: "/root"
-#     io-format: yaml
-#   set:
-#     type: docker
-#     image: compat
-#     entrypoint: compat
-#     args:
-#       - "config"
-#       - "set"
-#       - "/root/.hello-world/start9/config.yaml"
-#     mounts:
-#       main: "/root"
-#     io-format: yaml
-dependencies: {} # Service pre-requisites, none for hello-world, but see below example (which would make BTC Proxy a dependency) for format:
-  # btc-rpc-proxy:
-  #   version: ">=0.3.2.1 <0.4.0"
-  #   recommended: true
-  #   critical: false
-  #   optional: Can alternatively configure an external bitcoin node.
-  #   description: Used to fetch validated blocks.
-  #   config:
-  #     check: 
-  #       type: docker
-  #       image: compat
-  #       system: true
-  #       # the compat image will contain a tool to check the config rules against the specified dependency
-  #       entrypoint: compat
-  #       args:
-  #         - "dependency"
-  #         - "check"
-  #         - "/mnt/assets/btc-rpc-proxy.rules.yaml"
-  #       mounts:
-  #         compat: "/mnt/assets"  
-  #     auto-configure:
-  #       type: docker
-  #       image: compat
-  #       # if true, the denoted image is prebuilt and comes stock with EOS
-  #       # uncommon: if you want something not prebuilt with EOS, you can bundle multiple docker images into the `image.tar` during the `make` build process
-  #       system: true
-  #       entrypoint: compat
-  #       args:
-  #         - "dependency"
-  #         - "auto-configure"
-  #         - "/mnt/assets/btc-rpc-proxy.rules.yaml"
-  #       mounts:
-  #         compat: "/mnt/assets"  
-volumes: # this is the image where data will go from 0.2.x
+health-checks:
   main:
-    type: data # this is the image where files from the project asset directory will go
+    name: Web Interface
+    description: Ensures the network interface is accessible via HTTP.
+    type: docker
+    image: main
+    entrypoint: "sh"
+    args: ["-c", "curl --silent --show-error --fail http://loacalhost:80"]
+    # When `inject` is true, the health check will use the main image to run the health check. This is faster as there is no need to spin up an additional docker container
+    # When `inject` is false, the health check will use whatever image is specified. This is useful when using a system image with additional utilities to run a health check. If inject=false, then system must equal true
+    inject: true
+    # Optional if false - indicates if an image that is preloaded onto the system will be used
+    system: false
+    # Required - valid values are yaml, toml, json
+    io-format: json
+# Specifies how to get and set configuration file values for the service. NOTE: This stanza can be left empty (null) if the service has no configuration options.
+config:
+  # The config action to run to get the specified config file (default is config.yaml)
+  get:
+    # The type of implementation to run this action (currently, only Docker is available)
+    type: docker
+    # The Docker image to run the action command in. This could be the service's main image, or an image that is preloaded onto the system, like compat (which holds compatible helper functions for default functionality)
+    image: compat
+    # Indicates if an image that is preloaded onto the system will be used
+    system: true
+    # The initial run command to execute the config get action
+    entrypoint: compat
+    # Any arguments that need to be passed into the run command
+    args:
+      - config
+      - get
+      - /root
+      - "/mnt/assets/config_spec.yaml"
+    # The locations at which to mount the specified Docker images
+    mounts:
+      compat: /mnt/assets
+      main: /root
+    # Required - valid values are yaml, toml, json
+    io-format: yaml
+  # The config action to run to set the specified config file (default is config.yaml). Details for the keys below are the same as above.
+  set:
+    type: docker
+    image: compat
+    system: true
+    entrypoint: compat
+    args:
+      - config
+      - set
+      - hello-world
+      - /root
+      - "/mnt/assets/config_rules.yaml"
+    mounts:
+      compat: /mnt/assets
+      main: /root
+    io-format: yaml
+# This is a key value map specifying dependent services that this service needs in order to function. The keys are the package id's on which you depend. NOTE: if developing a standalone service, you may leave this stanza as an empty object (the key dependencies is required)
+dependencies:
+  hello-world-dep:
+    # The version range that is acceptable for this dependency
+    version: ">=0.13.3.1 <0.14.0"
+    # Describes if the dependency is critical to the service functioning. If the dependency is critical, the service will stop if this dependency is stopped.
+    critical: false
+    # Specifies the requirement type of the dependency
+    requirement:
+      # "Opt-out" means the dependency will be required according to the default config. "Opt-in" means the dependency may be required if you change the config. And "required" just means it's always required.
+      type: "opt-in"
+      # An explanation of how to opt-in or opt-out. This value is optional for type=required
+      how: Optionally use LND for internal lightning network node implementation.
+    # Description of the dependency relationship
+    description: Used to communicate with the Lightning Network.
+    # This is a list of rules that levies requirements on the configuration of the dependency and suggests ways to remedy any incompatibilities. Documentation of this feature is outside the scope of this example.
+    config: ~
+# This denotes any data, asset, or pointer volumes that should be connected when the "docker run" command is invoked
+volumes:
+  # This is the image where files from the project asset directory will go
+  main:
+    type: data
+  # This is an example of an asset volume
   compat:
-    type: assets # this is a pointer volume, where the image is specified in `<pointer-id>.volume-id` and the mount point is specificed in `main.mounts.<pointer-id>`
+    type: assets 
+# This specifies how to configure the port mapping for exposing the service over TOR and LAN (if applicable). Many interfaces can be specified depending on the needs of the service. If it can be launched over a Local Area Network connection, specify a `lan-config`. Otherwise, at minimum, a `tor-config` must be specified.
 interfaces:
+  # This key is the internal name that the OS will use to configure the interface
   main:
+    # A human readable name for display in the UI
     name: Network Interface
+    # A descriptive description of what the interface does
     description: Specifies the interface to listen on for HTTP connections.
     tor-config:
+    # Port mappings are from the external port to the internal container port
       port-mapping:
         80: "80"
+    # Port mappings are from the external port to the internal container port
     lan-config:
       80:
         ssl: false
-        mapping: 80
+        internal: 80
+    # Denotes if the service has a user interface to display
     ui: true
+    # Denotes the protocol specifications used by this interface
     protocols:
       - tcp
       - http
-alerts: {}
-# for duplicity - backup mount point needs to be something other than `/root` - we default to `/root/data`
+# Alerts: omitting these will result in using the default alerts in EmbassyOS, except for start, which has no default.
+alerts:
+  install-alert: This is an alert that will present before the user installs this service
+  uninstall-alert: This is an alert that will present before the user uninstalls this service
+  restore-alert: This is an alert that will present before the user restores this service from Embassy backup
+  start-alert: This is an alert that will present before the user starts this service
+# Specifies how backups should be run for this service. The default EmbassyOS provided option is to use the duplicity backup library on a system image (compat)
 backup:
   create:
     type: docker
-    image: compat # default backup process of the compat docker image is duplicity - EOS will have access to the image defined here
+    image: compat
     system: true 
-    entrypoint: compat # command to run the backup executable, in this case, duplicity
-    args: # arguments to pass into the entrypoint, in this case duplicity - in this example, the full command run will be: `duplicity hello-world file:///mnt/backup /root`
+    entrypoint: compat 
+    # Arguments to pass into the entrypoint. In this example, the full command run will be: `compat duplicity hello-world /mnt/backup /root/data`
+    args: 
       - duplicity
       - hello-world
       - /mnt/backup
-      - /root
+      # For duplicity, the backup mount point needs to be something other than `/root`, so we default to `/root/data`
+      - /root/data
     mounts:
-      # BACKUP is the default volume that is used for backups.  This is whatever backup drive is mounted to the defice, or a network filesystem.  
-      # The value here donates where the data mount point will be.  Backup drive is mounted to this location, which contains previous backups.
+      # BACKUP is the default volume that is used for backups. This is whatever backup drive is mounted to the device, or a network filesystem.  
+      # The value here donates where the mount point will be. The backup drive is mounted to this location.
       BACKUP: "/mnt/backup" 
       main: "/root"
   restore:
@@ -160,106 +190,28 @@ backup:
     args:
       - duplicity
       - hello-world
-      - /root
+      - /root/data
       - /mnt/backup
     mounts:
-      # See above comments under `backup: -> mounts:`
       BACKUP: "/mnt/backup"
       main: "/root"
-actions: {} # Commands that can be issued from the UI.  None for hello-world, but see below example (resetting a root user) for format:
-  # reset-root-user:
-  #   name: Reset Root User
-  #   description: Resets your root user (the first user) to username "admin" and a random password; restores any lost admin privileges.
-  #   warning: This will invalidate existing sessions and password managers if you have them set up.
-  #   allowed-statuses:
-  #     - stopped
-  #   implementation:
-  #     type: docker
-  #     image: main
-  #     system: true
-  #     entrypoint: docker_entrypoint.sh
-  #     args: ["reset-root-user"]
-  #     mounts:
-  #       main: "/root"
-
-########################################################################################################################
-
-# compat: v0
-# id: hello-world
-# version: 0.2.0
-# title: hello-world
-# description:
-#   short: "A simple, minimal project to serve as a template for creating an app for the Embassy."
-#   long: "Hello World is a simple, minimal project to serve as a template for creating an app for the Embassy."
-# release-notes: Initial release.
-
-# # Alerts: omitting these will result in using the default alerts in EmbassyOS, except for start, which has no default.
-# install-alert: This is an alert that will present before the user installs this service
-# uninstall-alert: This is an alert that will present before the user uninstalls this service
-# restore-alert: This is an alert that will present before the user restores this service from Embassy backup
-# start-alert: This is an alert that will present before the user starts this service
-
-# # Denotes whether this service has an instructions page. If this is true, it will pack in `instructions.md` in the same
-# # directory as this manifest.yaml
-# has-instructions: true
-
-# # Denotes the version required and recommended
-# # Required means that the package will not install if unsatisfied
-# # Recommended means that the package will not be listed by the registry to instances of EmbassyOS that do not satisfy it
-# os-version-required: ">=0.3.0"
-# os-version-recommended: ">=0.3.0"
-
-# # Port mappings from tor ports to the container port
-# ports:
-#   - internal: 3000
-#     tor: 3000
-#     # if lan is custom, it will proxy HTTP traffic from the specified lan port to the internal port
-#     lan:
-#       custom:
-#         port: 80
-#   - internal: 3001
-#     tor: 3001
-#     # if lan is standard, it will proxy HTTP traffic from 443 to the internal port
-#     lan: standard
-#   - internal: 3002
-#     tor: 3002
-#     # if lan is null it will disable access over the local area network
-#     lan: ~
-
-# # Do not change this
-# image:
-#   type: tar
-
-# # specifies where on the service's file system its persistence directory should be mounted prior to service startup
-# mount: /root
-
-# # Directory you would like to expose to dependent services, specified relative to the root of the persistence directory.
-# # This will be a read-only filesystem for the dependent service
-# public: public
-
-# # Directory you would like to expose to dependent services, specified relative to the root of the persistence directory.
-# # This will be a read-write filesystem for the dependent service
-# shared: shared
-
-# # Hidden Service version you would like to use for your services .onion url. Allowed options are "v2" and "v3"
-# hidden-service-version: v3
-
-# # This is a key value map specifying dependency services that you need to be able to function
-# # The keys are the service id's on which you depend.
-# # NOTE: if you are developing a standalone service, you may delete this entire stanza
-# dependencies: {}
-# #   hello-world-dep:
-# #     # The version range that is acceptable for this dependency
-# #     version: ^0.1.0
-# #     # if `optional` is omitted, the dependency is required, otherwise it will display this string to explain why the
-# #     # dependency is optional
-# #     optional: This dependency is optional because of this reason
-# #     # Description of the dependency relationship
-# #     decription: hello-world uses hello-world-dep to demo dependencies
-# #     # If set to true it will mount the public directory of the dependency to $mount/start9/public/$dependencyId
-# #     mount-public: true
-# #     # If set to true it will mount the shared directory of the dependency to $mount/start9/shared/$dependencyId
-# #     mount-public: true
-# #     # This is a list of rules that levies requirements on the configuration of the dependency and suggests ways to
-# #     # remedy any incompatibilities. Documentation of this feature is outside the scope of this example config.
-# #     config: []
+# Commands that can be issued from the UI. NOTE: if no actions are required, this section can be left as an empty object 
+actions:
+  hello-world-action:
+    name: Hello World Action
+    description: A description that describes what the action will accomplish.
+    warning: |
+      A warning message indicating and potential dangers associated with the action
+    # Indicates what state the service can be in while executing the action
+    allowed-statuses:
+      - running
+    # Defines how the action is run
+    implementation:
+      type: docker
+      image: main
+      entrypoint: sh
+      args: ["-c", "echo 'hello-world'"]
+      # Same as note on health-checks
+      inject: true
+      # Required - valid values are yaml, toml, json
+      io-format: json
