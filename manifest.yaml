@@ -111,19 +111,20 @@ config:
     io-format: yaml
 # This is a key value map specifying dependent services that this service needs in order to function. The keys are the package id's on which you depend. NOTE: if developing a standalone service, you may leave this stanza as an empty object (the key dependencies is required)
 dependencies:
-  hello-world-dep:
+  # Key must be the package id of another service that exists in the marketplace
+  filebrowser:
     # The version range that is acceptable for this dependency
-    version: ">=0.13.3.1 <0.14.0"
+    version: "^2.14.1.1"
     # Describes if the dependency is critical to the service functioning. If the dependency is critical, the service will stop if this dependency is stopped.
     critical: false
     # Specifies the requirement type of the dependency
     requirement:
       # "Opt-out" means the dependency will be required according to the default config. "Opt-in" means the dependency may be required if you change the config. And "required" just means it's always required.
-      type: "opt-in"
+      type: "opt-out"
       # An explanation of how to opt-in or opt-out. This value is optional for type=required
-      how: Optionally use LND for internal lightning network node implementation.
+      how: Optionally use the selected dependency
     # Description of the dependency relationship
-    description: Used to communicate with the Lightning Network.
+    description: A dependency that demonstrates the way to configure a dependent service
     # This is a list of rules that levies requirements on the configuration of the dependency and suggests ways to remedy any incompatibilities. Documentation of this feature is outside the scope of this example.
     config: ~
 # This denotes any data, asset, or pointer volumes that should be connected when the "docker run" command is invoked
