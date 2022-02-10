@@ -9,7 +9,7 @@ S9PK_PATH=$(shell find . -name hello-world.s9pk -print)
 all: verify
 
 verify: hello-world.s9pk $(S9PK_PATH)
-		embassy-sdk verify $(S9PK_PATH)
+		embassy-sdk verify s9pk $(S9PK_PATH)
 
 clean:
 		rm -f image.tar
