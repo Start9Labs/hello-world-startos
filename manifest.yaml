@@ -4,7 +4,7 @@
 id: hello-world 
  # A human readable service title
 title: "Hello World"
-# Service version - accepts up to four digits, where the last confirms to revisions necessary for EmbassyOS - see documentation: https://github.com/Start9Labs/emver-rs
+# Service version - accepts up to four digits, where the last confirms to revisions necessary for EmbassyOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
 version: 0.3.0
 # Release notes for the update - can be a string, paragraph or URL
 release-notes: "Upgrade to EmbassyOS v0.3.0"
