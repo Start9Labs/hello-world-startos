@@ -167,11 +167,15 @@ alerts:
 # Specifies how backups should be run for this service. The default EmbassyOS provided option is to use the duplicity backup library on a system image (compat)
 backup:
   create:
+    # Currently, only docker actions are supported.
     type: docker
+    # The docker image to use. In this case, a pre-loaded system image called compat
     image: compat
+    # Required if the action uses a system image. The default value is false. 
     system: true 
+    # The executable to run the command to begin the backup create process
     entrypoint: compat 
-    # Arguments to pass into the entrypoint. In this example, the full command run will be: `compat duplicity hello-world /mnt/backup /root/data`
+    # Arguments to pass into the entrypoint executable. In this example, the full command run will be: `compat duplicity hello-world /mnt/backup /root/data`
     args: 
       - duplicity
       - hello-world
@@ -183,6 +187,7 @@ backup:
       # The value here donates where the mount point will be. The backup drive is mounted to this location.
       BACKUP: "/mnt/backup" 
       main: "/root"
+  # The action to execute the backup restore functionality. Details for the keys below are the same as above.
   restore:
     type: docker
     image: compat
