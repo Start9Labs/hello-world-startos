@@ -1,0 +1,13 @@
+# To utilize the default config system built in the compat system image, this file is required. It defines the *structure* of the configuration file. These structured options display as changeable UI elements within the "Config" section of the service details page in the Embassy UI.
+
+# Example:
+# tor-address:
+#   name: Network Tor Address
+#   description: The Tor address for the network interface. 
+#   type: pointer
+#   subtype: package
+#   package-id: hello-world
+#   target: tor-address
+#   interface: main
+
+{}
