@@ -61,7 +61,7 @@ health-checks:
     type: docker
     image: main
     entrypoint: "sh"
-    args: ["-c", "curl --silent --show-error --fail http://loacalhost:80"]
+    args: ["-c", "curl --silent --show-error --fail http://localhost:80"]
     # When `inject` is true, the health check will use the main image to run the health check. This is faster as there is no need to spin up an additional docker container
     # When `inject` is false, the health check will use whatever image is specified. This is useful when using a system image with additional utilities to run a health check. If inject=false, then system must equal true
     inject: true
