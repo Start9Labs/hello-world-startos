@@ -9,3 +9,5 @@
 #   package-id: hello-world
 #   target: tor-address
 #   interface: main
+
+{}
