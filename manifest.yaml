@@ -60,8 +60,8 @@ health-checks:
     description: Ensures the network interface is accessible via HTTP.
     type: docker
     image: main
-    entrypoint: "sh"
-    args: ["-c", "curl --silent --show-error --fail http://localhost:80"]
+    entrypoint: "check-web.sh"
+    args: []
     # When `inject` is true, the health check will use the main image to run the health check. This is faster as there is no need to spin up an additional docker container
     # When `inject` is false, the health check will use whatever image is specified. This is useful when using a system image with additional utilities to run a health check. If inject=false, then system must equal true
     inject: true
@@ -120,7 +120,7 @@ dependencies:
     # Specifies the requirement type of the dependency
     requirement:
       # "Opt-out" means the dependency will be required according to the default config. "Opt-in" means the dependency may be required if you change the config. And "required" just means it's always required.
-      type: "opt-out"
+      type: "opt-in"
       # An explanation of how to opt-in or opt-out. This value is optional for type=required
       how: Optionally use the selected dependency
     # Description of the dependency relationship
@@ -149,8 +149,8 @@ interfaces:
         80: "80"
     # Port mappings are from the external port to the internal container port
     lan-config:
-      80:
-        ssl: false
+      443:
+        ssl: true
         internal: 80
     # Denotes if the service has a user interface to display
     ui: true
