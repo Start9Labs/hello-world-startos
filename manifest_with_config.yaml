@@ -13,7 +13,7 @@ license: mit
 # The Start9 wrapper repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
 wrapper-repo: "https://github.com/Start9Labs/hello-world-wrapper"
 # The original project repository URL. There is no upstream repo in this example
-upstream-repo: ~
+upstream-repo: "https://github.com/Start9Labs/hello-world-wrapper"
 # URL to the support site / channel for the project. This key can be omitted if none exists, or it can link to the original project repository issues.
 support-site: "https://docs.start9.com/"
 # URL to the marketing site for the project. This key can be omitted if none exists, or it can link to the original project repository. 
@@ -69,6 +69,46 @@ health-checks:
     system: false
     # Required - valid values are yaml, toml, json
     io-format: json
+# Specifies how to get and set configuration file values for the service. NOTE: This stanza can be left empty (null) if the service has no configuration options.
+config:
+  # The config action to run to get the specified config file (default is config.yaml)
+  get:
+    # The type of implementation to run this action (currently, only Docker is available)
+    type: docker
+    # The Docker image to run the action command in. This could be the service's main image, or an image that is preloaded onto the system, like compat (which holds compatible helper functions for default functionality)
+    image: compat
+    # Indicates if an image that is preloaded onto the system will be used
+    system: true
+    # The initial run command to execute the config get action
+    entrypoint: compat
+    # Any arguments that need to be passed into the run command
+    args:
+      - config
+      - get
+      - /root
+      - "/mnt/assets/config_spec.yaml"
+    # The locations at which to mount the specified Docker images
+    mounts:
+      compat: /mnt/assets
+      main: /root
+    # Required - valid values are yaml, toml, json
+    io-format: yaml
+  # The config action to run to set the specified config file (default is config.yaml). Details for the keys below are the same as above.
+  set:
+    type: docker
+    image: compat
+    system: true
+    entrypoint: compat
+    args:
+      - config
+      - set
+      - hello-world
+      - /root
+      - "/mnt/assets/config_rules.yaml"
+    mounts:
+      compat: /mnt/assets
+      main: /root
+    io-format: yaml
 # This denotes any data, asset, or pointer volumes that should be connected when the "docker run" command is invoked
 volumes:
   # This is the image where files from the project asset directory will go

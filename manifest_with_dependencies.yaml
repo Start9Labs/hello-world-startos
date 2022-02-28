@@ -13,7 +13,7 @@ license: mit
 # The Start9 wrapper repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
 wrapper-repo: "https://github.com/Start9Labs/hello-world-wrapper"
 # The original project repository URL. There is no upstream repo in this example
-upstream-repo: ~
+upstream-repo: "https://github.com/Start9Labs/hello-world-wrapper"
 # URL to the support site / channel for the project. This key can be omitted if none exists, or it can link to the original project repository issues.
 support-site: "https://docs.start9.com/"
 # URL to the marketing site for the project. This key can be omitted if none exists, or it can link to the original project repository. 
@@ -69,6 +69,64 @@ health-checks:
     system: false
     # Required - valid values are yaml, toml, json
     io-format: json
+# Specifies how to get and set configuration file values for the service. NOTE: This stanza can be left empty (null) if the service has no configuration options.
+config:
+  # The config action to run to get the specified config file (default is config.yaml)
+  get:
+    # The type of implementation to run this action (currently, only Docker is available)
+    type: docker
+    # The Docker image to run the action command in. This could be the service's main image, or an image that is preloaded onto the system, like compat (which holds compatible helper functions for default functionality)
+    image: compat
+    # Indicates if an image that is preloaded onto the system will be used
+    system: true
+    # The initial run command to execute the config get action
+    entrypoint: compat
+    # Any arguments that need to be passed into the run command
+    args:
+      - config
+      - get
+      - /root
+      - "/mnt/assets/config_spec.yaml"
+    # The locations at which to mount the specified Docker images
+    mounts:
+      compat: /mnt/assets
+      main: /root
+    # Required - valid values are yaml, toml, json
+    io-format: yaml
+  # The config action to run to set the specified config file (default is config.yaml). Details for the keys below are the same as above.
+  set:
+    type: docker
+    image: compat
+    system: true
+    entrypoint: compat
+    args:
+      - config
+      - set
+      - hello-world
+      - /root
+      - "/mnt/assets/config_rules.yaml"
+    mounts:
+      compat: /mnt/assets
+      main: /root
+    io-format: yaml
+# This is a key value map specifying dependent services that this service needs in order to function. The keys are the package id's on which you depend. NOTE: if developing a standalone service, you may leave this stanza as an empty object (the key dependencies is required)
+dependencies:
+  # Key must be the package id of another service that exists in the marketplace
+  filebrowser:
+    # The version range that is acceptable for this dependency
+    version: "^2.14.1.1"
+    # Describes if the dependency is critical to the service functioning. If the dependency is critical, the service will stop if this dependency is stopped.
+    critical: false
+    # Specifies the requirement type of the dependency
+    requirement:
+      # "Opt-out" means the dependency will be required according to the default config. "Opt-in" means the dependency may be required if you change the config. And "required" just means it's always required.
+      type: "opt-in"
+      # An explanation of how to opt-in or opt-out. This value is optional for type=required
+      how: Optionally use the selected dependency
+    # Description of the dependency relationship
+    description: A dependency that demonstrates the way to configure a dependent service
+    # This is a list of rules that levies requirements on the configuration of the dependency and suggests ways to remedy any incompatibilities. Documentation of this feature is outside the scope of this example.
+    config: ~
 # This denotes any data, asset, or pointer volumes that should be connected when the "docker run" command is invoked
 volumes:
   # This is the image where files from the project asset directory will go
@@ -100,6 +158,12 @@ interfaces:
     protocols:
       - tcp
       - http
+# Alerts: omitting these will result in using the default alerts in EmbassyOS, except for start, which has no default.
+alerts:
+  install-alert: This is an alert that will present before the user installs this service
+  uninstall-alert: This is an alert that will present before the user uninstalls this service
+  restore-alert: This is an alert that will present before the user restores this service from Embassy backup
+  start-alert: This is an alert that will present before the user starts this service
 # Specifies how backups should be run for this service. The default EmbassyOS provided option is to use the duplicity backup library on a system image (compat)
 backup:
   create:
@@ -137,3 +201,23 @@ backup:
     mounts:
       BACKUP: "/mnt/backup"
       main: "/root/data"
+# Commands that can be issued from the UI. NOTE: if no actions are required, this section can be left as an empty object 
+actions:
+  hello-world-action:
+    name: Hello World Action
+    description: A description that describes what the action will accomplish.
+    warning: |
+      A warning message indicating and potential dangers associated with the action
+    # Indicates what state the service can be in while executing the action
+    allowed-statuses:
+      - running
+    # Defines how the action is run
+    implementation:
+      type: docker
+      image: main
+      entrypoint: sh
+      args: ["-c", "echo 'hello-world'"]
+      # Same as note on health-checks
+      inject: true
+      # Required - valid values are yaml, toml, json
+      io-format: json
