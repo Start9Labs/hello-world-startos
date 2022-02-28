@@ -57,7 +57,7 @@ main:
 health-checks:
   main:
     name: Web Interface
-    description: Ensures the network interface is accessible via HTTP.
+    success-image: The hello-world UI is accessible
     type: docker
     image: main
     entrypoint: "check-web.sh"
