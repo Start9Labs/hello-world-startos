@@ -178,7 +178,7 @@ backup:
     # Arguments to pass into the entrypoint executable. In this example, the full command run will be: `compat duplicity hello-world /mnt/backup /root/data`
     args: 
       - duplicity
-      - hello-world
+      - create
       - /mnt/backup
       # For duplicity, the backup mount point needs to be something other than `/root`, so we default to `/root/data`
       - /root/data
@@ -186,7 +186,7 @@ backup:
       # BACKUP is the default volume that is used for backups. This is whatever backup drive is mounted to the device, or a network filesystem.  
       # The value here donates where the mount point will be. The backup drive is mounted to this location.
       BACKUP: "/mnt/backup" 
-      main: "/root"
+      main: "/root/data"
   # The action to execute the backup restore functionality. Details for the keys below are the same as above.
   restore:
     type: docker
@@ -195,12 +195,12 @@ backup:
     entrypoint: compat
     args:
       - duplicity
-      - hello-world
+      - restore
       - /root/data
       - /mnt/backup
     mounts:
       BACKUP: "/mnt/backup"
-      main: "/root"
+      main: "/root/data"
 # Commands that can be issued from the UI. NOTE: if no actions are required, this section can be left as an empty object 
 actions:
   hello-world-action:
