@@ -13,15 +13,13 @@ license: mit
 # The Start9 wrapper repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
 wrapper-repo: "https://github.com/Start9Labs/hello-world-wrapper"
 # The original project repository URL. There is no upstream repo in this example
-upstream-repo: ~
+upstream-repo: "https://github.com/Start9Labs/hello-world-wrapper"
 # URL to the support site / channel for the project. This key can be omitted if none exists, or it can link to the original project repository issues.
 support-site: "https://docs.start9.com/"
 # URL to the marketing site for the project. This key can be omitted if none exists, or it can link to the original project repository. 
 marketing-site: "https://start9.com/"
 # The series of commands to build the project into an s9pk for arm64/v8. In this case we are using a Makefile with the simple build command "make".
 build: ["make"]
-# Minimum required version of EmbassyOS
-min-os-version: "0.3.0"
 # Human readable descriptors for the service. These are used throughout the EmbassyOS user interface, primarily in the marketplace.
 description:
   # This is the first description visible to the user in the marketplace.
@@ -57,7 +55,7 @@ main:
 health-checks:
   main:
     name: Web Interface
-    success-image: The hello-world UI is accessible
+    success-message: The hello-world UI is accessible
     type: docker
     image: main
     entrypoint: "check-web.sh"
