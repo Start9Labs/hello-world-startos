@@ -49,7 +49,7 @@ cargo install toml-cli
 ```
 8. Build and install embassy-sdk
 ```
-cd ~/ && git clone https://github.com/Start9Labs/embassy-os.git
+cd ~/ && git clone --recursive https://github.com/Start9Labs/embassy-os.git
 cd embassy-os/backend/
 ./install-sdk.sh
 ```
@@ -62,10 +62,7 @@ Clone the project locally. Note the submodule link to the original project(s).
 git clone https://github.com/Start9Labs/hello-world-wrapper.git
 cd hello-world-wrapper
 ```
-During the 0.3.0 beta (you won't need this after merge to main), run:  
-```
-git checkout integration/0.3.0
-```
+
 ## Building
 
 To build the project, run the following commands:
