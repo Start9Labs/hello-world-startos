@@ -52,6 +52,7 @@ cargo install toml-cli
 cd ~/ && git clone --recursive https://github.com/Start9Labs/embassy-os.git
 cd embassy-os/backend/
 ./install-sdk.sh
+cd ~/.cargo/bin/ && sudo ./embassy-sdk init
 ```
 
 ## Cloning
