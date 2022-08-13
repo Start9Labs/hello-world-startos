@@ -115,8 +115,6 @@ dependencies:
   filebrowser:
     # The version range that is acceptable for this dependency
     version: "^2.14.1.1"
-    # Describes if the dependency is critical to the service functioning. If the dependency is critical, the service will stop if this dependency is stopped.
-    critical: false
     # Specifies the requirement type of the dependency
     requirement:
       # "Opt-out" means the dependency will be required according to the default config. "Opt-in" means the dependency may be required if you change the config. And "required" just means it's always required.
