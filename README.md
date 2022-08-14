@@ -63,7 +63,6 @@ Clone the project locally.
 ```
 git clone https://github.com/Start9Labs/hello-world-wrapper.git
 cd hello-world-wrapper
-
 ```
 
 ## Building
@@ -89,4 +88,4 @@ embassy-cli --host https://embassy-q1w2e3r4.local package install hello-world.s9
 
 Go to your Embassy Services page, select **Hello World**, configure and start the service.
 
-#Done
+## Done

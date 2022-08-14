@@ -16,7 +16,7 @@ verify: hello-world.s9pk $(S9PK_PATH)
 
 clean:
 	rm -f image.tar
-	rm -f hello-world.s9pk
+	rm -f $(S9PK_PATH)
 	rm -f scripts/*.js
 
 hello-world.s9pk: manifest.yaml instructions.md icon.png LICENSE scripts/embassy.js image.tar
