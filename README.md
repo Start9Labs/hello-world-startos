@@ -88,4 +88,4 @@ embassy-cli --host https://embassy-q1w2e3r4.local package install hello-world.s9
 
 Go to your Embassy Services page, select **Hello World**, configure and start the service.
 
-## Done
+**Done!** 
