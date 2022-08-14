@@ -1,4 +1,4 @@
-FROM arm64v8/alpine:3.12
+FROM arm64v8/alpine:latest
 
 RUN apk update
 RUN apk add tini curl

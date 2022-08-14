@@ -1,4 +1,4 @@
-# v0.3.0 and up Manifest example written in yaml (toml and json are also acceptable)
+# v0.3.1 and up Manifest example written in yaml (toml and json are also acceptable)
 
 # The package identifier used by the OS
 id: hello-world 
@@ -7,7 +7,7 @@ title: "Hello World"
 # Service version - accepts up to four digits, where the last confirms to revisions necessary for EmbassyOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
 version: 0.1.0.1
 # Release notes for the update - can be a string, paragraph or URL
-release-notes: "Upgrade to EmbassyOS v0.3.0"
+release-notes: "Upgrade to EmbassyOS v0.3.1"
 # The type of license for the project. Include the LICENSE in the root of the project directory. A license is required for a Start9 package.
 license: mit
 # The Start9 wrapper repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
@@ -31,7 +31,7 @@ description:
 assets:
   # Default = LICENSE.md
   license: LICENSE
-  # Default = icon.png
+  # Default = icon.png (.svg allowed)
   icon: icon.png
   # Default = INSTRUCTIONS.md
   instructions: instructions.md
@@ -67,14 +67,18 @@ health-checks:
     system: false
     # Required - valid values are yaml, toml, json
     io-format: json
+config:
+  get:
+    type: script
+  set:
+    type: script
+properties: ~
+#  type: script
 # This denotes any data, asset, or pointer volumes that should be connected when the "docker run" command is invoked
 volumes:
   # This is the image where files from the project asset directory will go
   main:
     type: data
-  # This is an example of an asset volume
-  compat:
-    type: assets 
 # This specifies how to configure the port mapping for exposing the service over TOR and LAN (if applicable). Many interfaces can be specified depending on the needs of the service. If it can be launched over a Local Area Network connection, specify a `lan-config`. Otherwise, at minimum, a `tor-config` must be specified.
 interfaces:
   # This key is the internal name that the OS will use to configure the interface
@@ -98,6 +102,7 @@ interfaces:
     protocols:
       - tcp
       - http
+dependencies: {}
 # Specifies how backups should be run for this service. The default EmbassyOS provided option is to use the duplicity backup library on a system image (compat)
 backup:
   create:
@@ -135,3 +140,12 @@ backup:
     mounts:
       BACKUP: "/mnt/backup"
       main: "/root/data"
+migrations:
+  from:
+    "*":
+      type: script
+      args: ["from"]
+  to:
+    "*":
+      type: script
+      args: ["to"]
