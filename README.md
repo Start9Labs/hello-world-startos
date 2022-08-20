@@ -1,6 +1,6 @@
 # Wrapper for hello-world
 
-`hello-world` is a simple, minimal project to serve as a template for creating an app for the Embassy.
+`hello-world` is a simple, minimal project to serve as a template for creating an app for the Embassy. Learn more about service packaging in [Developer Docs](https://start9.com/latest/developer-docs/).
 
 ## Dependencies
 
