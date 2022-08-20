@@ -67,11 +67,7 @@ health-checks:
     system: false
     # Required - valid values are yaml, toml, json
     io-format: json
-config:
-  get:
-    type: script
-  set:
-    type: script
+config: ~
 properties: ~
 #  type: script
 # This denotes any data, asset, or pointer volumes that should be connected when the "docker run" command is invoked
