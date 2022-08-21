@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 DURATION=$(</dev/stdin)
 if (($DURATION <= 5000)); then
