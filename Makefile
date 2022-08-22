@@ -22,7 +22,7 @@ clean:
 $(ID_NAME).s9pk: manifest.yaml instructions.md icon.png LICENSE scripts/embassy.js image.tar
 	embassy-sdk pack
 
-image.tar: Dockerfile docker_entrypoint.sh check-web.sh hello-world/target/aarch64-unknown-linux-musl/release/hello-world
+image.tar: Dockerfile docker_entrypoint.sh scripts/check-web.sh hello-world/target/aarch64-unknown-linux-musl/release/hello-world
 	DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --tag start9/$(ID_NAME)/main:$(VERSION) --platform=linux/arm64 -o type=docker,dest=image.tar .
 
 hello-world/target/aarch64-unknown-linux-musl/release/hello-world: $(HELLO_WORLD_SRC)
