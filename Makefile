@@ -14,6 +14,7 @@ install:
 	embassy-cli package install $(PKG_ID).s9pk
 
 clean:
+	rm -rf docker-images
 	rm -f image.tar
 	rm -f $(PKG_ID).s9pk
 	rm -f scripts/*.js
@@ -21,8 +22,14 @@ clean:
 scripts/embassy.js: $(TS_FILES)
 	deno bundle scripts/embassy.ts scripts/embassy.js
 
-image.tar: Dockerfile docker_entrypoint.sh
-	docker buildx build --tag start9/$(PKG_ID)/main:$(PKG_VERSION) --platform=linux/arm64 -o type=docker,dest=image.tar .
+docker-images/aarch64.tar: Dockerfile docker_entrypoint.sh
+	mkdir -p docker-images
+	docker buildx build --tag start9/$(PKG_ID)/main:$(PKG_VERSION) --platform=linux/arm64 -o type=docker,dest=docker-images/aarch64.tar .
 
-$(PKG_ID).s9pk: manifest.yaml instructions.md icon.png LICENSE scripts/embassy.js image.tar
+docker-images/x86_64.tar: Dockerfile docker_entrypoint.sh
+	mkdir -p docker-images
+	docker buildx build --tag start9/$(PKG_ID)/main:$(PKG_VERSION) --platform=linux/amd64 -o type=docker,dest=docker-images/x86_64.tar .
+
+$(PKG_ID).s9pk: manifest.yaml instructions.md icon.png LICENSE scripts/embassy.js docker-images/aarch64.tar docker-images/x86_64.tar
+	if ! [ -z "$(ARCH)" ]; then cp docker-images/$(ARCH).tar image.tar; fi
 	embassy-sdk pack

@@ -67,10 +67,22 @@ cd hello-world-wrapper
 
 ## Building
 
-To build the **Hello World** service, run the following command:
+To build the **Hello World** service for all platforms using embassy-sdk version >=0.3.3, run the following command:
 
 ```
 make
+```
+
+To build the **Hello World** service for a single platform using embassy-sdk version <=0.3.2, run:
+
+```
+# for amd64
+make ARCH=x86_64
+```
+or
+```
+# for arm64
+make ARCH=aarch64
 ```
 
 ## Installing (on Embassy)

@@ -5,9 +5,9 @@ id: hello-world
  # A human readable service title
 title: "Hello World"
 # Service version - accepts up to four digits, where the last confirms to revisions necessary for EmbassyOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
-version: 1.0.0.0
+version: 1.0.0.1
 # Release notes for the update - can be a string, paragraph or URL
-release-notes: "Revamped for EmabssyOS 0.3.2"
+release-notes: "Revamped for EmabssyOS 0.3.3"
 # The type of license for the project. Include the LICENSE in the root of the project directory. A license is required for a Start9 package.
 license: mit
 # The Start9 wrapper repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
