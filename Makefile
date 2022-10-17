@@ -10,7 +10,8 @@ all: verify
 verify: $(PKG_ID).s9pk
 	embassy-sdk verify s9pk $(PKG_ID).s9pk
 
-install:
+# assumes /etc/embassy/config.yaml exists on local system with `host: "http://embassy-server-name.local"` configured
+install: $(PKG_ID).s9pk
 	embassy-cli package install $(PKG_ID).s9pk
 
 clean:

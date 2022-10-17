@@ -1,6 +1,6 @@
 # Wrapper for hello-world
 
-`hello-world` is a simple, minimal project to serve as a template for creating an app for the Embassy. Learn more about service packaging in [Developer Docs](https://start9.com/latest/developer-docs/).
+Hello World is a simple, minimal project that serves as a template for creating a service that runs on embassyOS. This repository creates the `s9pk` package that is installed to run `hello-world` on [embassyOS](https://github.com/Start9Labs/embassy-os/). Learn more about service packaging in the[Developer Docs](https://start9.com/latest/developer-docs/).
 
 ## Dependencies
 
@@ -11,8 +11,8 @@
 - [make](https://www.gnu.org/software/make/)
 - [embassy-sdk](https://github.com/Start9Labs/embassy-os/tree/master/backend)
 
-## Build enviroment
-Prepare your EmbassyOS build enviroment. In this example we are using Ubuntu 20.04.
+## Build environment
+Prepare your embassyOS build environment. In this example we are using Ubuntu 20.04.
 
 1. Install docker
 ```
@@ -54,11 +54,11 @@ cd embassy-os/backend/
 ./install-sdk.sh
 embassy-sdk init
 ```
-Now you are ready to build your **hello-world** service
+Now you are ready to build the `hello-world` package!
 
 ## Cloning
 
-Clone the project locally. 
+Clone the project locally:
 
 ```
 git clone https://github.com/Start9Labs/hello-world-wrapper.git
@@ -67,13 +67,13 @@ cd hello-world-wrapper
 
 ## Building
 
-To build the **Hello World** service for all platforms using embassy-sdk version >=0.3.3, run the following command:
+To build the `hello-world` package for all platforms using embassy-sdk version >=0.3.3, run the following command:
 
 ```
 make
 ```
 
-To build the **Hello World** service for a single platform using embassy-sdk version <=0.3.2, run:
+To build the `hello-world` package for a single platform using embassy-sdk version <=0.3.2, run:
 
 ```
 # for amd64
@@ -85,19 +85,27 @@ or
 make ARCH=aarch64
 ```
 
-## Installing (on Embassy)
+## Installing (on embassyOS)
 
 Run the following commands to determine successful install:
-> :information_source: Change embassy-q1w2e3r4.local to your Embassy address
+> :information_source: Change embassy-server-name.local to your Embassy address
 
 ```
 embassy-cli auth login
-#Enter your embassy password
-embassy-cli --host https://embassy-q1w2e3r4.local package install hello-world.s9pk
+# Enter your embassy password
+embassy-cli --host https://embassy-server-name.local package install hello-world.s9pk
 ```
-**Tip:** You can also install the hello-world.s9pk using **Sideload Service** under the **Embassy > SETTINGS** section.
+
+If you already have your `embassy-cli` config file setup with a default `host`, you can install simply by running:
+
+```
+make install
+```
+
+> **Tip:** You can also install the hello-world.s9pk using **Sideload Service** under the **Embassy > Settings** section.
+
 ## Verify Install
 
-Go to your Embassy Services page, select **Hello World**, configure and start the service.
+Go to your Embassy Services page, select **Hello World**, configure and start the service. Then, verify it's interfaces are accessible.
 
 **Done!** 
