@@ -12,7 +12,7 @@ Hello World is a simple, minimal project that serves as a template for creating 
 - [embassy-sdk](https://github.com/Start9Labs/embassy-os/tree/master/backend)
 
 ## Build environment
-Prepare your embassyOS build environment. In this example we are using Ubuntu 20.04.
+Prepare your embassyOS build environment. In this example we are using Ubuntu 20.04. You can find more detailed steps to setup your environment in the service packaging [documentation](https://github.com/Start9Labs/service-pipeline#development-environment).
 
 1. Install docker
 ```
@@ -104,8 +104,8 @@ make install
 
 > **Tip:** You can also install the hello-world.s9pk using **Sideload Service** under the **Embassy > Settings** section.
 
-## Verify Install
+### Verify Install
 
-Go to your Embassy Services page, select **Hello World**, configure and start the service. Then, verify it's interfaces are accessible.
+Go to your Embassy Services page, select **Hello World**, configure and start the service. Then, verify its interfaces are accessible.
 
 **Done!** 
