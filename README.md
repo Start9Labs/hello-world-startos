@@ -4,6 +4,8 @@ Hello World is a simple, minimal project that serves as a template for creating 
 
 ## Dependencies
 
+The following set of dependencies are required to build this project. You can find detailed steps to setup your environment below and in the service packaging [documentation](https://github.com/Start9Labs/service-pipeline#development-environment).
+
 - [docker](https://docs.docker.com/get-docker)
 - [docker-buildx](https://docs.docker.com/buildx/working-with-buildx/)
 - [yq](https://mikefarah.gitbook.io/yq)
@@ -12,8 +14,7 @@ Hello World is a simple, minimal project that serves as a template for creating 
 - [embassy-sdk](https://github.com/Start9Labs/embassy-os/tree/master/backend)
 
 ## Build environment
-Prepare your embassyOS build environment. In this example we are using Ubuntu 20.04. You can find more detailed steps to setup your environment in the service packaging [documentation](https://github.com/Start9Labs/service-pipeline#development-environment).
-
+Prepare your embassyOS build environment. In this example we are using Ubuntu 20.04.
 1. Install docker
 ```
 curl -fsSL https://get.docker.com -o- | bash
