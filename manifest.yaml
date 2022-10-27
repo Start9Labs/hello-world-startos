@@ -36,22 +36,20 @@ assets:
   # Default = INSTRUCTIONS.md
   instructions: instructions.md
   # Default = image.tar
-  docker-images: image.tar
-# The main action for initializing the service. Currently, the only type of action available is docker.
-main:
-  # Docker is currently the only action implementation
-  type: docker
-  # Identifier for the main image volume, which will be used when other actions need to mount to this volume.
-  image: main
-  # The executable binary for starting the initialization action. For docker actions, this is typically a "docker_entrypoint.sh" file. See the Dockerfile and the docker_entrypoint.sh in this project for additional details.
-  entrypoint: "docker_entrypoint.sh"
-  # Any arguments that should be passed into the entrypoint executable 
-  args: []
-  # Specifies where to mount the data volume(s), if there are any. Mounts for pointer dependency volumes are also denoted here. These are necessary if data needs to be read from / written to these volumes. 
-  mounts:
-    # Specifies where on the service's file system its persistence directory should be mounted prior to service startup
-    main: /root
-# Health checks 
+  # docker-images: image.tar
+# The main action for initializing the service. This can be script to utilize the eOS scripting apis, or docker.
+main: 
+  type: script
+# Defines the containers needed to run the main and mounted volumes
+containers:
+  main:
+    # Identifier for the main image volume, which will be used when other actions need to mount to this volume.
+    image: main
+    # Specifies where to mount the data volume(s), if there are any. Mounts for pointer dependency volumes are also denoted here. These are necessary if data needs to be read from / written to these volumes. 
+    mounts:
+      # Specifies where on the service's file system its persistence directory should be mounted prior to service startup
+      main: /root
+# This is where health checks would be defined - see a more advanced example in https://github.com/Start9Labs/embassy-pages-wrapper
 health-checks: {}
 config: ~
 properties: ~
