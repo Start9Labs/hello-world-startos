@@ -1,6 +1,7 @@
-import { types as T } from "../deps.ts";
+import { types as T, util } from "../deps.ts";
 
-export const main = (effects: T.Effects) => {
+export const main = async (effects: T.Effects) => {
   // args defaulted to [] - not necessary to include if empty
-  return effects.runDaemon({ command: "docker_entrypoint.sh", args: [] }).wait()
+  await effects.runDaemon({ command: "docker_entrypoint.sh", args: [] }).wait();
+  return util.ok;
 }
