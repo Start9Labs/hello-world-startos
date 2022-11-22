@@ -1,7 +1,3 @@
-# Wrapper for hello-world
-
-`hello-world` is a simple, minimal project to serve as a template for creating an app for the Embassy. Learn more about service packaging in [Developer Docs](https://start9.com/latest/developer-docs/).
-
 ## Dependencies
 
 - [docker](https://docs.docker.com/get-docker)
@@ -13,6 +9,16 @@
 
 ## Build enviroment
 Prepare your EmbassyOS build enviroment. In this example we are using Ubuntu 20.04.
+
+# install xcode tools
+```sh
+xcode-select --install
+```
+
+# install homebrew
+```
+# ummm...
+```
 
 1. Install docker
 ```
@@ -30,25 +36,38 @@ docker buildx create --use
 docker run --privileged --rm linuxkit/binfmt:v0.8
 ```
 4. Install yq
-```
+```sh
 sudo snap install yq
+# -or-
+brew install yq
 ```
+
 5. Install deno
-```
+
+```sh
 sudo snap install deno
+# -or-
+brew install deno
 ```
 6. Install essentials build packages
-```
+
+```sh
 sudo apt-get install -y build-essential openssl libssl-dev libc6-dev clang libclang-dev ca-certificates
 ```
+
 7. Install Rust
-```
+
+```sh
 curl https://sh.rustup.rs -sSf | sh
-# Choose nr 1 (default install)
+
+# Choose 1 (default install)
+
 source $HOME/.cargo/env
 ```
+
 8. Build and install embassy-sdk
-```
+
+```sh
 cd ~/ && git clone --recursive https://github.com/Start9Labs/embassy-os.git
 cd embassy-os/backend/
 ./install-sdk.sh
@@ -85,7 +104,3 @@ embassy-cli --host https://embassy-q1w2e3r4.local package install hello-world.s9
 ```
 **Tip:** You can also install the hello-world.s9pk using **Sideload Service** under the **Embassy > SETTINGS** section.
 ## Verify Install
-
-Go to your Embassy Services page, select **Hello World**, configure and start the service.
-
-**Done!** 

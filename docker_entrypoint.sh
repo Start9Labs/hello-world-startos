@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec tini hello-world
+python3 -m src
