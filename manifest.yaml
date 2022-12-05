@@ -5,9 +5,9 @@ id: hello-world
  # A human readable service title
 title: "Hello World"
 # Service version - accepts up to four digits, where the last confirms to revisions necessary for EmbassyOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
-version: 1.0.0.0
+version: 1.0.0.1
 # Release notes for the update - can be a string, paragraph or URL
-release-notes: "Revamped for EmabssyOS 0.3.2"
+release-notes: "Revamped for EmabssyOS 0.3.3"
 # The type of license for the project. Include the LICENSE in the root of the project directory. A license is required for a Start9 package.
 license: mit
 # The Start9 wrapper repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
@@ -36,22 +36,20 @@ assets:
   # Default = INSTRUCTIONS.md
   instructions: instructions.md
   # Default = image.tar
-  docker-images: image.tar
-# The main action for initializing the service. Currently, the only type of action available is docker.
-main:
-  # Docker is currently the only action implementation
-  type: docker
-  # Identifier for the main image volume, which will be used when other actions need to mount to this volume.
-  image: main
-  # The executable binary for starting the initialization action. For docker actions, this is typically a "docker_entrypoint.sh" file. See the Dockerfile and the docker_entrypoint.sh in this project for additional details.
-  entrypoint: "docker_entrypoint.sh"
-  # Any arguments that should be passed into the entrypoint executable 
-  args: []
-  # Specifies where to mount the data volume(s), if there are any. Mounts for pointer dependency volumes are also denoted here. These are necessary if data needs to be read from / written to these volumes. 
-  mounts:
-    # Specifies where on the service's file system its persistence directory should be mounted prior to service startup
-    main: /root
-# Health checks 
+  # docker-images: image.tar
+# The main action for initializing the service. This can be script to utilize the eOS scripting apis, or docker.
+main: 
+  type: script
+# Defines the containers needed to run the main and mounted volumes
+containers:
+  main:
+    # Identifier for the main image volume, which will be used when other actions need to mount to this volume.
+    image: main
+    # Specifies where to mount the data volume(s), if there are any. Mounts for pointer dependency volumes are also denoted here. These are necessary if data needs to be read from / written to these volumes. 
+    mounts:
+      # Specifies where on the service's file system its persistence directory should be mounted prior to service startup
+      main: /root
+# This is where health checks would be defined - see a more advanced example in https://github.com/Start9Labs/embassy-pages-wrapper
 health-checks: {}
 config: ~
 properties: ~
@@ -117,8 +115,8 @@ backup:
     args:
       - duplicity
       - restore
-      - /root/data
       - /mnt/backup
+      - /root/data
     mounts:
       BACKUP: "/mnt/backup"
       main: "/root/data"
