@@ -103,7 +103,7 @@ If you already have your `embassy-cli` config file setup with a default `host`, 
 make install
 ```
 
-> **Tip:** You can also install the hello-world.s9pk using **Sideload Service** under the **Embassy > Settings** section.
+> **Tip:** You can also install the hello-world.s9pk using **Sideload Service** under the **System > Manage** section.
 
 ### Verify Install
 
