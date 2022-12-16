@@ -13,7 +13,7 @@ verify: $(PKG_ID).s9pk
 	@echo "   Filesize: $(shell du -h $(PKG_ID).s9pk) is ready"
 
 install:
-ifeq (,$(wildcard ~/.embassy/config.yaml1))
+ifeq (,$(wildcard ~/.embassy/config.yaml))
 	@echo; echo "You must define \"host: http://embassy-server-name.local\" in ~/.embassy/config.yaml config file first"; echo
 else
 	embassy-cli package install $(PKG_ID).s9pk
