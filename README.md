@@ -64,6 +64,7 @@ Clone the project locally:
 ```
 git clone https://github.com/Start9Labs/hello-world-wrapper.git
 cd hello-world-wrapper
+git submodule update --init --recursive
 ```
 
 ## Building
