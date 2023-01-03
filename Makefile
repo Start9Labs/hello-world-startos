@@ -1,8 +1,7 @@
-
-HELLO_WORLD_SRC := $(shell find ./hello-world/src) hello-world/Cargo.toml hello-world/Cargo.lock
 PKG_ID := $(shell yq e ".id" manifest.yaml)
 PKG_VERSION := $(shell yq e ".version" manifest.yaml)
 TS_FILES := $(shell find ./ -name \*.ts)
+HELLO_WORLD_SRC := $(shell find ./hello-world/src) hello-world/Cargo.toml hello-world/Cargo.lock
 
 # delete the target of a rule if it has changed and its recipe exits with a nonzero exit status
 .DELETE_ON_ERROR:
