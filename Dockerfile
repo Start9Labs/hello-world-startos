@@ -1,4 +1,9 @@
-FROM start9/hello-world
+FROM alpine:latest
+
+RUN apk update
+RUN apk add tini
+
+ADD ./hello-world/target/aarch64-unknown-linux-musl/release/hello-world /usr/local/bin/hello-world
 
 RUN apk add --no-cache curl && \
     rm -f /var/cache/apk/*
