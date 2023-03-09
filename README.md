@@ -17,7 +17,7 @@ Install the system dependencies below to build this project by following the ins
 Prepare your embassyOS build environment. In this example we are using Ubuntu 20.04.
 1. Install docker
 ```
-curl -fsSL https://get.docker.com -o | bash
+curl -fsSL https://get.docker.com | bash
 sudo usermod -aG docker "$USER"
 exec sudo su -l $USER
 ```
