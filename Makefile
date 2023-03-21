@@ -26,6 +26,21 @@ clean:
 	rm -f $(PKG_ID).s9pk
 	rm -f scripts/*.js
 
+clean-manifest:
+	@sed -i '' '/^[[:blank:]]*#/d;s/#.*//' manifest.yaml
+	@echo; echo "Comments successfully removed from manifest.yaml file."; echo
+
+# BEGIN REBRANDING
+rebranding:
+	@read -p "Enter new package ID name (must be a single word): " NEW_PKG_ID; \
+	read -p "Enter new package title: " NEW_PKG_TITLE; \
+	find . \( -name "*.md" -o -name ".gitignore" -o -name "manifest.yaml" -o -name "*Service.yml" \) -type f -not -path "./hello-world/*" -exec sed -i '' -e "s/hello-world/$$NEW_PKG_ID/g; s/Hello World/$$NEW_PKG_TITLE/g" {} +; \
+	echo; echo "Rebranding complete."; echo "	New package ID name is:	$$NEW_PKG_ID"; \
+	echo "	New package title is:	$$NEW_PKG_TITLE"; \
+	sed -i '' -e '/^# BEGIN REBRANDING/,/^# END REBRANDING/ s/^#*/#/' Makefile
+	@echo; echo "Note: Rebranding code has been commented out in Makefile"; echo
+# END REBRANDING
+
 scripts/embassy.js: $(TS_FILES)
 	deno bundle scripts/embassy.ts scripts/embassy.js
 
