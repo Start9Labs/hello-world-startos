@@ -67,6 +67,15 @@ cd hello-world-wrapper
 git submodule update --init --recursive
 ```
 
+## Docker Preparation
+
+It may be necessary to restart docker and prep for multi-arch cross compilation:
+
+```
+sudo systemctl restart docker
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes -c yes
+```
+
 ## Building
 
 To build the `hello-world` package for all platforms using embassy-sdk version >=0.3.3, run the following command:
