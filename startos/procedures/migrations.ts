@@ -1,4 +1,8 @@
-import { setupMigrations } from "start-sdk/lib/migrations";
-import { WrapperData } from "../wrapperData";
+import { manifest } from '../manifest'
+import { initializeActions } from './actions'
+import { setupMigrations } from 'start-sdk/lib/migrations/setupMigrations'
 
-export const { init, uninit } = setupMigrations<WrapperData>(async ({ effects, utils }) => {})
+export const { init, uninit } = setupMigrations(
+  manifest,
+  initializeActions /*, ...,migrationsGoHere */,
+)
