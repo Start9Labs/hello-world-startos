@@ -1,10 +1,10 @@
 import { WrapperData } from '../../wrapperData'
-import { inputSpec } from './inputSpec'
+import { configSpec } from './spec'
 import { read } from './read'
 import { save } from './save'
 import { setupConfig } from 'start-sdk/lib/config'
 
-export const { getConfig, setConfig } = setupConfig<
-  WrapperData,
-  typeof inputSpec
->(inputSpec, save, read)
+/**
+ * This is a static file. There is no need to make changes here
+ */
+export const { getConfig, setConfig } = setupConfig<WrapperData, typeof configSpec>(configSpec, save, read)

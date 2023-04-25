@@ -2,7 +2,6 @@ import { HealthReceipt } from 'start-sdk/lib/health'
 import { checkPortListening } from 'start-sdk/lib/health/checkFns'
 import {
   Daemons,
-  NetworkBuilder,
   NetworkInterfaceBuilder,
   setupMain,
 } from 'start-sdk/lib/mainFn'

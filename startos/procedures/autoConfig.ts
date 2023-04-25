@@ -1,5 +1,10 @@
 import { setupAutoConfig } from 'start-sdk/lib/autoconfig'
-import { InputSpec } from './config/inputSpec'
+import { ConfigSpec } from './config/spec'
 import { WrapperData } from '../wrapperData'
 
-export const autoConfig = setupAutoConfig<WrapperData, InputSpec>({})
+/**
+ * In this function, you establish rules for auto configuring service dependencies
+ * 
+ * See "Hello Moon" for an example
+ */
+export const autoConfig = setupAutoConfig<WrapperData, ConfigSpec>({})

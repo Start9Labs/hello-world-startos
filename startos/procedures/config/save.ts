@@ -1,12 +1,13 @@
-import { InputSpec } from './inputSpec'
+import { ConfigSpec } from './spec'
 import { WrapperData } from '../../wrapperData'
 import { Save } from 'start-sdk/lib/config/setupConfig'
 
 /**
- * Use this function to persist config data to various files and to establish current dependencies
+ * This function executes on config save
+ * 
+ * Use it to persist config data to various files and to establish any resulting dependencies
  */
-
-export const save: Save<WrapperData, InputSpec> = async ({
+export const save: Save<WrapperData, ConfigSpec> = async ({
   effects,
   utils,
   input,
