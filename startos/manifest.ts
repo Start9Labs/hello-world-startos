@@ -36,12 +36,10 @@ export const manifest = setupManifest({
     icon: 'assets/icon.png',
     instructions: 'assets/instructions.md',
   },
-  // This denotes any data, asset, or pointer volumes that should be connected when the "docker run" command is invoked
   volumes: {
     // This is the image where files from the project asset directory will go
     main: 'data',
   },
-  // Defines the containers needed to run the main and mounted volumes
   containers: {
     main: {
       // Identifier for the main image volume, which will be used when other actions need to mount to this volume.
