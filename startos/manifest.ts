@@ -7,10 +7,10 @@ import { actionsMetadata } from './procedures/actions'
 export const manifest = setupManifest({
   id: 'hello-world',
   title: 'Hello World',
-  version: '4.0.0.0',
+  version: '4.0.0',
   releaseNotes: 'Revamped for StartOS 0.4.0',
   license: 'mit',
-  replaces: Array<string>(),
+  replaces: Array<string>('Hello World (hosted)', 'Goodbye World'),
   wrapperRepo: 'https://github.com/Start9Labs/hello-world-wrapper',
   upstreamRepo: 'https://github.com/Start9Labs/hello-world',
   supportSite: 'https://docs.start9.com/',
@@ -49,7 +49,7 @@ export const manifest = setupManifest({
     start: 'Optional alert to display before starting the service',
     stop: 'Optional alert to display before stopping the service',
   },
-  // See "Hello Moon" for an example with dependencies
+  /** See Hello Moon for an example with dependencies */
   dependencies: {},
 })
 

@@ -6,11 +6,6 @@ import { Manifest } from '../manifest'
 /**
  * In this function, you establish rules for auto configuring service dependencies
  *
- * See "Hello Moon" for an example
+ * See Hello Moon for an example
  */
-export const autoConfig = setupAutoConfig<
-  WrapperData,
-  ConfigSpec,
-  Manifest,
-  {}
->({})
+export const autoConfig = setupAutoConfig<WrapperData, ConfigSpec, Manifest, {}>({})
