@@ -1,4 +1,4 @@
-import { Migration } from "start-sdk/lib/migrations/Migration"
+import { Migration } from "start-sdk/lib/inits/migrations/Migration";
 
 /**
  * This is an example migration file

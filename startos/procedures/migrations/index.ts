@@ -1,10 +1,10 @@
+import { setupMigrations } from 'start-sdk/lib/inits/migrations/setupMigrations'
 import { manifest } from '../../manifest'
-import { setupMigrations } from 'start-sdk/lib/migrations/setupMigrations'
 import { v4_0_0 } from './4.0.0'
 
 /**
  * Add each new migration as the next argument to this function
  */
-export const { init, uninit } = setupMigrations(manifest,
+export const migrations = setupMigrations(manifest,
   v4_0_0,
 )
