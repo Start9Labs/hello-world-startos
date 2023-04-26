@@ -1,6 +1,6 @@
 import { setupMigrations } from 'start-sdk/lib/inits/migrations/setupMigrations'
 import { manifest } from '../../manifest'
-import { v4_0_0 } from './4.0.0'
+import { v4_0_0 } from './v4_0_0'
 
 /**
  * Add each new migration as the next argument to this function

@@ -9,7 +9,7 @@ import { createAction } from 'start-sdk/lib/actions/createAction'
  * 
  * Actions optionally take an arbitrary config form as input
  */
-const inputBuilder = Config.of({
+const input = Config.of({
   nameToPrint: Value.text({
     name: 'Temp Name',
     description: 'If no name is provided, the name from config will be used',
@@ -18,8 +18,6 @@ const inputBuilder = Config.of({
     patterns: [],
   }),
 })
-const matchConfigSpec = inputBuilder.validator()
-type InputSpec = typeof matchConfigSpec._TYPE
 
 /**
  * This function defines the Action, including the FormSpec (if any)
@@ -28,22 +26,24 @@ type InputSpec = typeof matchConfigSpec._TYPE
  * 
  * If no input is required, FormSpec would be null
  */
-export const nameToLogs = createAction<WrapperData, InputSpec>(
+export const nameToLogs = createAction<WrapperData, typeof input>(
   {
     name: 'Name to Logs',
     description: 'Prints "Hello [Name]" to the service logs.',
     id: 'nameToLogs',
-    input: inputBuilder.build(),
+    input,
     runningOnly: false,
   },
   async ({ effects, utils, input }) => {
     const name = input.nameToPrint || (await utils.getWrapperData('/config/name').first())
-    await effects.runCommand(`echo "Hello ${name}"`)
+    effects.info(`Hello ${name}`)
     return {
       message: `"Hello ${name}" has been written to the service logs. Open your logs to view it.`,
-      value: null,
-      copyable: true,
-      qr: false,
+      value: {
+        value: null,
+        copyable: true,
+        qr: false,
+      }
     }
   },
 )

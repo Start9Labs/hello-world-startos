@@ -11,10 +11,10 @@ export const configSpec = Config.of({
     {
       name: "Name",
       description: 'When you launch the Hello World UI, it will display "Hello [First Name]"',
-      required: false,
+      required: true,
     },
   ),
 })
-// These two lines are necessary to satisfy Typescript typings
+// These two lines are necessary to satisfy Typescript typings. Do not touch them
 export const matchConfigSpec = configSpec.validator()
 export type ConfigSpec = typeof matchConfigSpec._TYPE

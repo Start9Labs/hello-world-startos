@@ -19,7 +19,7 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(async ({
    *
    * In this section, you will fetch any resources or run any commands necessary to run the service
    */
-  await effects.runCommand('echo "Starting Hello World!"')
+  effects.info('Starting Hello World!')
 
   /**
    * ======================== Interfaces ========================
@@ -40,16 +40,14 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(async ({
   const torOrigin1 = torHost1.createOrigin('http')
 
   // Create another Tor host with the assigned port mapping
-  const torHost2 = await torHostname1.bindTor(8080, 443)
+  const torHost2 = await torHostname1.bindTor(8443, 443)
   // Assign the Tor host a web protocol (e.g. "https", "wss")
   const torOrigin2 = torHost2.createOrigin('https')
 
   // ------------ LAN ------------
 
-  // Find or generate a random port by ID
-  const lanPort1 = utils.localPort('lanPort1')
   // Create a LAN host with the assigned internal port
-  const lanHost1 = await lanPort1.bindLan(8080)
+  const lanHost1 = await utils.bindLan(8080)
   // Assign the LAN host a web protocol (e.g. "https", "wss")
   const lanOrigins1 = lanHost1.createOrigins('https')
 
@@ -64,7 +62,7 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(async ({
     name: 'Web UI',
     id: 'webui',
     description: 'The web interface of Hello World',
-    ui: false,
+    ui: true,
     basic: null,
     path: '',
     search: {},
@@ -102,14 +100,14 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(async ({
     healthReceipts, // Provide the healthReceipts or [] to prove they were at least considered
   }).addDaemon({
     id: 'webui', // The ID of the daemon
-    command: './hello-world', // The command to start the daemon
+    command: 'hello-world', // The command to start the daemon
     ready: {
-      display: {
-        // Optional. If present, the health check will display to the user
-        name: 'Web Interface',
-        message: 'The web interface is ready',
-      },
-      fn: () => checkPortListening(effects, 8080, {}), // The function to run to determine the health status of the daemon
+      display: 'Web Interface',
+      // The function to run to determine the health status of the daemon
+      fn: () => checkPortListening(effects, 8080, {
+        timeout: 10_000,
+        successMessage: 'The web interface is ready',
+      }),
     },
   })
 })
