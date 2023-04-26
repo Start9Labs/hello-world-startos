@@ -19,7 +19,7 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(async ({
    *
    * In this section, you will fetch any resources or run any commands necessary to run the service
    */
-  effects.info('Starting Hello World!')
+  await effects.console.info('Starting Hello World!')
 
   /**
    * ======================== Interfaces ========================
