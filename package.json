@@ -5,7 +5,7 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "start-sdk": "0.4.0-lib0.charlie39"
+    "start-sdk": "0.4.0-lib0.rc1"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.36.1",
