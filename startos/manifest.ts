@@ -1,9 +1,9 @@
 import { setupManifest } from 'start-sdk/lib/manifest'
 import { actionsMetadata } from './procedures/actions'
 
-/** 
+/**
  * In this function you define static properties of the service
-*/
+ */
 export const manifest = setupManifest({
   id: 'hello-world',
   title: 'Hello World',
@@ -45,7 +45,8 @@ export const manifest = setupManifest({
     install: 'Optional alert to display before installing the service',
     update: 'Optional alert to display before updating the service',
     uninstall: 'Optional alert to display before uninstalling the service',
-    restore: 'Optional alert to display before restoring the service from backup',
+    restore:
+      'Optional alert to display before restoring the service from backup',
     start: 'Optional alert to display before starting the service',
     stop: 'Optional alert to display before stopping the service',
   },

@@ -7,4 +7,7 @@ import { setupConfig } from 'start-sdk/lib/config'
 /**
  * This is a static file. There is no need to make changes here
  */
-export const { getConfig, setConfig } = setupConfig<WrapperData, typeof configSpec>(configSpec, save, read)
+export const { getConfig, setConfig } = setupConfig<
+  WrapperData,
+  typeof configSpec
+>(configSpec, save, read)

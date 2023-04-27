@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "ncc build procedures/index.ts -o ./",
-    "prettier": "prettier --write procedures",
+    "prettier": "prettier --write startos",
     "check": "tsc --noEmit"
   },
   "dependencies": {

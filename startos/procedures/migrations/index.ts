@@ -5,6 +5,4 @@ import { v4_0_0 } from './v4_0_0'
 /**
  * Add each new migration as the next argument to this function
  */
-export const migrations = setupMigrations(manifest,
-  v4_0_0,
-)
+export const migrations = setupMigrations(manifest, v4_0_0)

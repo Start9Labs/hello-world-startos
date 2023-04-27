@@ -4,7 +4,7 @@ import { Save } from 'start-sdk/lib/config/setupConfig'
 
 /**
  * This function executes on config save
- * 
+ *
  * Use it to persist config data to various files and to establish any resulting dependencies
  */
 export const save: Save<WrapperData, ConfigSpec, Manifest> = async ({

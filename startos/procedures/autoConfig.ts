@@ -8,4 +8,9 @@ import { Manifest } from '../manifest'
  *
  * See Hello Moon for an example
  */
-export const autoConfig = setupAutoConfig<WrapperData, ConfigSpec, Manifest, {}>({})
+export const autoConfig = setupAutoConfig<
+  WrapperData,
+  ConfigSpec,
+  Manifest,
+  {}
+>({})
