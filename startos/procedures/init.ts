@@ -1,6 +1,6 @@
-import { setupInit, setupInstall, setupUninstall } from "start-sdk/lib/inits"
-import { WrapperData } from "../wrapperData"
-import { migrations } from "./migrations"
+import { setupInit, setupInstall, setupUninstall } from 'start-sdk/lib/inits'
+import { WrapperData } from '../wrapperData'
+import { migrations } from './migrations'
 
 /**
  * Here you define arbitrary code that runs once, on fresh install only
