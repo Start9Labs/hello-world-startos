@@ -1,12 +1,12 @@
-PKG_ID := $(shell yq e ".id" manifest.yaml)
-PKG_VERSION := $(shell yq e ".version" manifest.yaml)
+PKG_ID := $(shell grep ".id:" startos/manifest.ts | grep -o "'[^']*'" | sed "s/'//g")
+PKG_VERSION := $(shell grep ".version:" startos/manifest.ts | grep -o "'[^']*'" | sed "s/'//g")
 TS_FILES := $(shell find ./ -name \*.ts)
 HELLO_WORLD_SRC := $(shell find ./hello-world/src) hello-world/Cargo.toml hello-world/Cargo.lock
 
 # delete the target of a rule if it has changed and its recipe exits with a nonzero exit status
 .DELETE_ON_ERROR:
 
-all: verify
+all: submodule-update verify
 
 verify: $(PKG_ID).s9pk
 	@embassy-sdk verify s9pk $(PKG_ID).s9pk
@@ -22,13 +22,16 @@ endif
 
 clean:
 	rm -rf docker-images
-	rm -f image.tar
 	rm -f $(PKG_ID).s9pk
 	rm -f scripts/*.js
 
-clean-manifest:
-	@sed -i '' '/^[[:blank:]]*#/d;s/#.*//' manifest.yaml
-	@echo; echo "Comments successfully removed from manifest.yaml file."; echo
+submodule-update:
+	@if [ -z "$(shell git submodule status | egrep -v '^ '|awk '{print $$2}')" ]; then \
+		echo "Submodules are up to date."; \
+	else \
+		echo "\nUpdating submodules...\n"; \
+		git submodule update --init --progress; \
+	fi
 
 # BEGIN REBRANDING
 rebranding:
@@ -44,6 +47,14 @@ rebranding:
 scripts/embassy.js: $(TS_FILES)
 	deno bundle scripts/embassy.ts scripts/embassy.js
 
+arm:
+	@rm -f docker-images/x86_64.tar
+	ARCH=aarch64 $(MAKE)
+
+x86:
+	@rm -f docker-images/aarch64.tar
+	ARCH=x86_64 $(MAKE)
+
 docker-images/aarch64.tar: Dockerfile docker_entrypoint.sh hello-world/target/aarch64-unknown-linux-musl/release/hello-world
 ifeq ($(ARCH),x86_64)
 else
@@ -58,7 +69,7 @@ else
 	docker buildx build --tag start9/$(PKG_ID)/main:$(PKG_VERSION) --build-arg ARCH=x86_64 --platform=linux/amd64 -o type=docker,dest=docker-images/x86_64.tar .
 endif
 
-$(PKG_ID).s9pk: manifest.yaml instructions.md icon.png LICENSE scripts/embassy.js docker-images/aarch64.tar docker-images/x86_64.tar
+$(PKG_ID).s9pk: assets/instructions.md assets/icon.png LICENSE scripts/embassy.js docker-images/aarch64.tar docker-images/x86_64.tar
 ifeq ($(ARCH),aarch64)
 	@echo "embassy-sdk: Preparing aarch64 package ..."
 else ifeq ($(ARCH),x86_64)
