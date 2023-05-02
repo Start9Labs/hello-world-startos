@@ -1,4 +1,5 @@
 import { configBuilder } from 'start-sdk/lib'
+import { WrapperData } from '../../wrapperData'
 const { Config, Value } = configBuilder
 
 /**
@@ -6,7 +7,7 @@ const { Config, Value } = configBuilder
  *
  * Most form controls are available, including text, textarea, number, toggle, select, multiselect, list, color, datetime, object (a subform), and union (a conditional subform)
  */
-export const configSpec = Config.of({
+export const configSpec = Config.withWrapperData<WrapperData>().of({
   name: Value.text({
     name: 'Name',
     description:
@@ -15,5 +16,5 @@ export const configSpec = Config.of({
   }),
 })
 // These two lines are necessary to satisfy Typescript typings. Do not touch them
-export const matchConfigSpec = configSpec.validator()
+export const matchConfigSpec = configSpec.validator
 export type ConfigSpec = typeof matchConfigSpec._TYPE
