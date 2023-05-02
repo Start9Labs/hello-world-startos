@@ -36,7 +36,9 @@ export const nameToLogs = createAction<WrapperData, typeof input>(
     const name =
       input.nameToPrint ||
       (await utils.getOwnWrapperData('/config/name').once())
-    effects.console.log(`Hello ${name}`)
+
+    await effects.console.log(`Hello ${name}`)
+
     return {
       message: `"Hello ${name}" has been written to the service logs. Open your logs to view it.`,
       value: {

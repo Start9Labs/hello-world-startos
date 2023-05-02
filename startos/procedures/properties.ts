@@ -1,4 +1,8 @@
-import { PropertyString, setupProperties } from 'start-sdk/lib/properties'
+import {
+  PropertyGroup,
+  PropertyString,
+  setupProperties,
+} from 'start-sdk/lib/properties'
 import { WrapperData } from '../wrapperData'
 
 /**

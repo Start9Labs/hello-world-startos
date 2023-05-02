@@ -36,11 +36,6 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(
     // Assign the Tor host a web protocol (e.g. "http", "ws")
     const torOrigin1 = torHost1.createOrigin('http')
 
-    // Create another Tor host with the assigned port mapping
-    const torHost2 = await torHostname1.bindTor(8443, 443)
-    // Assign the Tor host a web protocol (e.g. "https", "wss")
-    const torOrigin2 = torHost2.createOrigin('https')
-
     // ------------ LAN ------------
 
     // Create a LAN host with the assigned internal port
@@ -68,7 +63,6 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(
     // Choose which origins to attach to this interface. The resulting addresses will share the attributes of the interface (name, path, search, etc)
     const addressReceipt1 = await iFace1.exportAddresses([
       torOrigin1,
-      torOrigin2,
       ...lanOrigins1.ip,
       lanOrigins1.local,
     ])
