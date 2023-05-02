@@ -9,7 +9,7 @@ import { createAction } from 'start-sdk/lib/actions/createAction'
  *
  * Actions optionally take an arbitrary config form as input
  */
-const input = Config.of({
+const input = Config.withWrapperData<WrapperData>().of({
   nameToPrint: Value.text({
     name: 'Temp Name',
     description: 'If no name is provided, the name from config will be used',

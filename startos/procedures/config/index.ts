@@ -1,5 +1,5 @@
 import { WrapperData } from '../../wrapperData'
-import { configSpec } from './spec'
+import { ConfigSpec, configSpec } from './spec'
 import { read } from './read'
 import { save } from './save'
 import { setupConfig } from 'start-sdk/lib/config'
