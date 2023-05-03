@@ -1,6 +1,7 @@
-import { Config, Value } from 'start-sdk/lib/config/builder'
+import { Config } from 'start-sdk/lib/config/builder/config'
 import { WrapperData } from '../../wrapperData'
 import { createAction } from 'start-sdk/lib/actions/createAction'
+import { Value } from 'start-sdk/lib/config/builder/value'
 
 /**
  * This is an example Action
@@ -9,7 +10,7 @@ import { createAction } from 'start-sdk/lib/actions/createAction'
  *
  * Actions optionally take an arbitrary config form as input
  */
-const input = Config.withWrapperData<WrapperData>().of({
+const input = Config.of({
   nameToPrint: Value.text({
     name: 'Temp Name',
     description: 'If no name is provided, the name from config will be used',

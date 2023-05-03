@@ -1,4 +1,4 @@
-import { setupManifest } from 'start-sdk/lib/manifest'
+import { setupManifest } from 'start-sdk/lib/manifest/setupManifest'
 import { actionsMetadata } from './procedures/actions'
 
 /**

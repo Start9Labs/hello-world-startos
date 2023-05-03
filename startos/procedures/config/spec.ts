@@ -1,12 +1,13 @@
-import { Value, topConfig } from 'start-sdk/lib/config/builder'
+import { Config } from 'start-sdk/lib/config/builder/config'
 import { WrapperData } from '../../wrapperData'
+import { Value } from 'start-sdk/lib/config/builder/value'
 
 /**
  * Here you define the config specification that will ultimately present to the user as validated form inputs
  *
  * Most form controls are available, including text, textarea, number, toggle, select, multiselect, list, color, datetime, object (a subform), and union (a conditional subform)
  */
-export const configSpec = topConfig<WrapperData>()({
+export const configSpec = Config.of({
   name: Value.text({
     name: 'Name',
     description:

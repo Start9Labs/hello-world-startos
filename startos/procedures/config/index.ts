@@ -2,8 +2,8 @@ import { WrapperData } from '../../wrapperData'
 import { configSpec } from './spec'
 import { read } from './read'
 import { save } from './save'
-import { setupConfig } from 'start-sdk/lib/config'
 import { Manifest } from '../../manifest'
+import setupConfig from 'start-sdk/lib/config/setupConfig'
 
 /**
  * This is a static file. There is no need to make changes here

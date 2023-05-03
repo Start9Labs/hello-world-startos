@@ -1,13 +1,11 @@
-import { HealthReceipt } from 'start-sdk/lib/health'
 import { checkPortListening } from 'start-sdk/lib/health/checkFns'
-import {
-  Daemons,
-  NetworkInterfaceBuilder,
-  setupMain,
-} from 'start-sdk/lib/mainFn'
+import { setupMain } from 'start-sdk/lib/mainFn'
 import exportInterfaces from 'start-sdk/lib/mainFn/exportInterfaces'
 import { ExpectedExports } from 'start-sdk/lib/types'
 import { WrapperData } from '../wrapperData'
+import { NetworkInterfaceBuilder } from 'start-sdk/lib/mainFn/NetworkInterfaceBuilder'
+import { HealthReceipt } from 'start-sdk/lib/health/HealthReceipt'
+import { Daemons } from 'start-sdk/lib/mainFn/Daemons'
 
 export const main: ExpectedExports.main = setupMain<WrapperData>(
   async ({ effects, utils, started }) => {

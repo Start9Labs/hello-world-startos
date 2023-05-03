@@ -1,9 +1,6 @@
-import {
-  PropertyGroup,
-  PropertyString,
-  setupProperties,
-} from 'start-sdk/lib/properties'
+import { setupProperties } from 'start-sdk/lib/properties'
 import { WrapperData } from '../wrapperData'
+import { PropertyString } from 'start-sdk/lib/properties/PropertyString'
 
 /**
  * With access to WrapperData, in this function you determine what to include in the Properties section of the UI
