@@ -24,22 +24,40 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(
      * Naming convention reference: https://developer.mozilla.org/en-US/docs/Web/API/Location
      */
 
+    // ------------ Reverse Proxy ----------------
+
+    // set up a reverse proxy to enable https for Tor/LAN
+    await effects.reverseProxy({
+      bind: {
+        port: 443,
+        ssl: true,
+      },
+      dst: {
+        port: 80,
+        ssl: false,
+      },
+    })
+
     // ------------ Tor ------------
 
     // Find or generate a random Tor hostname by ID
-    const torHostname1 = utils.torHostName('torHostname1')
+    const torHostname = utils.torHostName('torHostname')
 
     // Create a Tor host with the assigned port mapping
-    const torHost1 = await torHostname1.bindTor(8080, 80)
+    const torHostTcp = await torHostname.bindTor(80, 80)
     // Assign the Tor host a web protocol (e.g. "http", "ws")
-    const torOrigin1 = torHost1.createOrigin('http')
+    const torOriginHttp = torHostTcp.createOrigin('http')
+    // Create a Tor host with the assigned port mapping
+    const torHostSsl = await torHostname.bindTor(443, 443)
+    // Assign the Tor host a web protocol (e.g. "https", "wss")
+    const torOriginHttps = torHostSsl.createOrigin('https')
 
     // ------------ LAN ------------
 
     // Create a LAN host with the assigned internal port
-    const lanHost1 = await utils.bindLan(8080)
+    const lanHostSsl = await utils.bindLan(443)
     // Assign the LAN host a web protocol (e.g. "https", "wss")
-    const lanOrigins1 = lanHost1.createOrigins('https')
+    const lanOriginsHttps = lanHostSsl.createOrigins('https')
 
     // ------------ Interface ----------------
 
@@ -47,7 +65,7 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(
     // Addresses are different "routes" to the same destination
 
     // Define the Interface for user display and consumption
-    const iFace1 = new NetworkInterfaceBuilder({
+    const webInterface = new NetworkInterfaceBuilder({
       effects,
       name: 'Web UI',
       id: 'webui',
@@ -59,14 +77,15 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(
     })
 
     // Choose which origins to attach to this interface. The resulting addresses will share the attributes of the interface (name, path, search, etc)
-    const addressReceipt1 = await iFace1.exportAddresses([
-      torOrigin1,
-      ...lanOrigins1.ip,
-      lanOrigins1.local,
+    const webReceipt = await webInterface.exportAddresses([
+      torOriginHttp,
+      torOriginHttps,
+      ...lanOriginsHttps.ip,
+      lanOriginsHttps.local,
     ])
 
     // Export all address receipts for all interfaces to obtain interface receipt
-    const interfaceReceipt = exportInterfaces(addressReceipt1)
+    const interfaceReceipt = exportInterfaces(webReceipt)
 
     /**
      * ======================== Additional Health Checks (optional) ========================
@@ -93,8 +112,7 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(
         display: 'Web Interface',
         // The function to run to determine the health status of the daemon
         fn: () =>
-          checkPortListening(effects, 8080, {
-            timeout: 10_000,
+          checkPortListening(effects, 80, {
             successMessage: 'The web interface is ready',
             errorMessage: 'The web interface is not ready',
           }),
