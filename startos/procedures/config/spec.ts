@@ -1,6 +1,6 @@
-import { Config } from 'start-sdk/lib/config/builder/config'
+import { Config } from '@start9labs/start-sdk/lib/config/builder/config'
 import { WrapperData } from '../../wrapperData'
-import { Value } from 'start-sdk/lib/config/builder/value'
+import { Value } from '@start9labs/start-sdk/lib/config/builder/value'
 
 /**
  * Here you define the config specification that will ultimately present to the user as validated form inputs

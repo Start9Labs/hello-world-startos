@@ -1,4 +1,4 @@
-import { setupMigrations } from 'start-sdk/lib/inits/migrations/setupMigrations'
+import { setupMigrations } from '@start9labs/start-sdk/lib/inits/migrations/setupMigrations'
 import { manifest } from '../../manifest'
 import { v4_0_0 } from './v4_0_0'
 

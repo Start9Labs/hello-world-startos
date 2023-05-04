@@ -1,7 +1,7 @@
-import { Config } from 'start-sdk/lib/config/builder/config'
+import { Config } from '@start9labs/start-sdk/lib/config/builder/config'
 import { WrapperData } from '../../wrapperData'
-import { createAction } from 'start-sdk/lib/actions/createAction'
-import { Value } from 'start-sdk/lib/config/builder/value'
+import { createAction } from '@start9labs/start-sdk/lib/actions/createAction'
+import { Value } from '@start9labs/start-sdk/lib/config/builder/value'
 
 /**
  * This is an example Action

@@ -1,6 +1,6 @@
 import { ConfigSpec } from './spec'
 import { WrapperData } from '../../wrapperData'
-import { Read } from 'start-sdk/lib/config/setupConfig'
+import { Read } from '@start9labs/start-sdk/lib/config/setupConfig'
 
 /**
  * This function executes on config get

@@ -1,8 +1,8 @@
-import { setupInstall } from 'start-sdk/lib/inits/setupInstall'
+import { setupInstall } from '@start9labs/start-sdk/lib/inits/setupInstall'
 import { WrapperData } from '../wrapperData'
 import { migrations } from './migrations'
-import { setupUninstall } from 'start-sdk/lib/inits/setupUninstall'
-import { setupInit } from 'start-sdk/lib/inits/setupInit'
+import { setupUninstall } from '@start9labs/start-sdk/lib/inits/setupUninstall'
+import { setupInit } from '@start9labs/start-sdk/lib/inits/setupInit'
 
 /**
  * Here you define arbitrary code that runs once, on fresh install only
