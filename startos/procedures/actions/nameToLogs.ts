@@ -31,14 +31,14 @@ export const nameToLogs = createAction<WrapperData, typeof input>(
     description: 'Prints "Hello [Name]" to the service logs.',
     id: 'nameToLogs',
     input,
-    runningOnly: false,
+    allowedStatuses: 'only-running',
   },
   async ({ effects, utils, input }) => {
     const name =
       input.nameToPrint ||
       (await utils.getOwnWrapperData('/config/name').once())
 
-    await effects.console.log(`Hello ${name}`)
+    await console.log(`Hello ${name}`)
 
     return {
       message: `"Hello ${name}" has been written to the service logs. Open your logs to view it.`,

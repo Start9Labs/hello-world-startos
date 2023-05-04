@@ -5,7 +5,7 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "@start9labs/start-sdk": "0.4.0-rev0.lib0.rc1"
+    "@start9labs/start-sdk": "git+https://github.com/Start9Labs/start-sdk#597aa485186dcd3246357dc1f8e3ad91f062e454"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.36.1",
