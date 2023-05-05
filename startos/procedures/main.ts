@@ -71,7 +71,7 @@ export const main: ExpectedExports.main = setupMain<WrapperData>(
       id: 'webui',
       description: 'The web interface of Hello World',
       ui: true,
-      basic: null,
+      username: null,
       path: '',
       search: {},
     })

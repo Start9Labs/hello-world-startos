@@ -38,7 +38,7 @@ export const nameToLogs = createAction<WrapperData, typeof input>(
       input.nameToPrint ||
       (await utils.getOwnWrapperData('/config/name').once())
 
-    await console.log(`Hello ${name}`)
+    console.info(`Hello ${name}`)
 
     return {
       message: `"Hello ${name}" has been written to the service logs. Open your logs to view it.`,
