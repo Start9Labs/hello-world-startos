@@ -7,7 +7,7 @@ import { actionsMetadata } from './procedures/actions'
 export const manifest = setupManifest({
   id: 'hello-world',
   title: 'Hello World',
-  version: '4.0.0',
+  version: '4.0.0.1',
   releaseNotes: 'Revamped for StartOS 0.4.0',
   license: 'mit',
   replaces: Array<string>('Hello World (hosted)', 'Goodbye World'),

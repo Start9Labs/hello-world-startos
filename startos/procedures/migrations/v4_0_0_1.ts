@@ -7,8 +7,8 @@ import { Migration } from '@start9labs/start-sdk/lib/inits/migrations/Migration'
  *
  * The resulting migration (e.g. v4000) is exported, then imported into migration/index.ts
  */
-export const v4_0_0 = new Migration({
-  version: '4.0.0',
+export const v4_0_0_1 = new Migration({
+  version: '4.0.0.1',
   up: async ({ effects }) => await effects.setConfigured(false),
   down: async ({ effects }) => {},
 })
