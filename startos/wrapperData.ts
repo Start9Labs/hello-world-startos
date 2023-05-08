@@ -1,3 +1,4 @@
+import { createWrapperDataContract } from '@start9labs/start-sdk/lib/wrapperData/wrapperDataContract'
 import { ConfigSpec } from './procedures/config/spec'
 
 /**
@@ -8,3 +9,5 @@ import { ConfigSpec } from './procedures/config/spec'
 export interface WrapperData {
   config: ConfigSpec
 }
+
+export const wrapperDataContract = createWrapperDataContract<WrapperData>()

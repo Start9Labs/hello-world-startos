@@ -1,4 +1,4 @@
-import { WrapperData } from '../../wrapperData'
+import { WrapperData, wrapperDataContract } from '../../wrapperData'
 import { configSpec } from './spec'
 import { read } from './read'
 import { save } from './save'
@@ -12,4 +12,4 @@ export const { getConfig, setConfig } = setupConfig<
   WrapperData,
   typeof configSpec,
   Manifest
->(configSpec, save, read)
+>(wrapperDataContract, configSpec, save, read)

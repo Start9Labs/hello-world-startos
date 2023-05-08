@@ -2,12 +2,13 @@ import { checkPortListening } from '@start9labs/start-sdk/lib/health/checkFns'
 import { setupMain } from '@start9labs/start-sdk/lib/mainFn'
 import exportInterfaces from '@start9labs/start-sdk/lib/mainFn/exportInterfaces'
 import { ExpectedExports } from '@start9labs/start-sdk/lib/types'
-import { WrapperData } from '../wrapperData'
+import { WrapperData, wrapperDataContract } from '../wrapperData'
 import { NetworkInterfaceBuilder } from '@start9labs/start-sdk/lib/mainFn/NetworkInterfaceBuilder'
 import { HealthReceipt } from '@start9labs/start-sdk/lib/health/HealthReceipt'
 import { Daemons } from '@start9labs/start-sdk/lib/mainFn/Daemons'
 
-export const main: ExpectedExports.main = setupMain<WrapperData>(
+export const main: ExpectedExports.main = setupMain(
+  wrapperDataContract,
   async ({ effects, utils, started }) => {
     /**
      * ======================== Setup ========================

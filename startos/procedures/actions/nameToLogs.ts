@@ -1,5 +1,5 @@
 import { Config } from '@start9labs/start-sdk/lib/config/builder/config'
-import { WrapperData } from '../../wrapperData'
+import { WrapperData, wrapperDataContract } from '../../wrapperData'
 import { createAction } from '@start9labs/start-sdk/lib/actions/createAction'
 import { Value } from '@start9labs/start-sdk/lib/config/builder/value'
 
@@ -26,6 +26,7 @@ const input = Config.of({
  * If no input is required, FormSpec would be null
  */
 export const nameToLogs = createAction<WrapperData, typeof input>(
+  wrapperDataContract,
   {
     name: 'Name to Logs',
     description: 'Prints "Hello [Name]" to the service logs.',

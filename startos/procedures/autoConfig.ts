@@ -1,5 +1,5 @@
 import { ConfigSpec } from './config/spec'
-import { WrapperData } from '../wrapperData'
+import { WrapperData, wrapperDataContract } from '../wrapperData'
 import { Manifest } from '../manifest'
 import { setupAutoConfig } from '@start9labs/start-sdk/lib/autoconfig/setupAutoConfig'
 
@@ -13,4 +13,4 @@ export const autoConfig = setupAutoConfig<
   ConfigSpec,
   Manifest,
   {}
->({})
+>(wrapperDataContract, {})
