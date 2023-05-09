@@ -1,4 +1,4 @@
-import { ConfigSpec } from './config/spec'
+import { configSpec } from './config/spec'
 import { sdk } from './sdk'
 
 /**
@@ -6,4 +6,4 @@ import { sdk } from './sdk'
  *
  * See Hello Moon for an example
  */
-export const autoConfig = sdk.setupAutoConfig<ConfigSpec, {}>({})
+export const autoConfig = sdk.setupAutoConfig(configSpec, {})
