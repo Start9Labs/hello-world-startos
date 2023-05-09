@@ -1,6 +1,5 @@
-import { Config } from '@start9labs/start-sdk/lib/config/builder/config'
-import { Value } from '@start9labs/start-sdk/lib/config/builder/value'
-
+import { sdk } from '../sdk'
+const { Config, Value } = sdk
 /**
  * Here you define the config specification that will ultimately present to the user as validated form inputs
  *

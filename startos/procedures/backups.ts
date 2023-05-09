@@ -1,6 +1,5 @@
-import { setupBackups } from '@start9labs/start-sdk/lib/backup/setupBackups'
-import { Manifest } from '../manifest'
+import { sdk } from './sdk'
 /**
  * Here we define what volumes from the Manifest to include in backups
  */
-export const { createBackup, restoreBackup } = setupBackups<Manifest>('main')
+export const { createBackup, restoreBackup } = sdk.setupBackups('main')

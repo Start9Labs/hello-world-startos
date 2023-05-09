@@ -5,14 +5,13 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "@start9labs/start-sdk": "git+https://github.com/Start9Labs/start-sdk#e32b768e5c95574555cb29020d414c814f5c4598"
+    "@start9labs/start-sdk": "git+https://github.com/Start9Labs/start-sdk#021c4d4503f02c6d7814f9c9614e2fd93a8142c0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@vercel/ncc": "^0.36.1",
     "prettier": "^2.8.4",
     "typescript": "^4.9.5"
-
   },
   "prettier": {
     "trailingComma": "all",
