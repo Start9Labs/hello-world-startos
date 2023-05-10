@@ -1,5 +1,5 @@
 import { configSpec } from './config/spec'
-import { sdk } from './sdk'
+import { sdk } from '../sdk'
 
 /**
  * In this function, you establish rules for auto configuring service dependencies

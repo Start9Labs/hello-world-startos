@@ -1,4 +1,4 @@
-import { sdk } from '../sdk'
+import { sdk } from '../../sdk'
 const { Config, Value } = sdk
 
 /**

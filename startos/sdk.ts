@@ -1,7 +1,7 @@
 import { StartSdk } from '@start9labs/start-sdk/lib/StartSdk'
-import { manifest } from '../manifest'
-import { Store } from '../store'
-import { Vault } from '../vault'
+import { manifest } from './manifest'
+import { Store } from './store'
+import { Vault } from './vault'
 
 /**
  * This is a static file that provides type safety throughout the codebase

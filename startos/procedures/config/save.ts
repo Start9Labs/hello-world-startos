@@ -1,5 +1,5 @@
 import { configSpec } from './spec'
-import { sdk } from '../sdk'
+import { sdk } from '../../sdk'
 
 /**
  * This function executes on config save
