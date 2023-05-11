@@ -1,7 +1,5 @@
-import { Config } from '@start9labs/start-sdk/lib/config/builder/config'
-import { WrapperData } from '../../wrapperData'
-import { createAction } from '@start9labs/start-sdk/lib/actions/createAction'
-import { Value } from '@start9labs/start-sdk/lib/config/builder/value'
+import { sdk } from '../../sdk'
+const { Config, Value } = sdk
 
 /**
  * This is an example Action
@@ -25,7 +23,7 @@ const input = Config.of({
  *
  * If no input is required, FormSpec would be null
  */
-export const nameToLogs = createAction<WrapperData, typeof input>(
+export const nameToLogs = sdk.createAction(
   {
     name: 'Name to Logs',
     description: 'Prints "Hello [Name]" to the service logs.',
@@ -35,8 +33,7 @@ export const nameToLogs = createAction<WrapperData, typeof input>(
   },
   async ({ effects, utils, input }) => {
     const name =
-      input.nameToPrint ||
-      (await utils.getOwnWrapperData('/config/name').once())
+      input.nameToPrint || (await utils.store.getOwn('/config/name').once())
 
     console.info(`Hello ${name}`)
 

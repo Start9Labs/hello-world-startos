@@ -1,15 +1,14 @@
-import { ConfigSpec } from './spec'
-import { WrapperData } from '../../wrapperData'
-import { Read } from '@start9labs/start-sdk/lib/config/setupConfig'
+import { sdk } from '../../sdk'
+import { configSpec } from './spec'
 
 /**
  * This function executes on config get
  *
  * Use this function to gather data from various files and assemble into a valid config to display to the user
  */
-export const read: Read<WrapperData, ConfigSpec> = async ({
-  effects,
-  utils,
-}) => {
-  return utils.getOwnWrapperData('/config').once()
-}
+export const read = sdk.setupConfigRead(
+  configSpec,
+  async ({ effects, utils }) => {
+    return utils.store.getOwn('/config').once()
+  },
+)
