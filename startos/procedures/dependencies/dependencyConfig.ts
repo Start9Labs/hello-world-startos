@@ -6,4 +6,4 @@ import { configSpec } from '../config/spec'
  *
  * See Hello Moon for an example
  */
-export const autoConfig = sdk.setupDependencyConfig(configSpec, {})
+export const dependencyConfig = sdk.setupDependencyConfig(configSpec, {})
