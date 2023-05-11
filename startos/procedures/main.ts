@@ -1,10 +1,10 @@
+import { sdk } from '../sdk'
 import { checkPortListening } from '@start9labs/start-sdk/lib/health/checkFns'
 import exportInterfaces from '@start9labs/start-sdk/lib/mainFn/exportInterfaces'
 import { ExpectedExports } from '@start9labs/start-sdk/lib/types'
 import { NetworkInterfaceBuilder } from '@start9labs/start-sdk/lib/mainFn/NetworkInterfaceBuilder'
 import { HealthReceipt } from '@start9labs/start-sdk/lib/health/HealthReceipt'
 import { Daemons } from '@start9labs/start-sdk/lib/mainFn/Daemons'
-import { sdk } from '../sdk'
 
 export const main: ExpectedExports.main = sdk.setupMain(
   async ({ effects, utils, started }) => {

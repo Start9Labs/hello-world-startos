@@ -1,5 +1,5 @@
-import { migrations } from './migrations'
 import { sdk } from '../sdk'
+import { migrations } from './migrations'
 
 /**
  * Here you define arbitrary code that runs once, on fresh install only
