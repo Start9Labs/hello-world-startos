@@ -1,5 +1,6 @@
 import { sdk } from '../../sdk'
 const { Config, Value } = sdk
+
 /**
  * Here you define the config specification that will ultimately present to the user as validated form inputs
  *

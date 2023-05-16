@@ -8,11 +8,13 @@ export const webUiInterfaceId = 'webui'
  * ======================== Interfaces ========================
  *
  * In this section, you will decide how the service will be exposed to the outside world
+ *
+ * This function runs on service install/update AND on config save
  */
 export const setInterfaces = sdk.setupInterfaces(
   configSpec,
   async ({ effects, utils, input }) => {
-    const multi = utils.host.multi('multi')
+    const multi = utils.host.multi('multi') // technically just a multi hostname
     const multiOrigin = await multi.bindPort(uiPort, { protocol: 'http' })
     const multiInterface = utils.createInterface({
       name: 'Web UI',

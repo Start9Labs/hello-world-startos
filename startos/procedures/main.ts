@@ -1,5 +1,4 @@
 import { sdk } from '../sdk'
-import { checkPortListening } from '@start9labs/start-sdk/lib/health/checkFns'
 import { ExpectedExports } from '@start9labs/start-sdk/lib/types'
 import { HealthReceipt } from '@start9labs/start-sdk/lib/health/HealthReceipt'
 import { Daemons } from '@start9labs/start-sdk/lib/mainFn/Daemons'
@@ -35,10 +34,11 @@ export const main: ExpectedExports.main = sdk.setupMain(
     }).addDaemon('webui', {
       command: 'hello-world', // The command to start the daemon
       ready: {
+        // If display is null, it will not be displayed to the user in the UI
         display: 'Web Interface',
         // The function to run to determine the health status of the daemon
         fn: () =>
-          checkPortListening(effects, uiPort, {
+          sdk.healthCheck.checkPortListening(effects, uiPort, {
             successMessage: 'The web interface is ready',
             errorMessage: 'The web interface is not ready',
           }),
