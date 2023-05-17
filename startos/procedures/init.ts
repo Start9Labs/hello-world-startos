@@ -5,7 +5,12 @@ import { migrations } from './migrations'
 /**
  * Here you define arbitrary code that runs once, on fresh install only
  */
-const install = sdk.setupInstall(async ({ effects, utils }) => {})
+const install = sdk.setupInstall(async ({ effects, utils }) => {
+  await utils.vault.set(
+    'secretPhrase',
+    `Knock knock. Who's there? Nobody knows!`,
+  )
+})
 
 /**
  * Here you define arbitrary code that runs once, on uninstall only

@@ -12,6 +12,10 @@ export const save = sdk.setupConfigSave(
   async ({ effects, utils, input, dependencies }) => {
     // save data wherever you want
     await utils.store.setOwn('/config', input)
+    await utils.vault.set(
+      'secretPhrase',
+      `Knock knock. Who's there? ${input.name}!`,
+    )
 
     // set current dependencies based on config settings
     const dependenciesReceipt = await effects.setDependencies([])

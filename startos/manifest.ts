@@ -17,7 +17,7 @@ export const manifest = setupManifest({
   donationUrl: 'https://donate.start9.com/',
   description: {
     short: 'Example service for s9pk highlighting basic features',
-    long: 'Hello World is a bare-bones service that launches a web interface to say "Hello World", and nothing more.',
+    long: 'Hello World is a template service that provides examples of basic StartOS features.',
   },
   assets: {
     license: 'LICENSE',
