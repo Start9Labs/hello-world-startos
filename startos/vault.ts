@@ -8,6 +8,6 @@
  *
  * Values are encrypted with the user's StartOS master password and are visible to the user in the service console.
  */
-export interface Vault {
+export type Vault = {
   secretPhrase: string
 }

@@ -3,6 +3,6 @@
  *
  * Ideally this is empty. Stateless packages are easier to maintain and eliminate unexpected behavior
  */
-export interface Store {
+export type Store = {
   nameLastUpdatedAt: string
 }
