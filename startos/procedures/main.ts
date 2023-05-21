@@ -16,7 +16,7 @@ export const main: ExpectedExports.main = sdk.setupMain(
     /**
      * ======================== Additional Health Checks (optional) ========================
      *
-     * In this section, you will define additional health checks beyond those associated with daemons
+     * In this section, you will define *additional* health checks beyond those associated with daemons
      */
     const healthReceipts: HealthReceipt[] = []
 

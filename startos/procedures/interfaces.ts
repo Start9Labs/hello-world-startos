@@ -9,7 +9,7 @@ export const webUiInterfaceId = 'webui'
  *
  * In this section, you will decide how the service will be exposed to the outside world
  *
- * This function runs on service install/update AND on config save
+ * This function runs on service install/update *and* on config save
  */
 export const setInterfaces = sdk.setupInterfaces(
   configSpec,
@@ -21,6 +21,8 @@ export const setInterfaces = sdk.setupInterfaces(
       id: webUiInterfaceId,
       description: 'The web interface of Hello World',
       ui: true,
+      hasPrimary: false,
+      disabled: false,
       username: null,
       path: '',
       search: {},

@@ -1,7 +1,7 @@
 import { setupManifest } from '@start9labs/start-sdk/lib/manifest/setupManifest'
 
 /**
- * In this function you define static properties of the service
+ * In this function you define static properties of the service to be displayed in the Marketplace and used by StartOS
  */
 export const manifest = setupManifest({
   id: 'hello-world',

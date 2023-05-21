@@ -1,5 +1,7 @@
 import { sdk } from '../../sdk'
+import { getSecretPhrase } from '../../utils'
 import { setInterfaces } from '../interfaces'
+import { yamlFile } from './file-models/config.yml'
 import { configSpec } from './spec'
 
 /**
@@ -10,19 +12,29 @@ import { configSpec } from './spec'
 export const save = sdk.setupConfigSave(
   configSpec,
   async ({ effects, utils, input, dependencies }) => {
-    // save data wherever you want
-    await utils.store.setOwn('/config', input)
-    await utils.vault.set(
-      'secretPhrase',
-      `Knock knock. Who's there? ${input.name}!`,
-    )
+    /**
+     ******** save data wherever you want ********
+     */
 
-    // set current dependencies based on config settings
+    // Whenever possible, save data directly to the underlying config file(s) of the upstream service.
+    // This ensures that changes to the file from the service's GUI or from the command line are respected.
+    await yamlFile.write(input, effects)
+    // If absolutely necessary, save package specific data to the package Store. Stateless packages are preferable
+    await utils.store.setOwn('/nameLastUpdatedAt', new Date().toISOString())
+    // Use the vault to persist sensitive values that are not commonly persisted by the upstream service, such as access credentials
+    await utils.vault.set('secretPhrase', getSecretPhrase(input.name))
+
+    /**
+     ******** set current dependencies based on config ********
+     */
     const dependenciesReceipt = await effects.setDependencies([])
 
     return {
-      interfacesReceipt: await setInterfaces({ effects, utils, input }), // This is plumbing, don't touch it
+      // The line below is just plumbing, don't touch it. It insures setInterfaces runs whenever config is saved
+      interfacesReceipt: await setInterfaces({ effects, utils, input }),
+      // provide dependencies receipt from above
       dependenciesReceipt,
+      // optionally restart the service on config save
       restart: true,
     }
   },
