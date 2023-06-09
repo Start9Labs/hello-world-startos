@@ -1,5 +1,6 @@
 import { sdk } from '../../sdk'
 const { Config, Value } = sdk
+import { yamlFile } from '../config/file-models/config.yml'
 
 /**
  * This is an example Action
@@ -33,7 +34,7 @@ export const nameToLogs = sdk.createAction(
   },
   async ({ effects, utils, input }) => {
     const name =
-      input.nameToPrint || (await utils.store.getOwn('/config/name').once())
+      input.nameToPrint || (await yamlFile.read(effects))?.name || 'Unknown'
 
     console.info(`Hello ${name}`)
 

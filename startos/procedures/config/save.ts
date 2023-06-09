@@ -15,14 +15,14 @@ export const save = sdk.setupConfigSave(
     /**
      ******** save data wherever you want ********
      */
-
     // Whenever possible, save data directly to the underlying config file(s) of the upstream service.
     // This ensures that changes to the file from the service's GUI or from the command line are respected.
     await yamlFile.write(input, effects)
-    // If absolutely necessary, save package specific data to the package Store. Stateless packages are preferable
-    await utils.store.setOwn('/nameLastUpdatedAt', new Date().toISOString())
-    // Use the vault to persist sensitive values that are not commonly persisted by the upstream service, such as access credentials
-    await utils.vault.set('secretPhrase', getSecretPhrase(input.name))
+    // If necessary, save package specific data to the package Store. Stateless packages are preferable
+    await Promise.all([
+      utils.store.setOwn('/nameLastUpdatedAt', new Date().toISOString()),
+      utils.store.setOwn('/secretPhrase', getSecretPhrase(input.name)),
+    ])
 
     /**
      ******** set current dependencies based on config ********
