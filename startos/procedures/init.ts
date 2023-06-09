@@ -22,11 +22,10 @@ const uninstall = sdk.setupUninstall(async ({ effects, utils }) => {})
 
 /**
  * Here you determine which values from your store, if any, should be exposed to the user or to dependent services
- *
- * Values exposed to the user should be credentials and will be displayed in the user's "Vault"
  */
 const exported = sdk.setupExports(({ effects, utils }) => {
   return {
+    // Values exported to the UI will be displayed (masked) in the user's "Vault". It is designed for credentials
     ui: [
       {
         path: '/secretPhrase',
