@@ -11,11 +11,6 @@ export const configSpec = Config.of({
     name: 'Name',
     description:
       'When you launch the Hello World UI, it will display "Hello [First Name]"',
-    required: { default: null },
+    required: { default: 'World' },
   }),
 })
-
-/**
- * This line is necessary to satisfy Typescript typings. Do not touch it
- */
-export type ConfigSpec = typeof configSpec.validator._TYPE
