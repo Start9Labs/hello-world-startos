@@ -16,7 +16,7 @@ Install the system dependencies below to build this project by following the ins
 
 ```
 git clone https://github.com/Start9Labs/hello-world-startos.git
-cd hello-world-wrapper
+cd hello-world-startos
 ```
 
 ## Building

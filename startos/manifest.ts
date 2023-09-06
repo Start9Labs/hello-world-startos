@@ -19,6 +19,7 @@ export const manifest = setupManifest({
     short: 'Example service for s9pk highlighting basic features',
     long: 'Hello World is a template service that provides examples of basic StartOS features.',
   },
+  // Relative paths to asset files
   assets: {
     license: 'LICENSE',
     icon: 'assets/icon.png',
