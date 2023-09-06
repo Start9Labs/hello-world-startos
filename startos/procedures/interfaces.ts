@@ -20,7 +20,7 @@ export const setInterfaces = sdk.setupInterfaces(
       name: 'Web UI',
       id: webUiInterfaceId,
       description: 'The web interface of Hello World',
-      ui: true,
+      type: 'ui',
       hasPrimary: false,
       disabled: false,
       username: null,
