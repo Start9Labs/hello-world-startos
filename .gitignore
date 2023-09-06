@@ -1,6 +1,6 @@
-hello-world.s9pk
-image.tar
-scripts/*.js
+*.s9pk
+procedures/*.js
+node_modules/
 .DS_Store
 .vscode/
 docker-images
