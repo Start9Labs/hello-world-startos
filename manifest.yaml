@@ -4,7 +4,7 @@
 id: hello-world 
  # A human readable service title
 title: "Hello World"
-# Service version - accepts up to four digits, where the last confirms to revisions necessary for EmbassyOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
+# Service version - accepts up to four digits, where the last confirms to revisions necessary for StartOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
 version: 1.0.0.1
 # Release notes for the update - can be a string, paragraph or URL
 release-notes: "Revamped for EmabssyOS 0.3.3"
@@ -20,7 +20,7 @@ support-site: "https://docs.start9.com/"
 marketing-site: "https://start9.com/"
 # The series of commands to build the project into an s9pk for arm64/v8. In this case we are using a Makefile with the simple build command "make".
 build: ["make"]
-# Human readable descriptors for the service. These are used throughout the EmbassyOS user interface, primarily in the marketplace.
+# Human readable descriptors for the service. These are used throughout the StartOS user interface, primarily in the marketplace.
 description:
   # This is the first description visible to the user in the marketplace.
   short: Example service
@@ -64,7 +64,7 @@ main:
   mounts:
     # Specifies where on the service's file system its persistence directory should be mounted prior to service startup
     main: /root
-# This is where health checks would be defined - see a more advanced example in https://github.com/Start9Labs/embassy-pages-wrapper
+# This is where health checks would be defined - see a more advanced example in https://github.com/Start9Labs/start-pages-wrapper
 health-checks: {}
 config: ~
 properties: ~
@@ -98,7 +98,7 @@ interfaces:
       - tcp
       - http
 dependencies: {}
-# Specifies how backups should be run for this service. The default EmbassyOS provided option is to use the duplicity backup library on a system image (compat)
+# Specifies how backups should be run for this service. The default StartOS provided option is to use the duplicity backup library on a system image (compat)
 backup:
   create:
     # Currently, only docker actions are supported.
