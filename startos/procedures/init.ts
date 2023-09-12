@@ -25,7 +25,7 @@ const uninstall = sdk.setupUninstall(async ({ effects, utils }) => {})
  */
 const exported = sdk.setupExports(({ effects, utils }) => {
   return {
-    // Values exported to the UI will be displayed (masked) in the user's "Vault". It is designed for credentials
+    // Values exported to the UI will be displayed (masked) in the user's "Credentials". It is designed for credentials
     ui: [
       {
         path: '/secretPhrase',
