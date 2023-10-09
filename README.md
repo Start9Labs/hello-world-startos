@@ -50,7 +50,7 @@ source $HOME/.cargo/env
 ```
 8. Build and install start-sdk
 ```
-cd ~/ && git clone --recursive https://github.com/Start9Labs/start-os.git
+cd ~/ && git clone --recursive https://github.com/Start9Labs/start-os.git --branch sdk
 cd start-os/backend/
 ./install-sdk.sh
 start-sdk init
