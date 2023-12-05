@@ -26,7 +26,7 @@ clean:
 	rm -f scripts/*.js
 
 clean-manifest:
-	@sed -i '' '/^[[:blank:]]*#/d;s/#.*//' manifest.yaml
+	@sed -i '' '/^[[:blank:]]*#/d' manifest.yaml
 	@echo; echo "Comments successfully removed from manifest.yaml file."; echo
 
 # BEGIN REBRANDING
