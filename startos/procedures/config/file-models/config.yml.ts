@@ -1,10 +1,9 @@
-import { matches } from '@start9labs/start-sdk'
-import FileHelper from '@start9labs/start-sdk/lib/util/fileHelper'
+import { matches, FileHelper } from '@start9labs/start-sdk'
 
 const { object, string } = matches
 
-const yamlShape = object({
+const shape = object({
   name: string,
 })
 
-export const yamlFile = FileHelper.toml('config.yml', yamlShape)
+export const yamlFile = FileHelper.yaml('config.yml', shape)

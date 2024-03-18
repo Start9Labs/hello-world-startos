@@ -1,4 +1,4 @@
-import { setupManifest } from '@start9labs/start-sdk/lib/manifest/setupManifest'
+import { setupManifest } from '@start9labs/start-sdk'
 
 /**
  * In this function you define static properties of the service to be displayed in the Marketplace and used by StartOS
@@ -19,27 +19,12 @@ export const manifest = setupManifest({
     short: 'Example service for s9pk highlighting basic features',
     long: 'Hello World is a template service that provides examples of basic StartOS features.',
   },
-  // Relative paths to asset files
-  assets: {
-    license: 'LICENSE',
-    icon: 'assets/icon.png',
-    instructions: 'assets/instructions.md',
-  },
-  volumes: {
-    // This is the image where files from the project asset directory will go
-    main: 'data',
-  },
-  containers: {
-    main: {
-      // Identifier for the main image volume, which will be used when other actions need to mount to this volume.
-      image: 'main',
-      // Specifies where to mount the data volume(s), if there are any. Mounts for pointer dependency volumes are also denoted here. These are necessary if data needs to be read from / written to these volumes.
-      mounts: {
-        // Specifies where on the service's file system its persistence directory should be mounted prior to service startup
-        main: '/data',
-      },
-    },
-  },
+  // directories of static files you want to mount to your container
+  assets: [],
+  // List of identifiers of your persistence volumes that can be mounted to your container
+  volumes: ['main'],
+  // List of identifiers of your application images, which will be used when other actions need to run in this image
+  images: ['main'],
   alerts: {
     install: 'Optional alert to display before installing the service',
     update: 'Optional alert to display before updating the service',

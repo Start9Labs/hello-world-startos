@@ -31,6 +31,7 @@ export const nameToLogs = sdk.createAction(
     id: 'nameToLogs',
     input,
     allowedStatuses: 'only-running',
+    group: null,
   },
   async ({ effects, utils, input }) => {
     const name =

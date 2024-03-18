@@ -23,12 +23,14 @@ export const setInterfaces = sdk.setupInterfaces(
       type: 'ui',
       hasPrimary: false,
       disabled: false,
+      masked: false,
+      schemeOverride: null,
       username: null,
       path: '',
       search: {},
     })
 
-    const uiReceipt = await ui.export([uiMultiOrigin])
+    const uiReceipt = await uiMultiOrigin.export([ui])
 
     return [uiReceipt]
   },

@@ -1,4 +1,4 @@
-import { StartSdk } from '@start9labs/start-sdk/lib/StartSdk'
+import { StartSdk } from '@start9labs/start-sdk'
 import { manifest } from './manifest'
 import { Store } from './store'
 
