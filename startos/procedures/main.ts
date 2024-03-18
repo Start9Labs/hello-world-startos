@@ -2,7 +2,7 @@ import { sdk } from '../sdk'
 import { HealthReceipt } from '@start9labs/start-sdk/cjs/sdk/lib/health/HealthReceipt'
 import { uiPort } from './interfaces'
 
-export const main = sdk.setupMain(async ({ effects, utils, started }) => {
+export const main = sdk.setupMain(async ({ effects, started }) => {
   /**
    * ======================== Setup ========================
    *
@@ -31,6 +31,7 @@ export const main = sdk.setupMain(async ({ effects, utils, started }) => {
   }).addDaemon('webui', {
     imageId: 'main',
     command: 'hello-world', // The command to start the daemon
+    mounts: sdk.Mounts.of().addVolume('main', null, '/data', false),
     ready: {
       // If display is null, it will not be displayed to the user in the UI
       display: 'Web Interface',

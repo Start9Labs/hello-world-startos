@@ -13,10 +13,10 @@ export const webUiInterfaceId = 'webui'
  */
 export const setInterfaces = sdk.setupInterfaces(
   configSpec,
-  async ({ effects, utils, input }) => {
-    const uiMulti = utils.host.multi('uiMulti')
+  async ({ effects, input }) => {
+    const uiMulti = sdk.host.multi(effects, 'uiMulti')
     const uiMultiOrigin = await uiMulti.bindPort(uiPort, { protocol: 'http' })
-    const ui = utils.createInterface({
+    const ui = sdk.createInterface(effects, {
       name: 'Web UI',
       id: webUiInterfaceId,
       description: 'The web interface of Hello World',

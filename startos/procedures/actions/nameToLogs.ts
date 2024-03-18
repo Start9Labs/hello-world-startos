@@ -33,7 +33,7 @@ export const nameToLogs = sdk.createAction(
     allowedStatuses: 'only-running',
     group: null,
   },
-  async ({ effects, utils, input }) => {
+  async ({ effects, input }) => {
     const name =
       input.nameToPrint || (await yamlFile.read(effects))?.name || 'Unknown'
 

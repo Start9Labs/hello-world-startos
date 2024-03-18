@@ -9,7 +9,6 @@ import { sdk } from '../../sdk'
  */
 export const v4_0_0_1 = sdk.Migration.of({
   version: '4.0.0.1',
-  up: async ({ effects, utils }) =>
-    await effects.setConfigured({ configured: false }),
-  down: async ({ effects, utils }) => {},
+  up: async ({ effects }) => await effects.setConfigured({ configured: false }),
+  down: async ({ effects }) => {},
 })

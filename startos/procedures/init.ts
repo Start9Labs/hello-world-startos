@@ -7,23 +7,23 @@ import { migrations } from './migrations'
 /**
  * Here you define arbitrary code that runs *once*, on fresh install only
  */
-const install = sdk.setupInstall(async ({ effects, utils }) => {
+const install = sdk.setupInstall(async ({ effects }) => {
   const name = 'World'
 
   await yamlFile.write({ name }, effects)
 
-  await utils.store.setOwn('/secretPhrase', getSecretPhrase(name))
+  await sdk.store.setOwn(effects, '/secretPhrase', getSecretPhrase(name))
 })
 
 /**
  * Here you define arbitrary code that runs once, on uninstall only
  */
-const uninstall = sdk.setupUninstall(async ({ effects, utils }) => {})
+const uninstall = sdk.setupUninstall(async ({ effects }) => {})
 
 /**
  * Here you determine which values from your store, if any, should be exposed to the user or to dependent services
  */
-const exported = sdk.setupExports(({ effects, utils }) => {
+const exported = sdk.setupExports(({ effects }) => {
   return {
     // Values exported to the UI will be displayed (masked) in the user's "Credentials". It is designed for credentials
     ui: {
