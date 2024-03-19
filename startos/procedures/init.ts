@@ -5,7 +5,7 @@ import { setInterfaces } from './interfaces'
 import { migrations } from './migrations'
 
 /**
- * Here you define arbitrary code that runs *once*, on fresh install only
+ * Here you define arbitrary code that runs *once*, on fresh install only.
  */
 const install = sdk.setupInstall(async ({ effects }) => {
   const name = 'World'
@@ -16,16 +16,16 @@ const install = sdk.setupInstall(async ({ effects }) => {
 })
 
 /**
- * Here you define arbitrary code that runs once, on uninstall only
+ * Here we define arbitrary code that runs once, on uninstall only.
  */
 const uninstall = sdk.setupUninstall(async ({ effects }) => {})
 
 /**
- * Here you determine which values from your store, if any, should be exposed to the user or to dependent services
+ * Here we determine which values from the store, if any, should be exposed to the UI, or to dependent services, or both.
  */
 const exported = sdk.setupExports(({ effects }) => {
   return {
-    // Values exported to the UI will be displayed (masked) in the user's "Credentials". It is designed for credentials
+    /** Values exported to the UI are displayed in "Properties" according to the structure defined here. */
     ui: {
       'Secret Phrase': {
         type: 'string',
@@ -42,7 +42,7 @@ const exported = sdk.setupExports(({ effects }) => {
 })
 
 /**
- * This is a static function. There is no need to make changes here
+ * This is a static function. There is no need to make changes here.
  */
 export const { init, uninit } = sdk.setupInit(
   migrations,

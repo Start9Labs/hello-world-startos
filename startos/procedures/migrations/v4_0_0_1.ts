@@ -1,11 +1,11 @@
 import { sdk } from '../../sdk'
 
 /**
- * This is an example migration file
+ * This is an example migration file.
  *
- * By convention, each version service requiring a migration receives its own file
+ * By convention, each new version that requires a migration should receive its own file like this one.
  *
- * The resulting migration (e.g. v4_0_0_0) is exported, then imported into migrations/index.ts
+ * The resulting migration (e.g. v4_0_0_0) is exported from here, then imported into migrations/index.ts.
  */
 export const v4_0_0_1 = sdk.Migration.of({
   version: '4.0.0.1',

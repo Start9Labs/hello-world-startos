@@ -2,14 +2,13 @@ import { sdk } from '../sdk'
 import { configSpec } from './config/spec'
 
 export const uiPort = 80
-export const webUiInterfaceId = 'webui'
 
 /**
- * ======================== Interfaces ========================
+ * ======================== Service Interfaces ========================
  *
- * In this section, you will decide how the service will be exposed to the outside world
+ * Here we decide how the service will be exposed to the outside world.
  *
- * This function runs on service install, update, and config save
+ * This function runs on install, update, and config save.
  */
 export const setInterfaces = sdk.setupInterfaces(
   configSpec,
@@ -18,7 +17,7 @@ export const setInterfaces = sdk.setupInterfaces(
     const uiMultiOrigin = await uiMulti.bindPort(uiPort, { protocol: 'http' })
     const ui = sdk.createInterface(effects, {
       name: 'Web UI',
-      id: webUiInterfaceId,
+      id: 'webui',
       description: 'The web interface of Hello World',
       type: 'ui',
       hasPrimary: false,

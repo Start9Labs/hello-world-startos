@@ -4,6 +4,6 @@ import { read } from './read'
 import { save } from './save'
 
 /**
- * This is a static file. There is no need to make changes here
+ * Plumbing. DO NOT EDIT.
  */
 export const { getConfig, setConfig } = sdk.setupConfig(configSpec, save, read)

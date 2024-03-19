@@ -1,12 +1,16 @@
 import { sdk } from '../sdk'
 
 /**
- * Here we define what volumes from the Manifest to include in backups
+ * Here we define which volumes to back up, including advanced options.
+ */
+
+/**
+ * This example backs up the entire "main" volume.
  */
 export const { createBackup, restoreBackup } = sdk.setupBackups('main')
 
 /**
- * Excluding a hypothetical directory in the "main" volume, "excludedDir", that we do not want to back up
+ * This example backs up the "main" volume, but excludes a hypothetical directory called "excludedDir".
  */
 // export const { createBackup, restoreBackup } = sdk.setupBackups(
 //   sdk.Backups.volumes('main').setOptions({

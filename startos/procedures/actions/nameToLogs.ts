@@ -3,11 +3,13 @@ const { Config, Value } = sdk
 import { yamlFile } from '../config/file-models/config.yml'
 
 /**
- * This is an example Action
+ * Here we define an Action for our package.
  *
- * By convention, each action receives its own file
- *
- * Actions optionally take an arbitrary config form as input
+ * By convention, each Action receives its own file.
+ */
+
+/**
+ * Actions optionally take arbitrary form input.
  */
 const input = Config.of({
   nameToPrint: Value.text({
@@ -18,13 +20,10 @@ const input = Config.of({
 })
 
 /**
- * This function defines the Action, including the FormSpec (if any)
- *
- * The first argument is the Action metadata. The second argument is the Action function
- *
- * If no input is required, FormSpec would be null
+ * This function defines the Action, including the optional form input.
  */
 export const nameToLogs = sdk.createAction(
+  // The Action metadata
   {
     name: 'Name to Logs',
     description: 'Prints "Hello [Name]" to the service logs.',
@@ -33,6 +32,8 @@ export const nameToLogs = sdk.createAction(
     allowedStatuses: 'only-running',
     group: null,
   },
+
+  // the execution function
   async ({ effects, input }) => {
     const name =
       input.nameToPrint || (await yamlFile.read(effects))?.name || 'Unknown'
