@@ -34,7 +34,7 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
     mounts: sdk.Mounts.of().addVolume('main', null, '/data', false),
     ready: {
       display: 'Web Interface', // If null, the health check will NOT be displayed to the user. If provided, this string will be the name of the health check and displayed to the user.
-      // A function to run that will determine the health status of this daemon
+      // A function below determines the health status of this daemon
       fn: () =>
         sdk.healthCheck.checkPortListening(effects, uiPort, {
           successMessage: 'The web interface is ready',

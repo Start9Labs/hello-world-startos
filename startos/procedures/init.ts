@@ -42,7 +42,7 @@ const exported = sdk.setupExports(({ effects }) => {
 })
 
 /**
- * This is a static function. There is no need to make changes here.
+ * Plumbing. DO NOT EDIT.
  */
 export const { init, uninit } = sdk.setupInit(
   migrations,
