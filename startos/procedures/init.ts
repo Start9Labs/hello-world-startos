@@ -35,9 +35,7 @@ const exported = sdk.setupExports(({ effects }) => {
         masked: true,
       },
     },
-    services: {
-      paths: ['/nameLastUpdatedAt'],
-    },
+    services: ['/nameLastUpdatedAt'],
   }
 })
 

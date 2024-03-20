@@ -2,8 +2,8 @@ import { sdk } from '../../sdk'
 import { configSpec } from '../config/spec'
 
 /**
- * Here we establish rules for auto configuring service dependencies.
- *
- * See Hello Moon for an example.
+ * Here we list every dependency config.
+ * 
+ * By convention, each Dependency Config should receive its own file in the "dependencyConfig" directory.
  */
 export const dependencyConfig = sdk.setupDependencyConfig(configSpec, {})
