@@ -33,5 +33,3 @@ export const manifest = setupManifest({
   },
   dependencies: {}, // See Hello Moon for an example with dependencies
 })
-
-export type Manifest = typeof manifest
