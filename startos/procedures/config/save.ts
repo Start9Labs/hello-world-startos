@@ -11,7 +11,7 @@ import { configSpec } from './spec'
  */
 export const save = sdk.setupConfigSave(
   configSpec,
-  async ({ effects, input, dependencies }) => {
+  async ({ effects, input }) => {
     /**
      ******** save data wherever you want ********
      */
@@ -24,16 +24,9 @@ export const save = sdk.setupConfigSave(
       sdk.store.setOwn(effects, '/secretPhrase', getSecretPhrase(input.name)),
     ])
 
-    /**
-     ******** set current dependencies based on config ********
-     */
-    const dependenciesReceipt = await effects.setDependencies({
-      dependencies: [],
-    })
-
     return {
       interfacesReceipt: await setInterfaces({ effects, input }), // Plumbing. DO NOT EDIT. This line causes setInterfaces() to run whenever config is saved.
-      dependenciesReceipt, // Plumbing. DO NOT EDIT.
+      dependenciesReceipt: await setDependencies({ effects, input }), // Plumbing. DO NOT EDIT.
       restart: true, // optionally restart the service on config save.
     }
   },

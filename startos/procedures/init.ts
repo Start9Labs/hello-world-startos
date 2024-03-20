@@ -1,6 +1,7 @@
 import { sdk } from '../sdk'
 import { getSecretPhrase } from '../utils'
 import { yamlFile } from './config/file-models/config.yml'
+import { setDependencies } from './dependencies/dependencies'
 import { setInterfaces } from './interfaces'
 import { migrations } from './migrations'
 
@@ -47,5 +48,6 @@ export const { init, uninit } = sdk.setupInit(
   install,
   uninstall,
   setInterfaces,
+  setDependencies,
   exported,
 )
