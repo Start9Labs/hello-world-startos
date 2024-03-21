@@ -9,7 +9,7 @@ export const manifest = setupManifest({
   version: '4.0.0.1',
   releaseNotes: 'Revamped for StartOS 0.4.0',
   license: 'mit',
-  replaces: Array<string>('Hello World (hosted)', 'Goodbye World'),
+  replaces: ['Hello World (hosted)', 'Goodbye World'], // A list of SaaS services/products this service is intended to replace
   wrapperRepo: 'https://github.com/Start9Labs/hello-world-wrapper',
   upstreamRepo: 'https://github.com/Start9Labs/hello-world',
   supportSite: 'https://docs.start9.com/',

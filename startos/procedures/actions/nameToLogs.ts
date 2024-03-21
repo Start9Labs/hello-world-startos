@@ -25,9 +25,9 @@ const input = Config.of({
 export const nameToLogs = sdk.createAction(
   // The Action metadata
   {
+    id: 'nameToLogs',
     name: 'Name to Logs',
     description: 'Prints "Hello [Name]" to the service logs.',
-    id: 'nameToLogs',
     input,
     allowedStatuses: 'only-running',
     group: null,
