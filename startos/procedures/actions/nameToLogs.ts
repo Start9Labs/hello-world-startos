@@ -22,18 +22,21 @@ const input = Config.of({
 /**
  * This function defines the Action, including the optional form input.
  */
-export const nameToLogs = sdk.createAction(
-  // The Action metadata
-  {
-    id: 'nameToLogs',
+
+export const nameToLogs = sdk.createDynamicAction(
+  /** id */
+  'nameToLogs',
+  /** metadata */
+  ({ effects }) => ({
     name: 'Name to Logs',
     description: 'Prints "Hello [Name]" to the service logs.',
+    warning: null,
+    disabled: false,
     input,
     allowedStatuses: 'only-running',
     group: null,
-  },
-
-  // the execution function
+  }),
+  /** the execution function */
   async ({ effects, input }) => {
     const name =
       input.nameToPrint || (await yamlFile.read(effects))?.name || 'Unknown'
@@ -49,4 +52,6 @@ export const nameToLogs = sdk.createAction(
       },
     }
   },
+  /** spec for form input */
+  input,
 )
