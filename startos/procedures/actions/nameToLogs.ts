@@ -27,15 +27,17 @@ export const nameToLogs = sdk.createDynamicAction(
   /** id */
   'nameToLogs',
   /** metadata */
-  ({ effects }) => ({
-    name: 'Name to Logs',
-    description: 'Prints "Hello [Name]" to the service logs.',
-    warning: null,
-    disabled: false,
-    input,
-    allowedStatuses: 'only-running',
-    group: null,
-  }),
+  async ({ effects }) => {
+    return {
+      name: 'Name to Logs',
+      description: 'Prints "Hello [Name]" to the service logs.',
+      warning: null,
+      disabled: false,
+      input,
+      allowedStatuses: 'only-running',
+      group: null,
+    }
+  },
   /** the execution function */
   async ({ effects, input }) => {
     const name =
