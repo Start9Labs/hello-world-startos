@@ -14,7 +14,11 @@ const install = sdk.setupInstall(async ({ effects }) => {
 
   await yamlFile.write({ name }, effects)
 
-  await sdk.store.setOwn(effects, '/secretPhrase', getSecretPhrase(name))
+  await sdk.store.setOwn(
+    effects,
+    sdk.StorePath.secretPhrase,
+    getSecretPhrase(name),
+  )
 })
 
 /**

@@ -21,8 +21,16 @@ export const save = sdk.setupConfigSave(
     await yamlFile.write(input, effects)
     // If necessary, save package specific data to the package Store. Stateless packages are preferable.
     await Promise.all([
-      sdk.store.setOwn(effects, '/nameLastUpdatedAt', new Date().toISOString()),
-      sdk.store.setOwn(effects, '/secretPhrase', getSecretPhrase(input.name)),
+      sdk.store.setOwn(
+        effects,
+        sdk.StorePath.nameLastUpdatedAt,
+        new Date().toISOString(),
+      ),
+      sdk.store.setOwn(
+        effects,
+        sdk.StorePath.secretPhrase,
+        getSecretPhrase(input.name),
+      ),
     ])
 
     return {
