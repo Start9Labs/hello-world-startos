@@ -23,7 +23,7 @@ export const save = sdk.setupConfigSave(
     await Promise.all([
       sdk.store.setOwn(
         effects,
-        sdk.StorePath.nameLastUpdatedAt,
+        sdk.StorePath.nestedObject.nameLastUpdatedAt,
         new Date().toISOString(),
       ),
       sdk.store.setOwn(

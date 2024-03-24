@@ -7,10 +7,9 @@ import { setupExposeStore } from '@start9labs/start-sdk'
  */
 
 export type Store = {
-  nameLastUpdatedAt: string
   secretPhrase: string
   nestedObject: {
-    otherThings: string
+    nameLastUpdatedAt: string
   }
 }
 
