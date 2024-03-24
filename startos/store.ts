@@ -14,6 +14,5 @@ export type Store = {
 }
 
 export const exposedStore = setupExposeStore<Store>((pathBuilder) => [
-  pathBuilder.nameLastUpdatedAt,
-  pathBuilder.nestedObject.otherThings,
+  pathBuilder.nestedObject.nameLastUpdatedAt,
 ])
