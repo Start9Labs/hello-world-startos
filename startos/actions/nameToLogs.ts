@@ -1,4 +1,4 @@
-import { sdk } from '../../sdk'
+import { sdk } from '../sdk'
 const { Config, Value } = sdk
 import { yamlFile } from '../config/file-models/config.yml'
 
@@ -34,7 +34,7 @@ export const nameToLogs = sdk.createDynamicAction(
       warning: null,
       disabled: false,
       input,
-      allowedStatuses: 'only-running',
+      allowedStatuses: 'onlyRunning',
       group: null,
     }
   },

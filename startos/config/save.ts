@@ -1,5 +1,5 @@
-import { sdk } from '../../sdk'
-import { getSecretPhrase } from '../../utils'
+import { sdk } from '../sdk'
+import { getSecretPhrase } from '../utils'
 import { setDependencies } from '../dependencies/dependencies'
 import { setInterfaces } from '../interfaces'
 import { yamlFile } from './file-models/config.yml'

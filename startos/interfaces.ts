@@ -1,4 +1,4 @@
-import { sdk } from '../sdk'
+import { sdk } from './sdk'
 import { configSpec } from './config/spec'
 
 // It is good practice to abstract these two variables from each interface, as they may be used elsewhere in the package codebase or by dependent packages.

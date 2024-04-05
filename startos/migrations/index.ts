@@ -1,4 +1,4 @@
-import { sdk } from '../../sdk'
+import { sdk } from '../sdk'
 import { v4_0_0_1 } from './v4_0_0_1'
 
 /**

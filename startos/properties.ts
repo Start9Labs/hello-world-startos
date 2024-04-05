@@ -1,4 +1,4 @@
-import { sdk } from '../sdk'
+import { sdk } from './sdk'
 
 /**
  * Here we determine which values from the local Store and underlying service to expose in the UI in Properties.

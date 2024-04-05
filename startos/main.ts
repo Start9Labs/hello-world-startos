@@ -1,4 +1,4 @@
-import { sdk } from '../sdk'
+import { sdk } from './sdk'
 import { HealthReceipt } from '@start9labs/start-sdk/cjs/sdk/lib/health/HealthReceipt'
 import { uiPort } from './interfaces'
 
@@ -9,19 +9,6 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
    * In this section, we fetch any resources or run any desired preliminary commands.
    */
   console.info('Starting Hello World!')
-  /* TODO BluJ
-    getDependencies() -> Dependencies
-    checkDependencies({
-      packageIds: [PackageId, ...PackageId[]]
-    }) -> CheckResult
-
-    interface CheckResult {
-      throwIfError() -> never
-      throwIfNotExists() -> never
-      isValid() -> boolean
-      errorMessage() -> Option<someErrorSomething>
-    }
-    */
 
   /**
    * ======================== Additional Health Checks (optional) ========================
