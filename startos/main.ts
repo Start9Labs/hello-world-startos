@@ -28,7 +28,7 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
     effects,
     started,
     healthReceipts,
-  }).addDaemon('webui', {
+  }).addDaemon('primary', {
     imageId: 'main', // Must match an Image ID declared in the manifest.
     command: 'hello-world', // The command to start the daemon.
     mounts: sdk.Mounts.of().addVolume('main', null, '/data', false),

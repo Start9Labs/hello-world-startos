@@ -1,5 +1,5 @@
 import { sdk } from '../sdk'
-import { yamlFile } from './file-models/config.yml'
+import { yamlFile } from '../file-models/config.yml'
 import { configSpec } from './spec'
 
 /**

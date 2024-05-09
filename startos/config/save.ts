@@ -2,7 +2,7 @@ import { sdk } from '../sdk'
 import { getSecretPhrase } from '../utils'
 import { setDependencies } from '../dependencies/dependencies'
 import { setInterfaces } from '../interfaces'
-import { yamlFile } from './file-models/config.yml'
+import { yamlFile } from '../file-models/config.yml'
 import { configSpec } from './spec'
 
 /**
@@ -18,7 +18,7 @@ export const save = sdk.setupConfigSave(
      */
     // Whenever possible, save data directly to the underlying config file(s) of the upstream service.
     // This ensures that changes to the file from the service's GUI or from the command line are respected.
-    await yamlFile.write(input, effects)
+    await yamlFile.merge(input, effects)
     // If necessary, save package specific data to the package Store. Stateless packages are preferable.
     await Promise.all([
       sdk.store.setOwn(

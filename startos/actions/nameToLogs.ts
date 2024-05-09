@@ -1,6 +1,6 @@
 import { sdk } from '../sdk'
 const { Config, Value } = sdk
-import { yamlFile } from '../config/file-models/config.yml'
+import { yamlFile } from '../file-models/config.yml'
 
 /**
  * Here we define an Action for our package.
