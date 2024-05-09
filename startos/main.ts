@@ -1,6 +1,6 @@
 import { sdk } from './sdk'
-import { HealthReceipt } from '@start9labs/start-sdk/cjs/sdk/lib/health/HealthReceipt'
 import { uiPort } from './interfaces'
+import { T } from '@start9labs/start-sdk'
 
 export const main = sdk.setupMain(async ({ effects, started }) => {
   /**
@@ -15,7 +15,7 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
    *
    * In this section, we define *additional* health checks beyond those included with each daemon (below).
    */
-  const healthReceipts: HealthReceipt[] = []
+  const healthReceipts: T.HealthReceipt[] = []
 
   /**
    * ======================== Daemons ========================
