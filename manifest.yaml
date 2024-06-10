@@ -5,13 +5,23 @@ id: hello-world
  # A human readable service title
 title: "Hello World"
 # Service version - accepts up to four digits, where the last confirms to revisions necessary for StartOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
-version: 1.0.0.1
+version: 0.3.5
 # Release notes for the update - can be a string, paragraph or URL
-release-notes: "Revamped for EmabssyOS 0.3.3"
+release-notes: |
+  Revamped for StartOS 0.3.5.x
+  - Changed version to 0.3.5
+  - Updated manifest with correct OS name, GPU acceleration support, and supported architectures.
+  - Added release and build GitHub workflows.
+  - Added log message to announce when the service is starting.
+  - Added new optimized and standardized icon.
+  - Added simple healthcheck.
+  - Updated to the latest stable Alpine-based Docker image.
+  - Updated license file with the current year.
+  - Code cleanup
 # The type of license for the project. Include the LICENSE in the root of the project directory. A license is required for a Start9 package.
-license: mit
-# The Start9 wrapper repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
-wrapper-repo: "https://github.com/Start9Labs/hello-world-wrapper"
+license: MIT
+# The repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository. 
+wrapper-repo: "https://github.com/Start9Labs/hello-world-startos"
 # The original project repository URL. There is no upstream repo in this example
 upstream-repo: "https://github.com/Start9Labs/hello-world"
 # URL to the support site / channel for the project. This key can be omitted if none exists, or it can link to the original project repository issues.
@@ -31,7 +41,7 @@ description:
 assets:
   # Default = LICENSE.md
   license: LICENSE
-  # Default = icon.png (.svg allowed)
+  # Default = icon.png
   icon: icon.png
   # Default = INSTRUCTIONS.md
   instructions: instructions.md
@@ -64,8 +74,19 @@ main:
   mounts:
     # Specifies where on the service's file system its persistence directory should be mounted prior to service startup
     main: /root
-# This is where health checks would be defined - see a more advanced example in https://github.com/Start9Labs/start-pages-wrapper
-health-checks: {}
+# Specifies whether GPU acceleration is enabled or not. False by default.
+  gpu-acceleration: false
+# Defines what architectures will be supported by the service. This service supports x86_64 and aarch64 architectures.
+hardware-requirements:
+  arch:
+    - x86_64
+    - aarch64
+# This is where health checks would be defined - see a more advanced example in https://github.com/Start9Labs/start9-pages-startos
+health-checks:
+  web-ui:
+    name: Web Interface
+    success-message: The Hello World is accessible
+    type: script
 config: ~
 properties: ~
 #  type: script
