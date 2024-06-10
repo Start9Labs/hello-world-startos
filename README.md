@@ -52,12 +52,16 @@ curl https://sh.rustup.rs -sSf | sh
 # Choose nr 1 (default install)
 source $HOME/.cargo/env
 ```
-8. Build and install start-sdk
+8. Build and install start-sdk 
 ```
-cd ~/ && git clone --recursive https://github.com/Start9Labs/start-os.git --branch sdk
-cd start-os/
-make sdk
+git clone https://github.com/Start9Labs/start-os.git && \
+ cd start-os && git submodule update --init --recursive && \
+ make sdk
+```
+Initialize sdk & verify install
+```
 start-sdk init
+start-sdk --version
 ```
 Now you are ready to build the `hello-world` package!
 
