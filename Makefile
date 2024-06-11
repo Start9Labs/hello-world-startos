@@ -5,7 +5,7 @@ PACKAGE_ID := hello-world
 all: ${PACKAGE_ID}.s9pk
 
 clean:
-	rm ${PACKAGE_ID}.s9pk
+	rm -rf ${PACKAGE_ID}.s9pk
 	rm -rf javascript
 	rm -rf node_modules
 
@@ -17,6 +17,7 @@ javascript/index.js: $(shell git ls-files startos) node_modules package.json
 
 node_modules: package.json package-lock.json
 	npm ci
+	npm link @start9labs/start-sdk
 
 package-lock.json: package.json
 	npm i
