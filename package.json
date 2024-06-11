@@ -1,7 +1,7 @@
 {
   "name": "hello-world-startos",
   "scripts": {
-    "build": "ncc build startos/index.ts -o ./",
+    "build": "ncc build startos/index.ts -o ./javascript",
     "prettier": "prettier --write startos",
     "check": "tsc --noEmit"
   },

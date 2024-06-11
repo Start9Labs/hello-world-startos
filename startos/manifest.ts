@@ -21,7 +21,18 @@ export const manifest = setupManifest({
   },
   assets: [], // directories of static files you want to mount to your container
   volumes: ['main'], // IDs of persistence volumes that will be mounted to your container
-  images: ['main'], // IDs of images, used when other actions need to run in this image
+  images: {
+    main: {
+      source: {
+        dockerBuild: {
+          dockerfile: './Dockerfile',
+          workdir: '.',
+        },
+      },
+      arch: ['x86_64', 'aarch64'],
+      emulateMissingAs: 'aarch64',
+    },
+  }, // IDs of images, used when other actions need to run in this image
   alerts: {
     install: 'Optional alert to display before installing the service',
     update: 'Optional alert to display before updating the service',
