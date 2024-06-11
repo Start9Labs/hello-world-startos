@@ -15,7 +15,7 @@ export const webUiInterfaceId = 'webui'
 export const setInterfaces = sdk.setupInterfaces(
   configSpec,
   async ({ effects, input }) => {
-    const uiMulti = sdk.host.multi(effects, 'uiMulti')
+    const uiMulti = sdk.host.multi(effects, 'ui-multi')
     const uiMultiOrigin = await uiMulti.bindPort(uiPort, { protocol: 'http' })
     const ui = sdk.createInterface(effects, {
       name: 'Web UI',

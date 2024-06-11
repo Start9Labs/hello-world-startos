@@ -7,4 +7,7 @@ const shape = object({
   // favoriteNumber: natural,
 })
 
-export const yamlFile = FileHelper.yaml('config.yml', shape)
+export const yamlFile = FileHelper.yaml(
+  '/media/startos/volumes/main/config.yml',
+  shape,
+)
