@@ -6,7 +6,7 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "@start9labs/start-sdk": "0.3.6-alpha3"
+    "@start9labs/start-sdk": "0.3.6-alpha5"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",

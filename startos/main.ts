@@ -31,7 +31,7 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
   }).addDaemon('primary', {
     image: { id: 'main' }, // Must match an Image ID declared in the manifest.
     command: ['hello-world'], // The command to start the daemon.
-    mounts: sdk.Mounts.of().addVolume('main', null, '/data', false),
+    mounts: sdk.Mounts.of().addVolume('main', null, '/data', false), // Mount necessary volumes. ID must match manifest declaration.
     ready: {
       display: 'Web Interface', // If null, the health check will NOT be displayed to the user. If provided, this string will be the name of the health check and displayed to the user.
       // A function below determines the health status of this daemon
