@@ -16,7 +16,7 @@ export const manifest = setupManifest({
   marketingSite: 'https://start9.com/',
   donationUrl: 'https://donate.start9.com/',
   description: {
-    short: 'Bare bones example StartOS service',
+    short: 'Bare bones example of a StartOS service',
     long: 'Hello World is a template service that provides examples of basic StartOS features.',
   },
   assets: [], // directories of static files you want to mount to your container
@@ -24,15 +24,13 @@ export const manifest = setupManifest({
   images: {
     main: {
       source: {
-        dockerBuild: {
-          dockerfile: './Dockerfile',
-          workdir: '.',
-        },
+        dockerTag: 'start9/hello-world',
       },
       arch: ['x86_64', 'aarch64'],
       emulateMissingAs: 'aarch64',
     },
-  }, // IDs of images, used when other actions need to run in this image
+  },
+  hardwareRequirements: null,
   alerts: {
     install: 'Optional alert to display before installing the service',
     update: 'Optional alert to display before updating the service',
