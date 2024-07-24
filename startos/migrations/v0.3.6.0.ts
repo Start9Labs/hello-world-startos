@@ -7,8 +7,8 @@ import { sdk } from '../sdk'
  *
  * The resulting migration (e.g. v4_0_0_0) is exported from here, then imported into migrations/index.ts.
  */
-export const v4_0_0_1 = sdk.Migration.of({
-  version: '4.0.0.1',
+export const v0_3_6_0 = sdk.Migration.of({
+  version: '0.3.6:0',
   up: async ({ effects }) => await effects.setConfigured({ configured: false }),
   down: async ({ effects }) => {},
 })

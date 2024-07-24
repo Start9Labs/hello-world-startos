@@ -6,8 +6,8 @@ import { setupManifest } from '@start9labs/start-sdk'
 export const manifest = setupManifest({
   id: 'hello-world',
   title: 'Hello World',
-  version: '4.0.0.1',
-  releaseNotes: 'Revamped for StartOS 0.4.0',
+  version: '0.3.6:0',
+  releaseNotes: 'Revamped for StartOS 0.3.6',
   license: 'mit',
   replaces: ['Hello World (hosted)', 'Goodbye World'], // A list of SaaS services/products this service is intended to replace
   wrapperRepo: 'https://github.com/Start9Labs/hello-world-wrapper',
@@ -26,11 +26,9 @@ export const manifest = setupManifest({
       source: {
         dockerTag: 'start9/hello-world',
       },
-      arch: ['x86_64', 'aarch64'],
-      emulateMissingAs: 'aarch64',
     },
   },
-  hardwareRequirements: null,
+  hardwareRequirements: {},
   alerts: {
     install: 'Optional alert to display before installing the service',
     update: 'Optional alert to display before updating the service',
