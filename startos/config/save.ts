@@ -16,14 +16,15 @@ export const save = sdk.setupConfigSave(
     /**
      ******** save data wherever you want ********
      */
-    // Whenever possible, save data directly to the underlying config file(s) of the upstream service.
-    // This ensures that changes to the file from the service's GUI or from the command line are respected.
+
+    // Whenever possible, save data directly to the underlying config file(s) of the upstream service. This ensures that changes to the file from the service's GUI or from the command line are respected.
     await yamlFile.merge(input, effects)
+
     // If necessary, save package specific data to the package Store. Stateless packages are preferable.
     await Promise.all([
       sdk.store.setOwn(
         effects,
-        sdk.StorePath.nestedObject.nameLastUpdatedAt,
+        sdk.StorePath.otherData.nameLastUpdatedAt,
         new Date().toISOString(),
       ),
       sdk.store.setOwn(

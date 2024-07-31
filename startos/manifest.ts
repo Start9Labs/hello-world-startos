@@ -9,7 +9,6 @@ export const manifest = setupManifest({
   version: '0.3.6:0',
   releaseNotes: 'Revamped for StartOS 0.3.6',
   license: 'mit',
-  replaces: ['Hello World (hosted)', 'Goodbye World'], // A list of SaaS services/products this service is intended to replace
   wrapperRepo: 'https://github.com/Start9Labs/hello-world-wrapper',
   upstreamRepo: 'https://github.com/Start9Labs/hello-world',
   supportSite: 'https://docs.start9.com/',
@@ -29,14 +28,14 @@ export const manifest = setupManifest({
     },
   },
   hardwareRequirements: {},
+  // optional alerts to display at different time in the service lifecycle
   alerts: {
     install: 'Optional alert to display before installing the service',
-    update: 'Optional alert to display before updating the service',
-    uninstall: 'Optional alert to display before uninstalling the service',
-    restore:
-      'Optional alert to display before restoring the service from backup',
-    start: 'Optional alert to display before starting the service',
-    stop: 'Optional alert to display before stopping the service',
+    update: null,
+    uninstall: null,
+    restore: null,
+    start: null,
+    stop: null,
   },
   dependencies: {}, // See Hello Moon for an example with dependencies
 })

@@ -5,7 +5,7 @@ import { sdk } from '../sdk'
  *
  * By convention, each new version that requires a migration should receive its own file like this one.
  *
- * The resulting migration (e.g. v4_0_0_0) is exported from here, then imported into migrations/index.ts.
+ * The resulting migration (e.g. v0_3_6_0) is exported from here, then imported into migrations/index.ts.
  */
 export const v0_3_6_0 = sdk.Migration.of({
   version: '0.3.6:0',
