@@ -1,5 +1,7 @@
-# Instructions for Hello World
+# Hello Moon for StartOS
 
-Instructions go here. These appear to the user in the UI on the Service page under **Instructions**.
+A bare bones project serving as a template for [StartOS Service Packaging](https://docs.star9.com/packaging-guide).
 
-You are allowed to include basic [Markdown formatting](https://www.markdownguide.org/basic-syntax).
+## Building from source
+
+Follow the [Quick Start Guide](https://docs.star9.com/packaging-guide/quick-start/) for StartOS service packaging, replacing references to `hello-moon-startos` with this service ID.
