@@ -14,7 +14,9 @@ export const v0360 = VersionInfo.of({
   version: '0.3.6:0',
   releaseNotes: 'Revamped for StartOS 0.3.6',
   migrations: {
-    up: ({ effects }) => effects.setConfigured({ configured: false }),
+    up: async ({ effects }) => {
+      await effects.setConfigured({ configured: false })
+    },
     down: IMPOSSIBLE,
   },
 })
