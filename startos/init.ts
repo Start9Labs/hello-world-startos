@@ -4,7 +4,7 @@ import { getSecretPhrase } from './utils'
 import { yamlFile } from './file-models/config.yml'
 import { setDependencies } from './dependencies/dependencies'
 import { setInterfaces } from './interfaces'
-import { migrations } from './migrations'
+import { versions } from './versions'
 
 /**
  * Here you define arbitrary code that runs *once*, on fresh install only.
@@ -30,7 +30,7 @@ const uninstall = sdk.setupUninstall(async ({ effects }) => {})
  * Plumbing. DO NOT EDIT.
  */
 export const { init, uninit } = sdk.setupInit(
-  migrations,
+  versions,
   install,
   uninstall,
   setInterfaces,
