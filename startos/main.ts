@@ -1,5 +1,4 @@
 import { sdk } from './sdk'
-import { uiPort } from './interfaces'
 import { T } from '@start9labs/start-sdk'
 
 export const main = sdk.setupMain(async ({ effects, started }) => {
@@ -36,7 +35,7 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
       display: 'Web Interface', // If null, the health check will NOT be displayed to the user. If provided, this string will be the name of the health check and displayed to the user.
       // A function below determines the health status of this daemon
       fn: () =>
-        sdk.healthCheck.checkPortListening(effects, uiPort, {
+        sdk.healthCheck.checkPortListening(effects, 80, {
           successMessage: 'The web interface is ready',
           errorMessage: 'The web interface is not ready',
         }),

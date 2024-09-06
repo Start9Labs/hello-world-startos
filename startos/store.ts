@@ -1,22 +1,30 @@
 import { setupExposeStore } from '@start9labs/start-sdk'
 
 /**
- * The Store is for persisting data that are needed by the package but are NOT persisted by the upstream service. Do NOT persist data here that are already being persisted by the service itself.
+ * @description The Store is used for persisting arbitrary data that are needed by the wrapper
+ *   package but are NOT persisted by the upstream service. Do NOT persist data here that are
+ *   already being persisted by the service itself.
  *
- * Store data should be kept to a minimum. Stateless packages are easier to maintain and eliminate unexpected behavior.
+ *   Store data should be kept to a minimum. Stateless packages are easier to maintain
+ *   and eliminate unexpected behavior.
+ * @type {Record<string, any>}
+ * @example
+ * ```
+ * export type Store = {
+ *   key1: string
+ *   key2: boolean
+ *   key3: number
+ *   key4: {
+ *     key5: string[]
+ *   }
+ * }
+ * ```
  */
 export type Store = {
   secretPhrase: string
-  otherData: {
-    nameLastUpdatedAt: string
-  }
+  nameLastUpdatedAt: string
 }
 
-/**
- * By default, Store data are kept private to their service.
- *
- * To expose values from the Store to other services on StartOS, you must include their paths in the array returned by the function below.
- */
 export const exposedStore = setupExposeStore<Store>((pathBuilder) => [
-  pathBuilder.otherData.nameLastUpdatedAt,
+  pathBuilder.nameLastUpdatedAt,
 ])

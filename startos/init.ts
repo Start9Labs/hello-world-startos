@@ -6,9 +6,7 @@ import { setDependencies } from './dependencies/dependencies'
 import { setInterfaces } from './interfaces'
 import { versions } from './versions'
 
-/**
- * Here you define arbitrary code that runs *once*, on fresh install only.
- */
+// **** Install ****
 const install = sdk.setupInstall(async ({ effects }) => {
   const name = 'World'
 
@@ -21,9 +19,7 @@ const install = sdk.setupInstall(async ({ effects }) => {
   )
 })
 
-/**
- * Here we define arbitrary code that runs once, on uninstall only.
- */
+// **** Uninstall ****
 const uninstall = sdk.setupUninstall(async ({ effects }) => {})
 
 /**

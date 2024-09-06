@@ -5,7 +5,7 @@ import { Store } from './store'
 /**
  * Plumbing. DO NOT EDIT.
  *
- * The exported "sdk" const will be imported and used throughout the package codebase.
+ * The exported "sdk" const is used throughout this package codebase.
  */
 export const sdk = StartSdk.of()
   .withManifest(manifest)
