@@ -1,35 +1,27 @@
 import { sdk } from '../sdk'
-const { Config, Value } = sdk
 import { yamlFile } from '../file-models/config.yml'
 
-const input = Config.of({
-  nameToPrint: Value.text({
-    name: 'Temp Name',
-    description: 'If no name is provided, the name from config will be used',
-    required: false,
-  }),
-})
-
-export const nameToLogs = sdk.createDynamicAction(
+export const nameToLogs = sdk.Action.withoutInput(
   // id
   'nameToLogs',
 
   // metadata
-  async ({ effects }) => {
-    return {
-      name: 'Name to Logs',
-      description: 'Prints "Hello [Name]" to the service logs.',
-      warning: null,
-      disabled: false,
-      allowedStatuses: 'onlyRunning',
-      group: null,
-    }
-  },
+  async ({ effects }) => ({
+    name: 'Name to Logs',
+    description: 'Prints "Hello [Name]" to the service logs.',
+    warning: null,
+    allowedStatuses: 'only-running',
+    group: null,
+    visibility: (await sdk.store
+      .getOwn(effects, sdk.StorePath.nameLastUpdatedAt)
+      .once())
+      ? 'enabled'
+      : { disabled: 'Cannot print name to logs until you update your name.' },
+  }),
 
   // the execution function
-  async ({ effects, input }) => {
-    const name =
-      input.nameToPrint || (await yamlFile.read(effects))?.name || 'Unknown'
+  async ({ effects }) => {
+    const name = (await yamlFile.read(effects))!.name
 
     console.info(`Hello ${name}`)
 
@@ -41,7 +33,4 @@ export const nameToLogs = sdk.createDynamicAction(
       qr: false,
     }
   },
-
-  // spec for form input
-  input,
 )
