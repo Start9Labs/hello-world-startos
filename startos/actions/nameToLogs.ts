@@ -14,14 +14,18 @@ export const nameToLogs = sdk.Action.withoutInput(
     group: null,
     visibility: (await sdk.store
       .getOwn(effects, sdk.StorePath.nameLastUpdatedAt)
-      .once())
+      .const())
       ? 'enabled'
-      : { disabled: 'Cannot print name to logs until you update your name.' },
+      : {
+          disabled: {
+            reason: 'Cannot print name to logs until you update your name.',
+          },
+        },
   }),
 
   // the execution function
   async ({ effects }) => {
-    const name = (await yamlFile.read(effects))!.name
+    const name = (await yamlFile.read())!.name
 
     console.info(`Hello ${name}`)
 

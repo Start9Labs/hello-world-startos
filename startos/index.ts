@@ -3,7 +3,7 @@
  */
 export { createBackup, restoreBackup } from './backups'
 export { main } from './main'
-export { init, uninit } from './init'
+export { packageInit, packageUninit, containerInit } from './init'
 export { actions } from './actions'
 export { properties } from './properties'
 export { manifest } from './manifest'

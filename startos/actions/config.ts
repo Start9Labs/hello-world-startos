@@ -20,7 +20,7 @@ export const config = sdk.Action.withInput(
     name: 'Configure',
     description: 'edit the underlying config.yaml of Hello World',
     warning: null,
-    allowedStatuses: 'all',
+    allowedStatuses: 'any',
     group: null,
     visibility: 'enabled',
   },
@@ -29,8 +29,11 @@ export const config = sdk.Action.withInput(
   input,
 
   // optionally pre-fill the input form
-  ({ effects }) => yamlFile.read(effects),
+  ({ effects }) => yamlFile.read(),
 
   // the execution function
-  async ({ effects, input }) => yamlFile.merge(effects, input),
+  async ({ effects, input }) => {
+    await yamlFile.merge(input)
+    return null
+  },
 )

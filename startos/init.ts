@@ -11,7 +11,7 @@ import { actions } from './actions'
 const install = sdk.setupInstall(async ({ effects }) => {
   const name = 'World'
 
-  await yamlFile.merge(effects, { name })
+  await yamlFile.merge({ name })
 
   await sdk.store.setOwn(
     effects,
@@ -26,7 +26,7 @@ const uninstall = sdk.setupUninstall(async ({ effects }) => {})
 /**
  * Plumbing. DO NOT EDIT.
  */
-export const { init, uninit } = sdk.setupPackageInit(
+export const { packageInit, packageUninit, containerInit } = sdk.setupInit(
   versions,
   install,
   uninstall,
