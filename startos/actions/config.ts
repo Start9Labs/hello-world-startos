@@ -32,8 +32,5 @@ export const config = sdk.Action.withInput(
   ({ effects }) => yamlFile.read(),
 
   // the execution function
-  async ({ effects, input }) => {
-    await yamlFile.merge(input)
-    return null
-  },
+  ({ effects, input }) => yamlFile.merge(input).then((_) => null),
 )
