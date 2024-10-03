@@ -1,8 +1,9 @@
 import { sdk } from '../sdk'
 const { InputSpec, Value } = sdk
 import { yamlFile } from '../file-models/config.yml'
+import { getSecretPhrase } from '../utils'
 
-export const input = InputSpec.of({
+export const inputSpec = InputSpec.of({
   name: Value.text({
     name: 'Name',
     description:
@@ -25,12 +26,21 @@ export const config = sdk.Action.withInput(
     visibility: 'enabled',
   },
 
-  // spec for form input
-  input,
+  // form input specification
+  inputSpec,
 
   // optionally pre-fill the input form
   ({ effects }) => yamlFile.read(),
 
   // the execution function
-  ({ effects, input }) => yamlFile.merge(input).then((_) => null),
+  async ({ effects, input }) => {
+    await Promise.all([
+      yamlFile.merge(input),
+      sdk.store.setOwn(
+        effects,
+        sdk.StorePath.secretPhrase,
+        getSecretPhrase(input.name),
+      ),
+    ])
+  },
 )
