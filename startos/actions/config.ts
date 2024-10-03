@@ -17,14 +17,14 @@ export const config = sdk.Action.withInput(
   'config',
 
   // metadata
-  {
+  async ({ effects }) => ({
     name: 'Configure',
     description: 'edit the underlying config.yaml of Hello World',
     warning: null,
     allowedStatuses: 'any',
     group: null,
     visibility: 'enabled',
-  },
+  }),
 
   // form input specification
   inputSpec,
