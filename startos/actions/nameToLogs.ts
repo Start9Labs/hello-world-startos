@@ -17,23 +17,24 @@ export const nameToLogs = sdk.Action.withoutInput(
       .const())
       ? 'enabled'
       : {
-          disabled: {
-            reason: 'Cannot print name to logs until you update your name.',
-          },
+          disabled: 'Cannot print name to logs until you update your name.',
         },
   }),
 
   // the execution function
   async ({ effects }) => {
-    const name = (await yamlFile.read())!.name
+    const name = (await yamlFile.read.once())!.name
 
     console.info(`Hello ${name}`)
 
     return {
-      version: '0',
-      message: `"Hello ${name}" has been written to the service logs. Open your logs to view it.`,
+      version: '1',
+      type: 'string',
+      name: 'Log Successful',
+      description: `"Hello ${name}" has been written to the service logs. Open your logs to view it.`,
       value: name,
-      copyable: true,
+      masked: false,
+      copyable: false,
       qr: false,
     }
   },
