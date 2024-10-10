@@ -23,7 +23,7 @@ export const nameToLogs = sdk.Action.withoutInput(
 
   // the execution function
   async ({ effects }) => {
-    const name = (await yamlFile.read.once())!.name
+    const name = (await yamlFile.read.const(effects))!.name
 
     console.info(`Hello ${name}`)
 

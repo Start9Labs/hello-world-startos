@@ -21,9 +21,11 @@ export const properties = sdk.Action.withoutInput(
       type: 'string',
       name: 'Secret Phrase',
       description: 'Use this phrase to gain access to extraordinary places',
-      value: await sdk.store.getOwn(effects, sdk.StorePath.secretPhrase).once(),
+      value: await sdk.store
+        .getOwn(effects, sdk.StorePath.secretPhrase)
+        .const(),
       copyable: true,
-      qr: false,
+      qr: true,
       masked: true,
     }
   },

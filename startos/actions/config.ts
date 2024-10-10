@@ -30,16 +30,25 @@ export const config = sdk.Action.withInput(
   inputSpec,
 
   // optionally pre-fill the input form
-  ({ effects }) => yamlFile.read.once(),
+  ({ effects }) => yamlFile.read.const(effects),
 
   // the execution function
   async ({ effects, input }) => {
+    const yaml = await yamlFile.read.const(effects)
+
+    if (yaml?.name === input.name) return
+
     await Promise.all([
       yamlFile.merge(input),
       sdk.store.setOwn(
         effects,
         sdk.StorePath.secretPhrase,
         getSecretPhrase(input.name),
+      ),
+      sdk.store.setOwn(
+        effects,
+        sdk.StorePath.nameLastUpdatedAt,
+        new Date().toISOString(),
       ),
     ])
   },
