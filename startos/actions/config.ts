@@ -1,7 +1,8 @@
 import { sdk } from '../sdk'
-const { InputSpec, Value } = sdk
 import { yamlFile } from '../file-models/config.yml'
 import { getSecretPhrase } from '../utils'
+
+const { InputSpec, Value } = sdk
 
 export const inputSpec = InputSpec.of({
   name: Value.text({

@@ -7,7 +7,6 @@ export const v0360 = VersionInfo.of({
   releaseNotes: 'Revamped for StartOS 0.3.6',
   migrations: {
     up: async ({ effects }) => {
-      // require the user to run the "config" action
       await sdk.action.requestOwn(effects, config, 'critical')
     },
     down: IMPOSSIBLE,
