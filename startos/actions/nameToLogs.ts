@@ -3,7 +3,7 @@ import { yamlFile } from '../file-models/config.yml'
 
 export const nameToLogs = sdk.Action.withoutInput(
   // id
-  'nameToLogs',
+  'name-to-logs',
 
   // metadata
   async ({ effects }) => ({
