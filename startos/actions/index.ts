@@ -1,9 +1,9 @@
-import { properties } from './properties'
 import { sdk } from '../sdk'
-import { config } from './config'
+import { showSecretPhrase } from './showSecretPhrase'
+import { setName } from './setName'
 import { nameToLogs } from './nameToLogs'
 
 export const actions = sdk.Actions.of()
-  .addAction(config)
-  .addAction(properties)
+  .addAction(setName)
+  .addAction(showSecretPhrase)
   .addAction(nameToLogs)

@@ -1,13 +1,13 @@
 import { sdk } from '../sdk'
 
-export const properties = sdk.Action.withoutInput(
+export const showSecretPhrase = sdk.Action.withoutInput(
   // id
-  'properties',
+  'show-secret-phrase',
 
   // metadata
   async ({ effects }) => ({
-    name: 'Properties',
-    description: 'Useful information about Hello World',
+    name: 'Show Secret Phrase',
+    description: 'Reveal the secret phrase for Hello World',
     warning: null,
     allowedStatuses: 'any',
     group: null,

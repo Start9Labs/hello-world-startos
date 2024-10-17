@@ -13,14 +13,14 @@ export const inputSpec = InputSpec.of({
   }),
 })
 
-export const config = sdk.Action.withInput(
+export const setName = sdk.Action.withInput(
   // id
-  'config',
+  'set-name',
 
   // metadata
   async ({ effects }) => ({
-    name: 'Configure',
-    description: 'edit the underlying config.yaml of Hello World',
+    name: 'Set Name',
+    description: 'Set you name so hello world can say hello to you',
     warning: null,
     allowedStatuses: 'any',
     group: null,

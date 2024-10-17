@@ -7,7 +7,7 @@ export const nameToLogs = sdk.Action.withoutInput(
 
   // metadata
   async ({ effects }) => ({
-    name: 'Name to Logs',
+    name: 'Print name to Logs',
     description: 'Prints "Hello [Name]" to the service logs.',
     warning: null,
     allowedStatuses: 'only-running',

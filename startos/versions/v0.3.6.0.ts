@@ -1,6 +1,6 @@
 import { VersionInfo, IMPOSSIBLE } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
-import { config } from '../actions/config'
+import { config } from '../actions/setName'
 
 export const v0360 = VersionInfo.of({
   version: '0.3.6:0',
