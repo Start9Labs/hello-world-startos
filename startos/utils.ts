@@ -4,3 +4,5 @@
 export function getSecretPhrase(name: string): string {
   return `Knock knock. Who's there? ${name}!`
 }
+
+export const uiPort = 80

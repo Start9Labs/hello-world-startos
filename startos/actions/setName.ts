@@ -20,7 +20,7 @@ export const setName = sdk.Action.withInput(
   // metadata
   async ({ effects }) => ({
     name: 'Set Name',
-    description: 'Set you name so hello world can say hello to you',
+    description: 'Set your name so Hello World can say hello to you',
     warning: null,
     allowedStatuses: 'any',
     group: null,
@@ -31,7 +31,7 @@ export const setName = sdk.Action.withInput(
   inputSpec,
 
   // optionally pre-fill the input form
-  ({ effects }) => yamlFile.read.once(),
+  ({ effects }) => yamlFile.read.const(effects),
 
   // the execution function
   async ({ effects, input }) => {

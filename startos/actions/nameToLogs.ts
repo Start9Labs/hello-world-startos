@@ -23,19 +23,7 @@ export const nameToLogs = sdk.Action.withoutInput(
 
   // the execution function
   async ({ effects }) => {
-    const name = (await yamlFile.read.once())!.name
-
+    const name = (await yamlFile.read.const(effects))!.name
     console.info(`Hello ${name}`)
-
-    return {
-      version: '1',
-      type: 'string',
-      name: 'Log Successful',
-      description: `"Hello ${name}" has been written to the service logs. Open your logs to view it.`,
-      value: name,
-      masked: false,
-      copyable: false,
-      qr: false,
-    }
   },
 )

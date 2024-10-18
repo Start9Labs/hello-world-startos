@@ -1,6 +1,4 @@
 import { setupManifest } from '@start9labs/start-sdk'
-import { versions } from './versions'
-import { SDKManifest } from '@start9labs/start-sdk/base/lib/types'
 
 export const manifest = setupManifest({
   id: 'hello-world',
