@@ -15,18 +15,19 @@ export const showSecretPhrase = sdk.Action.withoutInput(
   }),
 
   // the execution function
-  async ({ effects }) => {
-    return {
-      version: '1',
-      type: 'string',
-      name: 'Secret Phrase',
-      description: 'Use this phrase to gain access to extraordinary places',
+  async ({ effects }) => ({
+    version: '1',
+    title: 'Secret Phrase',
+    message:
+      'Below is your secret phrase. Use it to gain access to extraordinary places',
+    result: {
+      type: 'single',
       value: await sdk.store
         .getOwn(effects, sdk.StorePath.secretPhrase)
         .const(),
       copyable: true,
       qr: true,
       masked: true,
-    }
-  },
+    },
+  }),
 )

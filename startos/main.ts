@@ -24,11 +24,7 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
    *
    * Each daemon defines its own health check, which can optionally be exposed to the user.
    */
-  return sdk.Daemons.of({
-    effects,
-    started,
-    healthReceipts,
-  }).addDaemon('primary', {
+  return sdk.Daemons.of(effects, started, healthReceipts).addDaemon('primary', {
     image: { id: 'main' }, // Must match an Image ID declared in the manifest.
     command: ['hello-world'], // The command to start the daemon.
     mounts: sdk.Mounts.of().addVolume('main', null, '/data', false), // Mount necessary volumes. ID must match manifest declaration.

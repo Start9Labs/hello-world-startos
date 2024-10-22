@@ -25,5 +25,12 @@ export const nameToLogs = sdk.Action.withoutInput(
   async ({ effects }) => {
     const name = (await yamlFile.read.const(effects))!.name
     console.info(`Hello ${name}`)
+
+    return {
+      version: '1',
+      title: 'Success',
+      message: `"Hello ${name}" has been logged. Open the Hello World service logs to view it.`,
+      result: null,
+    }
   },
 )
