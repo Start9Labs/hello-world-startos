@@ -8,29 +8,32 @@ else
   BUILD := $(firstword $(CMD_ARCH_GOAL))
 endif
 
-.PHONY: all arm x86 clean install check-deps check-init
+LAST_BUILD_STAMP := startos/.lba
+
+.PHONY: all arm x86 clean install check-deps check-init package
 .DELETE_ON_ERROR:
 
-all: ${PACKAGE_ID}.s9pk
-
-arm x86: ${PACKAGE_ID}.s9pk
-
-all arm x86:
+all arm x86: package
 	@echo "✅ Done!$(if $(filter arm x86, $@), ($@ only))"
 	@echo "   Filesize: $(shell du -h ${PACKAGE_ID}.s9pk)"
 
-${PACKAGE_ID}.s9pk: javascript/index.js $(INGREDIENTS) | check-deps check-init
-	@echo "📦 Packing '$(PACKAGE_ID).s9pk' for $(BUILD)..."
-	@BUILD=$(BUILD) start-cli s9pk pack
+package: javascript/index.js $(INGREDIENTS) | check-deps check-init
+	@if [ ! -f "${PACKAGE_ID}.s9pk" ] || [ "$(BUILD)" != "$$(cat ${LAST_BUILD_STAMP} 2>/dev/null)" ]; then \
+		echo "📦 Packing '${PACKAGE_ID}.s9pk' for $(BUILD)..."; \
+		BUILD=$(BUILD) start-cli s9pk pack; \
+		echo "$(BUILD)" > ${LAST_BUILD_STAMP}; \
+	else \
+		echo "ℹ️  Package is already up to date for $(BUILD)."; \
+	fi
 
-install: ${PACKAGE_ID}.s9pk | check-deps check-init
+install: package | check-deps check-init
 	@HOST=$$(awk -F'/' '/^host:/ {print $$3}' ~/.startos/config.yaml); \
 	if [ -z "$$HOST" ]; then \
 		echo "Error: You must define \"host: http://server-name.local\" in ~/.startos/config.yaml"; \
 		exit 1; \
 	fi; \
 	echo "\n🚀 Installing to $$HOST ..."; \
-	start-cli package install -s $<
+	start-cli package install -s ${PACKAGE_ID}.s9pk
 
 check-deps:
 	@command -v start-cli >/dev/null || \
@@ -55,4 +58,4 @@ package-lock.json: package.json
 
 clean:
 	@echo "Cleaning up build artifacts..."
-	@rm -rf ${PACKAGE_ID}.s9pk javascript node_modules
+	@rm -rf ${PACKAGE_ID}.s9pk javascript node_modules ${LAST_BUILD_STAMP}
