@@ -30,7 +30,7 @@ install: ${PACKAGE_ID}.s9pk | check-deps check-init
 		exit 1; \
 	fi; \
 	echo "\n🚀 Installing to $$HOST ..."; \
-	start-cli package install $<
+	start-cli package install -s $<
 
 check-deps:
 	@command -v start-cli >/dev/null || \
