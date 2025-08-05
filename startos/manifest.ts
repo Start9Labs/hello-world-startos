@@ -3,6 +3,13 @@ import { SDKImageInputSpec } from '@start9labs/start-sdk/base/lib/types/Manifest
 
 const BUILD = process.env.BUILD || ''
 
+const architectures =
+  BUILD === 'x86'
+    ? ['x86_64']
+    : BUILD === 'arm'
+      ? ['aarch64']
+      : ['x86_64', 'aarch64']
+
 export const manifest = setupManifest({
   id: 'hello-world',
   title: 'Hello World',
@@ -22,21 +29,11 @@ export const manifest = setupManifest({
   images: {
     'hello-world': {
       source: { dockerTag: 'start9/hello-world' },
-      arch:
-        BUILD === 'x86'
-          ? ['x86_64']
-          : BUILD === 'arm'
-            ? ['aarch64']
-            : ['x86_64', 'aarch64'],
+      arch: architectures,
     } as SDKImageInputSpec,
   },
   hardwareRequirements: {
-    arch:
-      BUILD === 'x86'
-        ? ['x86_64']
-        : BUILD === 'arm'
-          ? ['aarch64']
-          : ['x86_64', 'aarch64'],
+    arch: architectures,
   },
   alerts: {
     install: 'Optional alert to display before installing the service',
