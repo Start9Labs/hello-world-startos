@@ -3,28 +3,31 @@ INGREDIENTS := $(shell start-cli s9pk list-ingredients 2>/dev/null)
 
 CMD_ARCH_GOAL := $(filter arm x86, $(MAKECMDGOALS))
 ifeq ($(CMD_ARCH_GOAL),)
-  BUILD := both
+  BUILD := universal
 else
   BUILD := $(firstword $(CMD_ARCH_GOAL))
 endif
 
 LAST_BUILD_STAMP := startos/.lba
 
-.PHONY: all arm x86 clean install check-deps check-init package
+.PHONY: all arm x86 clean install check-deps check-init package ingredients
 .DELETE_ON_ERROR:
 
 all arm x86: package
 	@echo "✅ Done!$(if $(filter arm x86, $@), ($@ only))"
-	@echo "   Filesize: $(shell du -h ${PACKAGE_ID}.s9pk)"
 
-package: javascript/index.js $(INGREDIENTS) | check-deps check-init
+package: javascript/index.js ingredients | check-deps check-init
 	@if [ ! -f "${PACKAGE_ID}.s9pk" ] || [ "$(BUILD)" != "$$(cat ${LAST_BUILD_STAMP} 2>/dev/null)" ]; then \
-		echo "📦 Packing '${PACKAGE_ID}.s9pk' for $(BUILD)..."; \
+		echo "   Packing '${PACKAGE_ID}.s9pk' for $(BUILD)..."; \
 		BUILD=$(BUILD) start-cli s9pk pack; \
 		echo "$(BUILD)" > ${LAST_BUILD_STAMP}; \
 	else \
-		echo "ℹ️  Package is already up to date for $(BUILD)."; \
-	fi
+		echo "ℹ️  No code changes detected for $(BUILD) platform build."; \
+	fi; \
+	echo "📦 Filesize: $$(du -h ${PACKAGE_ID}.s9pk)"
+
+ingredients: $(INGREDIENTS)
+	@echo "   Re-evaluating ingredients..."
 
 install: package | check-deps check-init
 	@HOST=$$(awk -F'/' '/^host:/ {print $$3}' ~/.startos/config.yaml); \
