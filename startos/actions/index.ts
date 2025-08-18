@@ -1,9 +1,9 @@
 import { sdk } from '../sdk'
 import { showSecretPhrase } from './showSecretPhrase'
 import { setName } from './setName'
-import { nameToLogs } from './nameToLogs'
+import { helloScript } from './helloScript'
 
 export const actions = sdk.Actions.of()
   .addAction(setName)
   .addAction(showSecretPhrase)
-  .addAction(nameToLogs)
+  .addAction(helloScript)
