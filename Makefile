@@ -1,30 +1,28 @@
 PACKAGE_ID := $(shell awk -F"'" '/id:/ {print $$2}' startos/manifest.ts)
 INGREDIENTS := $(shell start-cli s9pk list-ingredients 2>/dev/null)
 
-CMD_ARCH_GOAL := $(filter arm x86, $(MAKECMDGOALS))
+CMD_ARCH_GOAL := $(filter aarch64 x86_64, $(MAKECMDGOALS))
 ifeq ($(CMD_ARCH_GOAL),)
   BUILD := universal
+  S9PK := $(PACKAGE_ID).s9pk
 else
   BUILD := $(firstword $(CMD_ARCH_GOAL))
+  S9PK := $(PACKAGE_ID)_$(BUILD).s9pk
 endif
 
-LAST_BUILD_STAMP := .lba
-
-.PHONY: all arm x86 clean install check-deps check-init package ingredients
+.PHONY: all aarch64 x86_64 clean install check-deps check-init package ingredients
 .DELETE_ON_ERROR:
 
-all arm x86: package
-	@echo "✅ Done!$(if $(filter arm x86, $@), ($@ only))"
+all: $(PACKAGE_ID).s9pk
+	@echo "✅ Done!"
 
-package: javascript/index.js ingredients | check-deps check-init
-	@if [ ! -f "${PACKAGE_ID}.s9pk" ] || [ "$(BUILD)" != "$$(cat ${LAST_BUILD_STAMP} 2>/dev/null)" ]; then \
-		echo "   Packing '${PACKAGE_ID}.s9pk' for $(BUILD)..."; \
-		BUILD=$(BUILD) start-cli s9pk pack; \
-		echo "$(BUILD)" > ${LAST_BUILD_STAMP}; \
-	else \
-		echo "ℹ️  No code changes detected for $(BUILD) platform build."; \
-	fi; \
-	echo "📦 Filesize: $$(du -h ${PACKAGE_ID}.s9pk)"
+$(BUILD): $(PACKAGE_ID)_$(BUILD).s9pk
+	@echo "✅ Done! ($(BUILD) only)"
+
+$(S9PK): $(INGREDIENTS)
+	@$(MAKE) --no-print-directory ingredients
+	@echo "   Packing '$(S9PK)'..."
+	BUILD=$(BUILD) start-cli s9pk pack -o $(S9PK)
 
 ingredients: $(INGREDIENTS)
 	@echo "   Re-evaluating ingredients..."
@@ -36,7 +34,7 @@ install: package | check-deps check-init
 		exit 1; \
 	fi; \
 	echo "\n🚀 Installing to $$HOST ..."; \
-	start-cli package install -s ${PACKAGE_ID}.s9pk
+	start-cli package install -s $(S9PK)
 
 check-deps:
 	@command -v start-cli >/dev/null || \
@@ -61,4 +59,4 @@ package-lock.json: package.json
 
 clean:
 	@echo "Cleaning up build artifacts..."
-	@rm -rf ${PACKAGE_ID}.s9pk javascript node_modules ${LAST_BUILD_STAMP}
+	@rm -rf $(PACKAGE_ID).s9pk $(PACKAGE_ID)_x86_64.s9pk $(PACKAGE_ID)_aarch64.s9pk javascript node_modules
