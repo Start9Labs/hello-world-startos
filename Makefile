@@ -17,6 +17,7 @@ all arm x86: package
 	@echo "✅ Done!$(if $(filter arm x86, $@), ($@ only))"
 
 package: javascript/index.js ingredients | check-deps check-init
+	@$(MAKE) --no-print-directory ingredients
 	@if [ ! -f "${PACKAGE_ID}.s9pk" ] || [ "$(BUILD)" != "$$(cat ${LAST_BUILD_STAMP} 2>/dev/null)" ]; then \
 		echo "   Packing '${PACKAGE_ID}.s9pk' for $(BUILD)..."; \
 		BUILD=$(BUILD) start-cli s9pk pack; \
