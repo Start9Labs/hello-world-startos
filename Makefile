@@ -8,7 +8,7 @@ else
   BUILD := $(firstword $(CMD_ARCH_GOAL))
 endif
 
-LAST_BUILD_STAMP := startos/.lba
+LAST_BUILD_STAMP := .lba
 
 .PHONY: all arm x86 clean install check-deps check-init package ingredients
 .DELETE_ON_ERROR:
@@ -17,7 +17,6 @@ all arm x86: package
 	@echo "✅ Done!$(if $(filter arm x86, $@), ($@ only))"
 
 package: javascript/index.js ingredients | check-deps check-init
-	@$(MAKE) --no-print-directory ingredients
 	@if [ ! -f "${PACKAGE_ID}.s9pk" ] || [ "$(BUILD)" != "$$(cat ${LAST_BUILD_STAMP} 2>/dev/null)" ]; then \
 		echo "   Packing '${PACKAGE_ID}.s9pk' for $(BUILD)..."; \
 		BUILD=$(BUILD) start-cli s9pk pack; \
@@ -51,7 +50,7 @@ check-init:
 		start-cli init; \
 	fi
 
-javascript/index.js: $(shell git ls-files startos) tsconfig.json node_modules
+javascript/index.js: $(shell find startos -type f) tsconfig.json node_modules
 	npm run build
 
 node_modules: package-lock.json
