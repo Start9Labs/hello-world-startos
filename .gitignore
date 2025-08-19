@@ -1,6 +1,5 @@
 *.s9pk
 startos/*.js
-.lba
 node_modules/
 .DS_Store
 .vscode/

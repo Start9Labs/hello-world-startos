@@ -20,7 +20,7 @@ define SUMMARY
 	version=$$(echo $$manifest | jq -r .version); \
 	arches=$$(echo $$manifest | jq -r '.hardwareRequirements.arch | join(", ")'); \
 	sdkv=$$(echo $$manifest | jq -r .sdkVersion); \
-	gitHash=$$(echo $$manifest | jq -r .gitHash); \
+	gitHash=$$(echo "$$manifest" | jq -r .gitHash | sed -E 's/(.*-modified)$$/\x1b[0;31m\1\x1b[0m/'); \
 	echo ""; \
 	echo "\033[1;32m✅ Build Complete!\033[0m"; \
 	echo ""; \
