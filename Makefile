@@ -40,7 +40,7 @@ all: $(PACKAGE_ID).s9pk
 $(BUILD): $(PACKAGE_ID)_$(BUILD).s9pk
 	$(call SUMMARY,$(S9PK))
 
-$(S9PK): $(INGREDIENTS)
+$(S9PK): $(INGREDIENTS) .git/HEAD .git/index
 	@$(MAKE) --no-print-directory ingredients
 	@echo "   Packing '$(S9PK)'..."
 	BUILD=$(BUILD) start-cli s9pk pack -o $(S9PK)
