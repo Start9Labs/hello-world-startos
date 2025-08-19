@@ -4,11 +4,7 @@ import { SDKImageInputSpec } from '@start9labs/start-sdk/base/lib/types/Manifest
 const BUILD = process.env.BUILD || ''
 
 const architectures =
-  BUILD === 'x86'
-    ? ['x86_64']
-    : BUILD === 'arm'
-      ? ['aarch64']
-      : ['x86_64', 'aarch64']
+  BUILD === 'x86_64' || BUILD === 'aarch64' ? [BUILD] : ['x86_64', 'aarch64']
 
 export const manifest = setupManifest({
   id: 'hello-world',

@@ -13,11 +13,32 @@ endif
 .PHONY: all aarch64 x86_64 clean install check-deps check-init package ingredients
 .DELETE_ON_ERROR:
 
+define SUMMARY
+	@manifest=$$(start-cli s9pk inspect $(1) manifest); \
+	size=$$(du -h $(1) | awk '{print $$1}'); \
+	title=$$(echo $$manifest | jq -r .title); \
+	version=$$(echo $$manifest | jq -r .version); \
+	arches=$$(echo $$manifest | jq -r '.hardwareRequirements.arch | join(", ")'); \
+	sdkv=$$(echo $$manifest | jq -r .sdkVersion); \
+	gitHash=$$(echo $$manifest | jq -r .gitHash); \
+	echo ""; \
+	echo "\033[1;32m✅ Build Complete!\033[0m"; \
+	echo ""; \
+	echo "\033[1;37m📦 $$title\033[0m   \033[36mv$$version\033[0m"; \
+	echo "───────────────────────────────"; \
+	printf " \033[1;36mFilename:\033[0m   %s\n" "$(1)"; \
+	printf " \033[1;36mSize:\033[0m       %s\n" "$$size"; \
+	printf " \033[1;36mArch:\033[0m       %s\n" "$$arches"; \
+	printf " \033[1;36mSDK:\033[0m        %s\n" "$$sdkv"; \
+	printf " \033[1;36mGit:\033[0m        %s\n" "$$gitHash"; \
+	echo ""
+endef
+
 all: $(PACKAGE_ID).s9pk
-	@echo "✅ Done!"
+	$(call SUMMARY,$(S9PK))
 
 $(BUILD): $(PACKAGE_ID)_$(BUILD).s9pk
-	@echo "✅ Done! ($(BUILD) only)"
+	$(call SUMMARY,$(S9PK))
 
 $(S9PK): $(INGREDIENTS)
 	@$(MAKE) --no-print-directory ingredients
