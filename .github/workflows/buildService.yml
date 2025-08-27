@@ -54,3 +54,55 @@ jobs:
         with:
           name: ${{ env.arch_package }}
           path: ./${{ env.arch_package }}
+
+  BuildUniversal:
+    name: Build Universal S9PK
+    runs-on: ubuntu-24.04
+    needs: BuildPackage
+    steps:
+      - name: Prepare StartOS SDK
+        uses: k0gen/sdk@v3-optimization
+
+      - name: Checkout services repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Setup for universal build
+        run: |
+          start-cli init
+          
+          find artifacts -name "*.s9pk" -exec mv {} . \;
+          
+          echo "Available architecture packages:"
+          ls -la *.s9pk
+          
+          PACKAGE_ID=$(start-cli s9pk inspect $(ls *_*.s9pk | head -n1) manifest | jq -r '.id')
+          echo "package_id=${PACKAGE_ID}" >> $GITHUB_ENV
+
+      - name: Build universal package
+        run: |
+          RUST_LOG=debug RUST_BACKTRACE=1 make
+          
+          UNIVERSAL_PACKAGE=$(ls *.s9pk | grep -v "_aarch64\|_x86_64" | head -n1)
+          
+          if [ -f "$UNIVERSAL_PACKAGE" ]; then
+            echo "universal_package=${UNIVERSAL_PACKAGE}" >> $GITHUB_ENV
+            printf "\n Universal Package SHA256SUM: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
+          else
+            echo "❌ Universal package not found"
+            echo "Available files:"
+            ls -la *.s9pk
+            exit 1
+          fi
+
+      - name: Upload Universal .s9pk
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.universal_package }}
+          path: ./${{ env.universal_package }}
