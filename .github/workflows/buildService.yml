@@ -147,7 +147,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-node-modules-
 
-      # Install Node.js dependencies only if cache miss and package.json exists
+      ## Install Node.js dependencies only if cache miss and package.json exists
       - name: Install Node.js dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true' && hashFiles('**/package.json') != ''
         run: |
