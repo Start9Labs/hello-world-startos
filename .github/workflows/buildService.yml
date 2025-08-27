@@ -11,7 +11,7 @@ on:
 
 jobs:
   BuildARM:
-    name: Build ARM S9PK
+    name: Build S9PK (aarch64)
     runs-on: ubuntu-24.04-arm
     outputs:
       package_id: ${{ steps.build.outputs.package_id }}
@@ -71,9 +71,8 @@ jobs:
           if-no-files-found: ignore
 
   BuildIntel:
-    name: Build Intel S9PK
+    name: Build S9PK (x86_64)
     runs-on: ubuntu-24.04
-    needs: BuildARM
     outputs:
       package_id: ${{ steps.build.outputs.package_id }}
       intel_package: ${{ steps.build.outputs.intel_package }}
@@ -86,35 +85,12 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Download Docker cache from ARM
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-cache-arm
-          path: docker-cache/
-
-      - name: Import Docker images
-        run: |
-          echo "Importing Docker images from ARM build..."
-          
-          if [ -d "docker-cache" ] && [ -n "$(ls -A docker-cache/*.tar 2>/dev/null)" ]; then
-            for tar_file in docker-cache/*.tar; do
-              if [ -f "$tar_file" ]; then
-                echo "Loading $(basename $tar_file)"
-                docker load -i "$tar_file"
-              fi
-            done
-            echo "Docker images imported successfully"
-            docker image ls | head -10
-          else
-            echo "No Docker cache to import"
-          fi
-
       - name: Build Intel package
         id: build
         run: |
           start-cli init
           
-          echo "Building x86_64 package with imported Docker cache..."
+          echo "Building x86_64 package..."
           RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
           
           # Find the generated package (dynamic naming)
@@ -136,14 +112,36 @@ jobs:
           
           printf "\n Intel SHA256: $(sha256sum ${INTEL_PACKAGE}) \n"
 
+      - name: Export Docker images for cache
+        run: |
+          echo "Exporting Docker images for cache..."
+          
+          # Export images used by this specific service
+          for image in $(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E "(start9|ghcr.io/start9labs)"); do
+            if [[ "$image" != "<none>:<none>" ]]; then
+              safe_name=$(echo $image | sed 's#[:/.]#_#g')
+              echo "Exporting $image as ${safe_name}.tar"
+              docker save "$image" -o "${safe_name}.tar"
+            fi
+          done
+          
+          ls -la *.tar 2>/dev/null || echo "No Docker images cached"
+
       - name: Upload Intel package
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.intel_package }}
           path: ./${{ env.intel_package }}
 
+      - name: Upload Docker cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-cache-intel
+          path: "*.tar"
+          if-no-files-found: ignore
+
   BuildUniversal:
-    name: Build Universal S9PK
+    name: Build S9PK (Universal)
     runs-on: ubuntu-24.04
     needs: [BuildARM, BuildIntel]
     steps:
@@ -159,28 +157,49 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: docker-cache-arm
-          path: docker-cache/
+          path: docker-cache-arm/
 
-      - name: Import Docker images
+      - name: Download Docker cache from Intel
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-cache-intel
+          path: docker-cache-intel/
+
+      - name: Import Docker images from both architectures
         run: |
-          echo "Importing Docker images for universal build..."
+          echo "Importing Docker images from both ARM and Intel builds..."
           
-          if [ -d "docker-cache" ] && [ -n "$(ls -A docker-cache/*.tar 2>/dev/null)" ]; then
-            for tar_file in docker-cache/*.tar; do
+          # Import ARM cache
+          if [ -d "docker-cache-arm" ] && [ -n "$(ls -A docker-cache-arm/*.tar 2>/dev/null)" ]; then
+            echo "Loading ARM Docker cache..."
+            for tar_file in docker-cache-arm/*.tar; do
               if [ -f "$tar_file" ]; then
                 echo "Loading $(basename $tar_file)"
-                docker load -i "$tar_file"
+                docker load -i "$tar_file" || true
               fi
             done
-            echo "Docker cache imported for universal build"
           fi
+          
+          # Import Intel cache  
+          if [ -d "docker-cache-intel" ] && [ -n "$(ls -A docker-cache-intel/*.tar 2>/dev/null)" ]; then
+            echo "Loading Intel Docker cache..."
+            for tar_file in docker-cache-intel/*.tar; do
+              if [ -f "$tar_file" ]; then
+                echo "Loading $(basename $tar_file)"
+                docker load -i "$tar_file" || true
+              fi
+            done
+          fi
+          
+          echo "Available Docker images after import:"
+          docker image ls | grep -E "(start9|ghcr.io/start9labs)" || echo "No relevant images found"
 
       - name: Build Universal package
         run: |
           start-cli init
           
-          echo "Building universal package with full Docker cache..."
-          RUST_LOG=debug RUST_BACKTRACE=1 make
+          echo "Building universal package with full Docker cache from both architectures..."
+          time RUST_LOG=debug RUST_BACKTRACE=1 make
           
           # Find the universal package (dynamic naming)
           UNIVERSAL_PACKAGE=$(ls *.s9pk | grep -v "_aarch64\|_x86_64" | head -n1)
