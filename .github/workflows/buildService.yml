@@ -10,19 +10,9 @@ on:
     branches: ['main', 'master', 'update/040']
 
 jobs:
-  BuildPackage:
-    name: Build S9PK for ${{ matrix.arch_display }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        include:
-          - arch_display: aarch64
-            runner: ubuntu-24.04-arm
-            arch: arm64
-          - arch_display: x86_64
-            runner: ubuntu-24.04
-            arch: amd64
-    
+  BuildARM:
+    name: Build S9PK for aarch64
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: Prepare StartOS SDK
         uses: k0gen/sdk@v3-optimization
@@ -32,33 +22,40 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build the service package
-        id: build
+      - name: Build ARM package and preserve artifacts
         run: |
           start-cli init
-          RUST_LOG=debug RUST_BACKTRACE=1 make ${{ matrix.arch_display }}
+          RUST_LOG=debug RUST_BACKTRACE=1 make aarch64
           
-          # Find the generated package (should already have arch in filename)
-          ARCH_PACKAGE=$(ls *_${{ matrix.arch_display }}.s9pk | head -n1)
+          # Find the generated package
+          ARCH_PACKAGE=$(ls *_aarch64.s9pk | head -n1)
           PACKAGE_ID=$(start-cli s9pk inspect "$ARCH_PACKAGE" manifest | jq -r '.id')
           
-          # Set environment variables for later steps
           echo "package_id=${PACKAGE_ID}" >> $GITHUB_ENV
           echo "arch_package=${ARCH_PACKAGE}" >> $GITHUB_ENV
           
-          printf "\n SHA256SUM: $(sha256sum ${ARCH_PACKAGE}) \n"
-        shell: bash
+          printf "\n ARM SHA256SUM: $(sha256sum ${ARCH_PACKAGE}) \n"
 
-      - name: Upload .s9pk
+      - name: Upload ARM .s9pk
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.arch_package }}
           path: ./${{ env.arch_package }}
 
-  BuildUniversal:
-    name: Build Universal S9PK
+      # Upload build artifacts that can be shared for faster universal build
+      - name: Upload ARM build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm-build-artifacts
+          path: |
+            node_modules/
+            package-lock.json
+          if-no-files-found: ignore
+
+  BuildIntelAndUniversal:
+    name: Build x86_64 and Universal S9PK
     runs-on: ubuntu-24.04
-    needs: BuildPackage
+    needs: BuildARM
     steps:
       - name: Prepare StartOS SDK
         uses: k0gen/sdk@v3-optimization
@@ -68,38 +65,69 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Download all artifacts
+      - name: Download ARM build artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          name: arm-build-artifacts
+          path: .
 
-      - name: Setup for universal build
+      - name: Download ARM package
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*_aarch64.s9pk"
+          path: arm-package
+
+      - name: Setup and build x86_64 package
         run: |
           start-cli init
           
-          find artifacts -name "*.s9pk" -exec mv {} . \;
+          # Move ARM package to current directory
+          find arm-package -name "*_aarch64.s9pk" -exec mv {} . \;
           
-          echo "Available architecture packages:"
-          ls -la *.s9pk
+          echo "Files available for x86_64 build:"
+          ls -la *.s9pk 2>/dev/null || echo "No s9pk files yet"
+          ls -la node_modules/ 2>/dev/null && echo "node_modules available" || echo "No node_modules"
           
-          PACKAGE_ID=$(start-cli s9pk inspect $(ls *_*.s9pk | head -n1) manifest | jq -r '.id')
-          echo "package_id=${PACKAGE_ID}" >> $GITHUB_ENV
+          # Build x86_64 package (this should be faster with shared node_modules)
+          RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
+          
+          # Find the generated x86_64 package
+          X86_PACKAGE=$(ls *_x86_64.s9pk | head -n1)
+          echo "x86_package=${X86_PACKAGE}" >> $GITHUB_ENV
+          
+          printf "\n x86_64 SHA256SUM: $(sha256sum ${X86_PACKAGE}) \n"
 
       - name: Build universal package
         run: |
+          echo "Building universal package with available artifacts:"
+          ls -la *.s9pk
+          
+          # Now we have both arch packages and shared build artifacts
+          # This should be very fast since node_modules and other artifacts are already available
           RUST_LOG=debug RUST_BACKTRACE=1 make
           
+          # Find the universal package
           UNIVERSAL_PACKAGE=$(ls *.s9pk | grep -v "_aarch64\|_x86_64" | head -n1)
           
           if [ -f "$UNIVERSAL_PACKAGE" ]; then
             echo "universal_package=${UNIVERSAL_PACKAGE}" >> $GITHUB_ENV
             printf "\n Universal Package SHA256SUM: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
+            
+            # Show final artifacts
+            echo "Final build artifacts:"
+            ls -la *.s9pk
           else
             echo "❌ Universal package not found"
             echo "Available files:"
             ls -la *.s9pk
             exit 1
           fi
+
+      - name: Upload x86_64 .s9pk
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.x86_package }}
+          path: ./${{ env.x86_package }}
 
       - name: Upload Universal .s9pk
         uses: actions/upload-artifact@v4
