@@ -71,24 +71,16 @@ jobs:
           name: arm-build-artifacts
           path: .
 
-      - name: Download ARM package
-        uses: actions/download-artifact@v4
-        with:
-          pattern: "*_aarch64.s9pk"
-          path: arm-package
-
       - name: Setup and build x86_64 package
         run: |
           start-cli init
           
-          # Move ARM package to current directory
-          find arm-package -name "*_aarch64.s9pk" -exec mv {} . \;
+          echo "JS/TS build artifacts available:"
+          ls -la node_modules/ 2>/dev/null && echo "✅ node_modules available" || echo "❌ No node_modules"
+          ls -la dist/ 2>/dev/null && echo "✅ dist/ available" || echo "❌ No dist/"
+          ls -la build/ 2>/dev/null && echo "✅ build/ available" || echo "❌ No build/"
           
-          echo "Files available for x86_64 build:"
-          ls -la *.s9pk 2>/dev/null || echo "No s9pk files yet"
-          ls -la node_modules/ 2>/dev/null && echo "node_modules available" || echo "No node_modules"
-          
-          # Build x86_64 package (this should be faster with shared node_modules)
+          # Build x86_64 package (should be faster with shared JS/TS artifacts)
           RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
           
           # Find the generated x86_64 package
@@ -99,27 +91,21 @@ jobs:
 
       - name: Build universal package
         run: |
-          echo "Building universal package with available artifacts:"
-          ls -la *.s9pk
+          echo "Building universal package with shared JS/TS artifacts..."
           
-          # Now we have both arch packages and shared build artifacts
-          # This should be very fast since node_modules and other artifacts are already available
+          # Universal build should use the shared JS/TS artifacts and be very fast
           RUST_LOG=debug RUST_BACKTRACE=1 make
           
           # Find the universal package
-          UNIVERSAL_PACKAGE=$(ls *.s9pk | grep -v "_aarch64\|_x86_64" | head -n1)
+          UNIVERSAL_PACKAGE=$(ls *.s9pk | head -n1)
           
           if [ -f "$UNIVERSAL_PACKAGE" ]; then
             echo "universal_package=${UNIVERSAL_PACKAGE}" >> $GITHUB_ENV
             printf "\n Universal Package SHA256SUM: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
-            
-            # Show final artifacts
-            echo "Final build artifacts:"
-            ls -la *.s9pk
           else
             echo "❌ Universal package not found"
             echo "Available files:"
-            ls -la *.s9pk
+            ls -la
             exit 1
           fi
 
