@@ -54,8 +54,9 @@ jobs:
             npm install
           fi
 
-      # Cache Rust build artifacts
+      # Cache Rust build artifacts (only if Rust project exists)
       - name: Cache Rust build artifacts
+        if: hashFiles('**/Cargo.lock') != ''
         uses: actions/cache@v4
         id: cache-rust
         with:
