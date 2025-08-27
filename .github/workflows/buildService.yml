@@ -22,10 +22,20 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build ARM package and preserve artifacts
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ARM package with Docker cache export
         run: |
           start-cli init
-          RUST_LOG=debug RUST_BACKTRACE=1 make aarch64
+          
+          # Build with Docker cache export to GitHub Actions cache
+          DOCKER_BUILDKIT=1 \
+          BUILDX_EXPERIMENTAL=1 \
+          RUST_LOG=debug RUST_BACKTRACE=1 \
+          make aarch64 \
+          CACHE_FROM="type=gha,scope=arm-cache" \
+          CACHE_TO="type=gha,mode=max,scope=arm-cache"
           
           # Find the generated package
           ARCH_PACKAGE=$(ls *_aarch64.s9pk | head -n1)
@@ -42,14 +52,24 @@ jobs:
           name: ${{ env.arch_package }}
           path: ./${{ env.arch_package }}
 
-      # Upload build artifacts that can be shared for faster universal build
+      # Upload JS/TS build artifacts
       - name: Upload ARM build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: arm-build-artifacts
           path: |
             node_modules/
+            .npm/
             package-lock.json
+            yarn.lock
+            dist/
+            build/
+            assets/
+            .next/
+            .nuxt/
+            public/build/
+            www/
+            scripts/
           if-no-files-found: ignore
 
   BuildIntelAndUniversal:
@@ -65,23 +85,30 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Download ARM build artifacts
         uses: actions/download-artifact@v4
         with:
           name: arm-build-artifacts
           path: .
 
-      - name: Setup and build x86_64 package
+      - name: Build x86_64 with shared artifacts and Docker cache
         run: |
           start-cli init
           
-          echo "JS/TS build artifacts available:"
-          ls -la node_modules/ 2>/dev/null && echo "✅ node_modules available" || echo "❌ No node_modules"
-          ls -la dist/ 2>/dev/null && echo "✅ dist/ available" || echo "❌ No dist/"
-          ls -la build/ 2>/dev/null && echo "✅ build/ available" || echo "❌ No build/"
+          echo "Shared artifacts available:"
+          ls -la node_modules/ 2>/dev/null && echo "✅ node_modules" || echo "❌ No node_modules"
+          ls -la dist/ 2>/dev/null && echo "✅ dist/" || echo "❌ No dist/"
           
-          # Build x86_64 package (should be faster with shared JS/TS artifacts)
-          RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
+          # Build x86_64 with Docker cache import from ARM build and export for intel
+          DOCKER_BUILDKIT=1 \
+          BUILDX_EXPERIMENTAL=1 \
+          RUST_LOG=debug RUST_BACKTRACE=1 \
+          make x86_64 \
+          CACHE_FROM="type=gha,scope=arm-cache type=gha,scope=intel-cache" \
+          CACHE_TO="type=gha,mode=max,scope=intel-cache"
           
           # Find the generated x86_64 package
           X86_PACKAGE=$(ls *_x86_64.s9pk | head -n1)
@@ -89,12 +116,22 @@ jobs:
           
           printf "\n x86_64 SHA256SUM: $(sha256sum ${X86_PACKAGE}) \n"
 
-      - name: Build universal package
+      - name: Clean arch packages before universal build
         run: |
-          echo "Building universal package with shared JS/TS artifacts..."
+          # Remove arch-specific packages to avoid conflicts
+          rm -f *_aarch64.s9pk *_x86_64.s9pk
+          echo "Cleaned arch packages for universal build"
+
+      - name: Build universal package with full cache
+        run: |
+          echo "Building universal package with Docker cache from both architectures..."
           
-          # Universal build should use the shared JS/TS artifacts and be very fast
-          RUST_LOG=debug RUST_BACKTRACE=1 make
+          # Universal build using cache from both ARM and Intel builds
+          DOCKER_BUILDKIT=1 \
+          BUILDX_EXPERIMENTAL=1 \
+          RUST_LOG=debug RUST_BACKTRACE=1 \
+          make \
+          CACHE_FROM="type=gha,scope=arm-cache type=gha,scope=intel-cache"
           
           # Find the universal package
           UNIVERSAL_PACKAGE=$(ls *.s9pk | head -n1)
@@ -104,7 +141,6 @@ jobs:
             printf "\n Universal Package SHA256SUM: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
           else
             echo "❌ Universal package not found"
-            echo "Available files:"
             ls -la
             exit 1
           fi
