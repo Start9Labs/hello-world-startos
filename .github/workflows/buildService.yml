@@ -13,6 +13,9 @@ jobs:
   BuildARM:
     name: Build ARM S9PK
     runs-on: ubuntu-24.04-arm
+    outputs:
+      package_id: ${{ steps.build.outputs.package_id }}
+      arch_package: ${{ steps.build.outputs.arch_package }}
     steps:
       - name: Prepare StartOS SDK
         uses: k0gen/sdk@v3-optimization
@@ -23,32 +26,35 @@ jobs:
           submodules: recursive
 
       - name: Build ARM package
+        id: build
         run: |
           start-cli init
           RUST_LOG=debug RUST_BACKTRACE=1 make aarch64
           
+          # Find the generated package (dynamic naming)
           ARCH_PACKAGE=$(ls *_aarch64.s9pk | head -n1)
+          PACKAGE_ID=$(start-cli s9pk inspect "$ARCH_PACKAGE" manifest | jq -r '.id')
+          
+          echo "package_id=${PACKAGE_ID}" >> $GITHUB_OUTPUT
+          echo "arch_package=${ARCH_PACKAGE}" >> $GITHUB_OUTPUT
+          echo "package_id=${PACKAGE_ID}" >> $GITHUB_ENV
           echo "arch_package=${ARCH_PACKAGE}" >> $GITHUB_ENV
           
           printf "\n ARM SHA256: $(sha256sum ${ARCH_PACKAGE}) \n"
 
       - name: Export Docker images for cache
         run: |
-          # Export only the images we need (based on your test results)
           echo "Exporting Docker images for cache..."
           
-          # Check if images exist and export them
-          if docker image inspect start9/hello-world:latest >/dev/null 2>&1; then
-            docker save "start9/hello-world:latest" -o "start9_hello-world_latest.tar"
-            echo "Exported start9/hello-world:latest"
-          fi
+          # Export images used by this specific service
+          for image in $(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E "(start9|ghcr.io/start9labs)"); do
+            if [[ "$image" != "<none>:<none>" ]]; then
+              safe_name=$(echo $image | sed 's#[:/.]#_#g')
+              echo "Exporting $image as ${safe_name}.tar"
+              docker save "$image" -o "${safe_name}.tar"
+            fi
+          done
           
-          if docker image inspect ghcr.io/start9labs/sdk/utils:latest >/dev/null 2>&1; then
-            docker save "ghcr.io/start9labs/sdk/utils:latest" -o "ghcr_io_start9labs_sdk_utils_latest.tar"
-            echo "Exported ghcr.io/start9labs/sdk/utils:latest"
-          fi
-          
-          # List exported files
           ls -la *.tar 2>/dev/null || echo "No Docker images cached"
 
       - name: Upload ARM package
@@ -64,10 +70,13 @@ jobs:
           path: "*.tar"
           if-no-files-found: ignore
 
-  BuildIntelAndUniversal:
-    name: Build Intel + Universal S9PK
+  BuildIntel:
+    name: Build Intel S9PK
     runs-on: ubuntu-24.04
     needs: BuildARM
+    outputs:
+      package_id: ${{ steps.build.outputs.package_id }}
+      intel_package: ${{ steps.build.outputs.intel_package }}
     steps:
       - name: Prepare StartOS SDK
         uses: k0gen/sdk@v3-optimization
@@ -94,43 +103,97 @@ jobs:
                 docker load -i "$tar_file"
               fi
             done
-            
-            echo "Available Docker images after import:"
-            docker image ls | grep -E "(start9/hello-world|ghcr.io/start9labs/sdk/utils)"
+            echo "Docker images imported successfully"
+            docker image ls | head -10
           else
             echo "No Docker cache to import"
           fi
 
-      - name: Build Intel package (with Docker cache)
+      - name: Build Intel package
+        id: build
         run: |
           start-cli init
           
           echo "Building x86_64 package with imported Docker cache..."
-          time RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
+          RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
           
-          X86_PACKAGE=$(ls *_x86_64.s9pk | head -n1)
-          echo "x86_package=${X86_PACKAGE}" >> $GITHUB_ENV
+          # Find the generated package (dynamic naming)
+          INTEL_PACKAGE=$(ls *_x86_64.s9pk | head -n1)
           
-          printf "\n Intel SHA256: $(sha256sum ${X86_PACKAGE}) \n"
-
-      - name: Build Universal package (very fast with cache)
-        run: |
-          # Clean arch-specific packages to avoid conflicts
-          rm -f *_aarch64.s9pk *_x86_64.s9pk
+          if [ -z "$INTEL_PACKAGE" ]; then
+            echo "❌ No x86_64 package found!"
+            echo "Available files:"
+            ls -la *.s9pk || echo "No .s9pk files found"
+            exit 1
+          fi
           
-          echo "Building universal package with full Docker cache..."
-          time RUST_LOG=debug RUST_BACKTRACE=1 make
+          PACKAGE_ID=$(start-cli s9pk inspect "$INTEL_PACKAGE" manifest | jq -r '.id')
           
-          UNIVERSAL_PACKAGE=$(ls *.s9pk | head -n1)
-          echo "universal_package=${UNIVERSAL_PACKAGE}" >> $GITHUB_ENV
+          echo "package_id=${PACKAGE_ID}" >> $GITHUB_OUTPUT
+          echo "intel_package=${INTEL_PACKAGE}" >> $GITHUB_OUTPUT
+          echo "package_id=${PACKAGE_ID}" >> $GITHUB_ENV
+          echo "intel_package=${INTEL_PACKAGE}" >> $GITHUB_ENV
           
-          printf "\n Universal SHA256: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
+          printf "\n Intel SHA256: $(sha256sum ${INTEL_PACKAGE}) \n"
 
       - name: Upload Intel package
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.x86_package }}
-          path: ./${{ env.x86_package }}
+          name: ${{ env.intel_package }}
+          path: ./${{ env.intel_package }}
+
+  BuildUniversal:
+    name: Build Universal S9PK
+    runs-on: ubuntu-24.04
+    needs: [BuildARM, BuildIntel]
+    steps:
+      - name: Prepare StartOS SDK
+        uses: k0gen/sdk@v3-optimization
+
+      - name: Checkout services repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download Docker cache from ARM
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-cache-arm
+          path: docker-cache/
+
+      - name: Import Docker images
+        run: |
+          echo "Importing Docker images for universal build..."
+          
+          if [ -d "docker-cache" ] && [ -n "$(ls -A docker-cache/*.tar 2>/dev/null)" ]; then
+            for tar_file in docker-cache/*.tar; do
+              if [ -f "$tar_file" ]; then
+                echo "Loading $(basename $tar_file)"
+                docker load -i "$tar_file"
+              fi
+            done
+            echo "Docker cache imported for universal build"
+          fi
+
+      - name: Build Universal package
+        run: |
+          start-cli init
+          
+          echo "Building universal package with full Docker cache..."
+          RUST_LOG=debug RUST_BACKTRACE=1 make
+          
+          # Find the universal package (dynamic naming)
+          UNIVERSAL_PACKAGE=$(ls *.s9pk | grep -v "_aarch64\|_x86_64" | head -n1)
+          
+          if [ -z "$UNIVERSAL_PACKAGE" ]; then
+            echo "❌ No universal package found!"
+            echo "Available files:"
+            ls -la *.s9pk || echo "No .s9pk files found"
+            exit 1
+          fi
+          
+          echo "universal_package=${UNIVERSAL_PACKAGE}" >> $GITHUB_ENV
+          printf "\n Universal SHA256: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
 
       - name: Upload Universal package
         uses: actions/upload-artifact@v4
