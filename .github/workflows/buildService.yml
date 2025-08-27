@@ -16,8 +16,10 @@ jobs:
     outputs:
       package_id: ${{ steps.build.outputs.package_id }}
       arch_package: ${{ steps.build.outputs.arch_package }}
+      sdk_cache_hit: ${{ steps.sdk-setup.outputs.cache-hit }}
     steps:
-      - name: Prepare StartOS SDK
+      - name: Prepare StartOS SDK (Super Cached)
+        id: sdk-setup
         uses: k0gen/sdk@v3-optimization
 
       - name: Checkout services repository
@@ -25,11 +27,56 @@ jobs:
         with:
           submodules: recursive
 
+      # Cache Node.js dependencies if they exist
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v4
+        id: cache-node-modules
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-${{ runner.arch }}-node-modules-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-v1
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-node-modules-
+
+      # Install Node.js dependencies only if cache miss and package.json exists
+      - name: Install Node.js dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true' && hashFiles('**/package.json') != ''
+        run: |
+          if [ -f "package-lock.json" ]; then
+            echo "Installing with npm..."
+            npm ci
+          elif [ -f "yarn.lock" ]; then
+            echo "Installing with yarn..."
+            yarn install --frozen-lockfile
+          else
+            echo "Installing with npm (no lockfile)..."
+            npm install
+          fi
+
+      # Cache Rust build artifacts
+      - name: Cache Rust build artifacts
+        uses: actions/cache@v4
+        id: cache-rust
+        with:
+          path: |
+            target/
+            ~/.cargo/registry/
+            ~/.cargo/git/
+          key: ${{ runner.os }}-${{ runner.arch }}-rust-${{ hashFiles('**/Cargo.lock') }}-v1
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-rust-
+
       - name: Build ARM package
         id: build
         run: |
           start-cli init
-          RUST_LOG=debug RUST_BACKTRACE=1 make aarch64
+          
+          echo "🏗️ Building ARM package with caches:"
+          echo "  Node modules cache hit: ${{ steps.cache-node-modules.outputs.cache-hit }}"
+          echo "  Rust cache hit: ${{ steps.cache-rust.outputs.cache-hit }}"
+          
+          time RUST_LOG=debug RUST_BACKTRACE=1 make aarch64
           
           # Find the generated package (dynamic naming)
           ARCH_PACKAGE=$(ls *_aarch64.s9pk | head -n1)
@@ -44,7 +91,7 @@ jobs:
 
       - name: Export Docker images for cache
         run: |
-          echo "Exporting Docker images for cache..."
+          echo "📦 Exporting Docker images for cache..."
           
           # Export images used by this specific service
           for image in $(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E "(start9|ghcr.io/start9labs)"); do
@@ -76,8 +123,10 @@ jobs:
     outputs:
       package_id: ${{ steps.build.outputs.package_id }}
       intel_package: ${{ steps.build.outputs.intel_package }}
+      sdk_cache_hit: ${{ steps.sdk-setup.outputs.cache-hit }}
     steps:
-      - name: Prepare StartOS SDK
+      - name: Prepare StartOS SDK (Super Cached)
+        id: sdk-setup
         uses: k0gen/sdk@v3-optimization
 
       - name: Checkout services repository
@@ -85,20 +134,62 @@ jobs:
         with:
           submodules: recursive
 
+      # Cache Node.js dependencies if they exist
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v4
+        id: cache-node-modules
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-${{ runner.arch }}-node-modules-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-v1
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-node-modules-
+
+      # Install Node.js dependencies only if cache miss and package.json exists
+      - name: Install Node.js dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true' && hashFiles('**/package.json') != ''
+        run: |
+          if [ -f "package-lock.json" ]; then
+            echo "Installing with npm..."
+            npm ci
+          elif [ -f "yarn.lock" ]; then
+            echo "Installing with yarn..."
+            yarn install --frozen-lockfile
+          else
+            echo "Installing with npm (no lockfile)..."
+            npm install
+          fi
+
+      # Cache Rust build artifacts
+      - name: Cache Rust build artifacts
+        uses: actions/cache@v4
+        id: cache-rust
+        with:
+          path: |
+            target/
+            ~/.cargo/registry/
+            ~/.cargo/git/
+          key: ${{ runner.os }}-${{ runner.arch }}-rust-${{ hashFiles('**/Cargo.lock') }}-v1
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-rust-
+
       - name: Build Intel package
         id: build
         run: |
           start-cli init
           
-          echo "Building x86_64 package..."
-          RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
+          echo "🏗️ Building Intel package with caches:"
+          echo "  Node modules cache hit: ${{ steps.cache-node-modules.outputs.cache-hit }}"
+          echo "  Rust cache hit: ${{ steps.cache-rust.outputs.cache-hit }}"
+          
+          time RUST_LOG=debug RUST_BACKTRACE=1 make x86_64
           
           # Find the generated package (dynamic naming)
           INTEL_PACKAGE=$(ls *_x86_64.s9pk | head -n1)
           
           if [ -z "$INTEL_PACKAGE" ]; then
             echo "❌ No x86_64 package found!"
-            echo "Available files:"
             ls -la *.s9pk || echo "No .s9pk files found"
             exit 1
           fi
@@ -114,7 +205,7 @@ jobs:
 
       - name: Export Docker images for cache
         run: |
-          echo "Exporting Docker images for cache..."
+          echo "📦 Exporting Docker images for cache..."
           
           # Export images used by this specific service
           for image in $(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E "(start9|ghcr.io/start9labs)"); do
@@ -145,13 +236,55 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [BuildARM, BuildIntel]
     steps:
-      - name: Prepare StartOS SDK
+      # CONDITIONAL: Only run SDK setup if both ARM and Intel had cache misses
+      - name: Prepare StartOS SDK (Conditional)
+        if: needs.BuildARM.outputs.sdk_cache_hit != 'true' || needs.BuildIntel.outputs.sdk_cache_hit != 'true'
         uses: k0gen/sdk@v3-optimization
+
+      # ALTERNATIVE: Minimal SDK setup if ARM/Intel had cache hits
+      - name: Minimal SDK setup (Cache hit scenario)
+        if: needs.BuildARM.outputs.sdk_cache_hit == 'true' && needs.BuildIntel.outputs.sdk_cache_hit == 'true'
+        run: |
+          echo "🚀 ARM and Intel had SDK cache hits - using minimal setup"
+          # Add start-cli to PATH if it exists in cache
+          if [ -f "$HOME/.local/bin/start-cli" ]; then
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
+            echo "✅ start-cli found in cache"
+          else
+            echo "⚠️ start-cli not found - will download quickly"
+            # Quick fallback download
+            mkdir -p ~/.local/bin
+            curl -fL "$(curl -s https://api.github.com/repos/Start9Labs/start-cli/releases/latest | jq -r '.assets[] | select(.name | contains("x86_64-unknown-linux-gnu")) | .browser_download_url')" | tar xz -C ~/.local/bin --strip-components=0
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
+          fi
 
       - name: Checkout services repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      # Restore Node.js cache from Intel build (x86_64 runner)
+      - name: Restore Node.js dependencies (from Intel build)
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-X64-node-modules-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-v1
+          restore-keys: |
+            ${{ runner.os }}-X64-node-modules-
+
+      # Restore Rust cache from Intel build (x86_64 runner) 
+      - name: Restore Rust build artifacts (from Intel build)
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            target/
+            ~/.cargo/registry/
+            ~/.cargo/git/
+          key: ${{ runner.os }}-X64-rust-${{ hashFiles('**/Cargo.lock') }}-v1
+          restore-keys: |
+            ${{ runner.os }}-X64-rust-
 
       - name: Download Docker cache from ARM
         uses: actions/download-artifact@v4
@@ -167,7 +300,7 @@ jobs:
 
       - name: Import Docker images from both architectures
         run: |
-          echo "Importing Docker images from both ARM and Intel builds..."
+          echo "📦 Importing Docker images from both ARM and Intel builds..."
           
           # Import ARM cache
           if [ -d "docker-cache-arm" ] && [ -n "$(ls -A docker-cache-arm/*.tar 2>/dev/null)" ]; then
@@ -194,11 +327,16 @@ jobs:
           echo "Available Docker images after import:"
           docker image ls | grep -E "(start9|ghcr.io/start9labs)" || echo "No relevant images found"
 
-      - name: Build Universal package
+      - name: Build Universal package (Lightning Fast)
         run: |
           start-cli init
           
-          echo "Building universal package with full Docker cache from both architectures..."
+          echo "⚡ Building universal package with MAXIMUM cache optimization:"
+          echo "  ARM SDK cache hit: ${{ needs.BuildARM.outputs.sdk_cache_hit }}"  
+          echo "  Intel SDK cache hit: ${{ needs.BuildIntel.outputs.sdk_cache_hit }}"
+          echo "  Docker cache: ARM + Intel images available"
+          echo "  Build artifacts: Restored from Intel build"
+          
           time RUST_LOG=debug RUST_BACKTRACE=1 make
           
           # Find the universal package (dynamic naming)
@@ -206,13 +344,12 @@ jobs:
           
           if [ -z "$UNIVERSAL_PACKAGE" ]; then
             echo "❌ No universal package found!"
-            echo "Available files:"
             ls -la *.s9pk || echo "No .s9pk files found"
             exit 1
           fi
           
           echo "universal_package=${UNIVERSAL_PACKAGE}" >> $GITHUB_ENV
-          printf "\n Universal SHA256: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
+          printf "\n ⚡ Universal SHA256: $(sha256sum ${UNIVERSAL_PACKAGE}) \n"
 
       - name: Upload Universal package
         uses: actions/upload-artifact@v4
