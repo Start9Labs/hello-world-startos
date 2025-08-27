@@ -11,10 +11,21 @@ on:
 
 jobs:
   BuildPackage:
-    runs-on: ubuntu-latest
+    name: Build S9PK for ${{ matrix.arch_display }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - arch_display: aarch64
+            runner: ubuntu-24.04-arm
+            arch: arm64
+          - arch_display: x86_64
+            runner: ubuntu-24.04
+            arch: amd64
+    
     steps:
       - name: Prepare StartOS SDK
-        uses: start9labs/sdk@v2
+        uses: k0gen/sdk@v3-optimization
 
       - name: Checkout services repository
         uses: actions/checkout@v4
@@ -25,14 +36,21 @@ jobs:
         id: build
         run: |
           start-cli init
-          RUST_LOG=debug RUST_BACKTRACE=1 make
-          PACKAGE_ID=$(start-cli s9pk inspect *.s9pk manifest | jq -r '.id')
+          RUST_LOG=debug RUST_BACKTRACE=1 make ${{ matrix.arch_display }}
+          
+          # Find the generated package (should already have arch in filename)
+          ARCH_PACKAGE=$(ls *_${{ matrix.arch_display }}.s9pk | head -n1)
+          PACKAGE_ID=$(start-cli s9pk inspect "$ARCH_PACKAGE" manifest | jq -r '.id')
+          
+          # Set environment variables for later steps
           echo "package_id=${PACKAGE_ID}" >> $GITHUB_ENV
-          printf "\n SHA256SUM: $(sha256sum ${PACKAGE_ID}.s9pk) \n"
+          echo "arch_package=${ARCH_PACKAGE}" >> $GITHUB_ENV
+          
+          printf "\n SHA256SUM: $(sha256sum ${ARCH_PACKAGE}) \n"
         shell: bash
 
       - name: Upload .s9pk
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.package_id }}.s9pk
-          path: ./${{ env.package_id }}.s9pk
+          name: ${{ env.arch_package }}
+          path: ./${{ env.arch_package }}
