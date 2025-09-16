@@ -16,7 +16,7 @@ For local builds, set up the build environment using the official
 ## Build and install
 
 ```sh
-git clone git@github.com:Start9Labs/hello-world-startos.git
+git clone https://github.com/Start9Labs/hello-world-startos.git
 cd hello-world-startos
 make
 make install
