@@ -1,3 +1,4 @@
+import { i18n } from './i18n'
 import { sdk } from './sdk'
 import { uiPort } from './utils'
 
@@ -7,7 +8,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
    *
    * In this section, we fetch any resources or run any desired preliminary commands.
    */
-  console.info('Starting Hello World!')
+  console.info(i18n('Starting Hello World!'))
 
   /**
    * ======================== Daemons ========================
@@ -30,11 +31,11 @@ export const main = sdk.setupMain(async ({ effects }) => {
     ),
     exec: { command: ['hello-world'] },
     ready: {
-      display: 'Web Interface',
+      display: i18n('Web Interface'),
       fn: () =>
         sdk.healthCheck.checkPortListening(effects, uiPort, {
-          successMessage: 'The web interface is ready',
-          errorMessage: 'The web interface is not ready',
+          successMessage: i18n('The web interface is ready'),
+          errorMessage: i18n('The web interface is not ready'),
         }),
     },
     requires: [],
