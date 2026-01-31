@@ -17,6 +17,7 @@ export const manifest = setupManifest({
   images: {
     'hello-world': {
       source: { dockerTag: 'ghcr.io/start9labs/hello-world:2.0.0' },
+      arch: ['x86_64', 'aarch64', 'riscv64'],
     },
   },
   alerts: {
