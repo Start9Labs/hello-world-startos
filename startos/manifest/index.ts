@@ -16,7 +16,7 @@ export const manifest = setupManifest({
   volumes: ['main'],
   images: {
     'hello-world': {
-      source: { dockerTag: 'start9/hello-world' },
+      source: { dockerTag: 'ghcr.io/start9labs/hello-world:2.0.0' },
     },
   },
   alerts: {
