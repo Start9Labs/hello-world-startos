@@ -1,4 +1,5 @@
 import { setupManifest } from '@start9labs/start-sdk'
+import { short, long } from './i18n'
 
 export const manifest = setupManifest({
   id: 'hello-world',
@@ -11,10 +12,7 @@ export const manifest = setupManifest({
   donationUrl: 'https://donate.start9.com/',
   docsUrl:
     'https://github.com/Start9Labs/hello-world-startos/blob/master/instructions.md',
-  description: {
-    short: 'Bare bones example of a StartOS service',
-    long: 'Hello World is a template service that provides examples of basic StartOS features.',
-  },
+  description: { short, long },
   volumes: ['main'],
   images: {
     'hello-world': {
