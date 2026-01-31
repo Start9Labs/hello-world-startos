@@ -1,4 +1,4 @@
-PACKAGE_ID := $(shell awk -F"'" '/id:/ {print $$2}' startos/manifest.ts)
+PACKAGE_ID := $(shell awk -F"'" '/id:/ {print $$2}' startos/manifest/index.ts)
 INGREDIENTS := $(shell start-cli s9pk list-ingredients 2>/dev/null)
 
 .PHONY: all aarch64 x86_64 riscv64 arm arm64 x86 riscv arch/* clean install check-deps check-init package ingredients
