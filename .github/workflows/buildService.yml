@@ -9,8 +9,13 @@ on:
     paths-ignore: ['*.md']
     branches: ['main', 'master', 'update/040']
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    if: github.event.pull_request.draft == false
     uses: start9labs/shared-workflows/.github/workflows/buildService.yml@master
     # with:
     #   FREE_DISK_SPACE: true
