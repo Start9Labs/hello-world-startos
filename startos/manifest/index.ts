@@ -10,8 +10,7 @@ export const manifest = setupManifest({
   supportSite: 'https://docs.start9.com/',
   marketingSite: 'https://start9.com/',
   donationUrl: 'https://donate.start9.com/',
-  docsUrl:
-    'https://github.com/Start9Labs/hello-world-startos/blob/master/instructions.md',
+  docsUrl: 'https://github.com/Start9Labs/hello-world/blob/master/README.md',
   description: { short, long },
   volumes: ['main'],
   images: {
