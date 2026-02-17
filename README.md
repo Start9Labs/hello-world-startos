@@ -8,6 +8,10 @@
 
 A minimal reference service for StartOS. It displays a simple web page — nothing more. Use [this repository](https://github.com/Start9Labs/hello-world-startos) as a template when packaging a new service for StartOS.
 
+## Getting Started
+
+To learn how to use this template to create your own StartOS service package, see the [Packaging Guide](https://docs.start9.com/packaging-guide).
+
 ---
 
 ## Container Runtime
