@@ -10,29 +10,29 @@ A minimal reference service for StartOS. It displays a simple web page — nothi
 
 ## Getting Started
 
-To learn how to use this template to create your own StartOS service package, see the [Packaging Guide](https://docs.start9.com/packaging-guide).
+To learn how to use this template to create your own StartOS service package, see the [Packaging Guide](https://docs.start9.com/packaging).
 
 ---
 
 ## Container Runtime
 
-| Property | Value |
-|----------|-------|
-| Image | `ghcr.io/start9labs/hello-world:2.0.0` |
-| Architectures | x86_64, aarch64, riscv64 |
-| Entrypoint | `hello-world` |
+| Property      | Value                                  |
+| ------------- | -------------------------------------- |
+| Image         | `ghcr.io/start9labs/hello-world:2.0.0` |
+| Architectures | x86_64, aarch64, riscv64               |
+| Entrypoint    | `hello-world`                          |
 
 ## Volumes
 
-| Volume | Mount Point | Purpose |
-|--------|-------------|---------|
-| `main` | `/data` | Persistent data |
+| Volume | Mount Point | Purpose         |
+| ------ | ----------- | --------------- |
+| `main` | `/data`     | Persistent data |
 
 ## Network Interfaces
 
-| Interface | Port | Protocol | Purpose |
-|-----------|------|----------|---------|
-| Web UI | 80 | HTTP | Hello World web page |
+| Interface | Port | Protocol | Purpose              |
+| --------- | ---- | -------- | -------------------- |
+| Web UI    | 80   | HTTP     | Hello World web page |
 
 ## Actions
 
@@ -48,8 +48,8 @@ The `main` volume is backed up.
 
 ## Health Checks
 
-| Check | Method | Messages |
-|-------|--------|----------|
+| Check         | Method              | Messages                            |
+| ------------- | ------------------- | ----------------------------------- |
 | Web Interface | Port listening (80) | Ready: "The web interface is ready" |
 
 ---
