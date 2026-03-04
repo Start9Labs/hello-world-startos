@@ -1,5 +1,5 @@
 import { setupManifest } from '@start9labs/start-sdk'
-import { short, long } from './i18n'
+import { long, short } from './i18n'
 
 export const manifest = setupManifest({
   id: 'hello-world',
