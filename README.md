@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon.png" alt="Hello World Logo" width="21%">
+  <img src="icon.svg" alt="Hello World Logo" width="21%">
 </p>
 
 # Hello World on StartOS
@@ -18,7 +18,7 @@ To learn how to use this template to create your own StartOS service package, se
 
 | Property      | Value                                  |
 | ------------- | -------------------------------------- |
-| Image         | `ghcr.io/start9labs/hello-world:2.0.0` |
+| Image         | `ghcr.io/start9labs/hello-world` |
 | Architectures | x86_64, aarch64, riscv64               |
 | Entrypoint    | `hello-world`                          |
 
@@ -64,8 +64,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions and development wo
 
 ```yaml
 package_id: hello-world
-upstream_version: 2.0.0
-image: ghcr.io/start9labs/hello-world:2.0.0
+image: ghcr.io/start9labs/hello-world
 architectures: [x86_64, aarch64, riscv64]
 volumes:
   main: /data
