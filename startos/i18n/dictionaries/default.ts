@@ -10,6 +10,10 @@ const dict = {
   // interfaces.ts
   'Web UI': 4,
   'The web interface of Hello World': 5,
+
+  // actions/sayHello.ts
+  'Say Hello': 6,
+  'A simple example action that greets the user': 7,
 } as const
 
 /**
