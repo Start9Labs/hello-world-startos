@@ -5,7 +5,7 @@ export const manifest = setupManifest({
   id: 'hello-world',
   title: 'Hello World',
   license: 'MIT',
-  packageRepo: 'https://github.com/Start9Labs/hello-world-startos/tree/update/040',
+  packageRepo: 'https://github.com/Start9Labs/hello-world-startos',
   upstreamRepo: 'https://github.com/Start9Labs/hello-world',
   marketingUrl: 'https://start9.com/',
   donationUrl: 'https://donate.start9.com/',
