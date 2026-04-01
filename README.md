@@ -14,43 +14,108 @@ To learn how to use this template to create your own StartOS service package, se
 
 ---
 
-## Container Runtime
+## Table of Contents
+
+- [Image and Container Runtime](#image-and-container-runtime)
+- [Volume and Data Layout](#volume-and-data-layout)
+- [Installation and First-Run Flow](#installation-and-first-run-flow)
+- [Configuration Management](#configuration-management)
+- [Network Access and Interfaces](#network-access-and-interfaces)
+- [Actions (StartOS UI)](#actions-startos-ui)
+- [Backups and Restore](#backups-and-restore)
+- [Health Checks](#health-checks)
+- [Dependencies](#dependencies)
+- [Limitations and Differences](#limitations-and-differences)
+- [What Is Unchanged from Upstream](#what-is-unchanged-from-upstream)
+- [Contributing](#contributing)
+- [Quick Reference for AI Consumers](#quick-reference-for-ai-consumers)
+
+---
+
+## Image and Container Runtime
 
 | Property      | Value                                  |
 | ------------- | -------------------------------------- |
-| Image         | `ghcr.io/start9labs/hello-world` |
+| Image         | `ghcr.io/start9labs/hello-world`       |
 | Architectures | x86_64, aarch64, riscv64               |
-| Entrypoint    | `hello-world`                          |
+| Command       | `hello-world`                          |
 
-## Volumes
+---
+
+## Volume and Data Layout
 
 | Volume | Mount Point | Purpose         |
 | ------ | ----------- | --------------- |
 | `main` | `/data`     | Persistent data |
 
-## Network Interfaces
+---
+
+## Installation and First-Run Flow
+
+No special setup. Install and start — the web page is immediately available.
+
+---
+
+## Configuration Management
+
+No configurable settings. The service runs with no user-facing configuration.
+
+---
+
+## Network Access and Interfaces
 
 | Interface | Port | Protocol | Purpose              |
 | --------- | ---- | -------- | -------------------- |
 | Web UI    | 80   | HTTP     | Hello World web page |
 
-## Actions
+**Access methods:**
+
+- LAN IP with unique port
+- `<hostname>.local` with unique port
+- Tor `.onion` address
+- Custom domains (if configured)
+
+---
+
+## Actions (StartOS UI)
 
 None.
+
+---
+
+## Backups and Restore
+
+**Included in backup:**
+
+- `main` volume
+
+**Restore behavior:** Volume is fully restored before the service starts.
+
+---
+
+## Health Checks
+
+| Check         | Method              | Messages                                                           |
+| ------------- | ------------------- | ------------------------------------------------------------------ |
+| Web Interface | Port listening (80) | Success: "The web interface is ready" / Error: "The web interface is not ready" |
+
+---
 
 ## Dependencies
 
 None.
 
-## Backups
+---
 
-The `main` volume is backed up.
+## Limitations and Differences
 
-## Health Checks
+1. **No meaningful functionality** — this is a reference/template package only
 
-| Check         | Method              | Messages                            |
-| ------------- | ------------------- | ----------------------------------- |
-| Web Interface | Port listening (80) | Ready: "The web interface is ready" |
+---
+
+## What Is Unchanged from Upstream
+
+The service is identical to upstream. There are no modifications.
 
 ---
 
@@ -71,9 +136,6 @@ volumes:
 ports:
   ui: 80
 dependencies: none
-actions: []
-health_checks:
-  - port_listening: 80
-backup_volumes:
-  - main
+startos_managed_env_vars: none
+actions: none
 ```
