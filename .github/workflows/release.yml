@@ -10,7 +10,7 @@ jobs:
     uses: start9labs/shared-workflows/.github/workflows/release.yml@master
     with:
       # FREE_DISK_SPACE: true
-      REGISTRY: ${{ vars.TEST_REGISTRY }}
+      RELEASE_REGISTRY: ${{ vars.RELEASE_REGISTRY }}
       S3_S9PKS_BASE_URL: ${{ vars.S3_S9PKS_BASE_URL }}
     secrets:
       DEV_KEY: ${{ secrets.DEV_KEY }}
