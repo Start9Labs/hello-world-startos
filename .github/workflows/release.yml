@@ -6,7 +6,20 @@ on:
       - 'v*.*'
 
 jobs:
+  guard:
+    runs-on: ubuntu-latest
+    outputs:
+      id: ${{ steps.read.outputs.id }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: read
+        run: |
+          id="$(awk -F"'" '/id:/ {print $2; exit}' startos/manifest/index.ts)"
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+
   release:
+    needs: guard
+    if: needs.guard.outputs.id != 'hello-world'
     uses: start9labs/shared-workflows/.github/workflows/release.yml@master
     with:
       # FREE_DISK_SPACE: true
