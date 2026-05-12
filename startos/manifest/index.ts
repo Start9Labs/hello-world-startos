@@ -9,7 +9,6 @@ export const manifest = setupManifest({
   upstreamRepo: 'https://github.com/Start9Labs/hello-world',
   marketingUrl: 'https://start9.com/',
   donationUrl: 'https://donate.start9.com/',
-  docsUrls: ['https://github.com/Start9Labs/hello-world/blob/master/README.md'],
   description: { short, long },
   volumes: ['main'],
   images: {

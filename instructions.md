@@ -1,44 +1,25 @@
 # Hello World
 
-Hello World is a minimal reference service for StartOS. It serves a single static web page and exists to demonstrate what a working StartOS package looks like end-to-end. If you're a user, this is the simplest service you can install — there's nothing to configure. If you're a developer, this package is the [recommended template](https://github.com/Start9Labs/hello-world-startos) for starting a new package.
+You've installed Hello World — there's nothing to configure and nothing to set up. This page covers how to open the page it serves and where to read more. (If you're a developer, Hello World is also the recommended packaging template.)
+
+## Documentation
+
+- [Hello World upstream docs](https://github.com/Start9Labs/hello-world/blob/master/README.md) — the README for the web server this package runs.
+- [StartOS Packaging Guide](https://docs.start9.com/packaging) — how to build a StartOS service package from that template.
 
 ## What you get on StartOS
 
-After install you have:
-
-- **A running web server** that serves a single page over HTTP/HTTPS.
-- **A web interface** reachable on your LAN, over Tor, and (optionally) over a public domain — the same networking options every StartOS service exposes.
-- **No configuration required.** The service starts and is immediately usable.
+- **A running web server** that serves a single static page.
+- **Nothing to configure and no actions** — the service starts on its own and is immediately usable.
 
 ## Getting set up
 
-1. Install Hello World from the marketplace.
-2. Open the service's **Dashboard** tab to see its status.
-3. Click the web interface link in the Dashboard to open the served page.
+There's no setup wizard, no admin password, no first-run prompt — Hello World is usable the moment it starts. To view the page it serves:
 
-That's it. There's no setup wizard, no admin password to set, no first-run prompt.
-
-## Using Hello World
-
-### Web interface
-
-The service exposes one HTTP interface on port 80, automatically wrapped in HTTPS by StartOS. From the **Dashboard** tab, click the interface link to open it. From the interface's own page you can:
-
-- Copy the URL to share or paste into another device.
-- Reveal a QR code for opening from a phone.
-- Choose between LAN, Tor, and any public domains you've added.
-
-### Actions
-
-Hello World ships with no actions — it has nothing for you to do beyond viewing the page.
+1. Open Hello World's **Dashboard** tab.
+2. Click the **Web UI** interface to open the served page in your browser.
 
 ## Limitations
 
 - Hello World is intentionally minimal. It is not a useful service on its own; it exists to demonstrate the StartOS packaging system.
 - The page content is static and cannot be customized through the StartOS UI.
-
-## Learn more
-
-- [Hello World source code](https://github.com/Start9Labs/hello-world-startos) — the StartOS package
-- [Upstream Hello World repo](https://github.com/Start9Labs/hello-world) — the underlying web server
-- [StartOS packaging guide](https://docs.start9.com/packaging) — to write your own service
