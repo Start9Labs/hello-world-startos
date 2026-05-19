@@ -29,6 +29,18 @@ Hello World runs the `ghcr.io/start9labs/hello-world` image. To track a new upst
 3. Rebuild (`make`), sideload the `.s9pk`, and confirm it starts.
 4. Review `README.md` and `instructions.md` for anything the bump changed.
 
+## GitHub Actions
+
+Three workflows live under `.github/workflows/`. All three are thin wrappers that call reusable workflows in [`start9labs/shared-workflows`](https://github.com/Start9Labs/shared-workflows); the local files just configure triggers, pass inputs, and forward secrets. `release.yml` and `tagAndRelease.yml` additionally carry a guard that skips publishing while `startos/manifest/index.ts` still has `id: 'hello-world'` — so this template never auto-publishes itself. When you fork it and rename the package, the guard naturally lets your package through.
+
+- **`build.yml` — PR validation.** Triggered by `pull_request` against `master` (non-draft, ignoring `*.md` changes) and `workflow_dispatch`. Builds the `.s9pk` and uploads each arch as its own 14-day artifact. Use it during development: open a PR, wait for the green check, download the artifact from the run's summary page to sideload and smoke-test before merging. Cancels in-progress runs on the same branch/PR when new commits land.
+
+- **`tagAndRelease.yml` — master → test registry.** Triggered by push to `master` (ignoring `*.md`). Reads `version` from the manifest, checks the configured `REFERENCE_REGISTRY` (production), and skips if that version is already published there. Otherwise it force-pushes a `v<version>` tag at the current commit and chains into the shared `release.yml`, which builds per arch and publishes to `RELEASE_REGISTRY` (the test registry — `alpha` for Start9-maintained packages). This is the normal path: bump `version`, merge to `master`, the test-registry release happens automatically.
+
+- **`release.yml` — tag → test registry.** Triggered by pushing a `v*.*` tag directly. Same downstream behavior as `tagAndRelease.yml`'s release step (build matrix → GitHub Release with manifest release notes + SHA256s → publish to `RELEASE_REGISTRY`, optionally via S3 if `S3_S9PKS_BASE_URL`/`S3_*_KEY` are configured), but without the production-registry version-check guard. Use it to re-cut a release at a specific commit, or to ship from a branch you haven't merged into `master`. For routine bumps, prefer letting `tagAndRelease.yml` do this for you.
+
+Promotion from the test registry (`alpha`) to `beta` and `prod` is a separate, manual step performed by maintainers — not part of these workflows.
+
 ## How to contribute
 
 1. Fork the repository and create a branch from `master`.
