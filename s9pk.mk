@@ -86,7 +86,7 @@ install: | check-deps check-init
 		echo "Error: No .s9pk file found. Run 'make' first."; \
 		exit 1; \
 	fi; \
-	S9PK=$$(start-cli s9pk select *.s9pk) || exit 1; \
+	S9PK=$$(start-cli s9pk select) || exit 1; \
 	printf "\n🚀 Installing %s to %s ...\n" "$$S9PK" "$$HOST"; \
 	start-cli package install -s "$$S9PK"
 
