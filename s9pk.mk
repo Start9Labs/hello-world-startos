@@ -82,11 +82,11 @@ install: | check-deps check-init
 		echo "Error: You must define \"host: http://server-name.local\" in ~/.startos/config.yaml"; \
 		exit 1; \
 	fi; \
-	S9PK=$$(ls -t *.s9pk 2>/dev/null | head -1); \
-	if [ -z "$$S9PK" ]; then \
+	if [ -z "$$(ls *.s9pk 2>/dev/null)" ]; then \
 		echo "Error: No .s9pk file found. Run 'make' first."; \
 		exit 1; \
 	fi; \
+	S9PK=$$(start-cli s9pk select *.s9pk) || exit 1; \
 	printf "\n🚀 Installing %s to %s ...\n" "$$S9PK" "$$HOST"; \
 	start-cli package install -s "$$S9PK"
 
