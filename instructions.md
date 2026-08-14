@@ -1,6 +1,6 @@
 # Hello World
 
-You've installed Hello World — there's nothing to configure and nothing to set up. This page covers how to open the page it serves and where to read more. (If you're a developer, Hello World is also the recommended packaging template.)
+You've installed Hello World — there's nothing to configure and nothing to set up. This page covers how to open the page it serves and where to read more. (If you're a developer, Hello World is also the reference example for packaging.)
 
 ## Documentation
 
