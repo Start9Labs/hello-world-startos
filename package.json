@@ -6,7 +6,7 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "@start9labs/start-sdk": "2.0.6"
+    "@start9labs/start-sdk": "2.0.9"
   },
   "devDependencies": {
     "@types/node": "^22.19.0",
@@ -19,5 +19,8 @@
     "tabWidth": 2,
     "semi": false,
     "singleQuote": true
+  },
+  "overrides": {
+    "@start9labs/start-sdk": "$@start9labs/start-sdk"
   }
 }

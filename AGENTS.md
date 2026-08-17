@@ -6,12 +6,10 @@ Develop it inside a StartOS packaging workspace created by `start-cli s9pk init-
 which provides the packaging guide and agent context one level up. If you're reading this in a
 bare clone with no workspace, the full guide is at <https://docs.start9.com/packaging>.
 
-Work this package's `TODO.md` from top to bottom. Keep `README.md` (architecture, for developers and LLMs) and `instructions.md` (end-user docs) in sync with your changes.
+Work this package's `TODO.md` from top to bottom. Keep `README.md` (technical reference for an AI support or administering agent) and `instructions.md` (end-user docs) in sync with your changes.
 
 ## This repo
 
-- **Package id is `hello-world`.** Minimal reference/template service — a single web UI on port 80, one `main` volume, no dependencies and no actions. Use it as the starting point when packaging a new service.
-
-## Inspecting a running install
-
-To run a command inside the service's container (read its generated config, grep app logs), use `start-cli package attach hello-world -n hello-world-sub -- <cmd>`. Select the subcontainer by **name** with `-n` (the name passed to `SubContainer.of` in `main.ts` — here `hello-world-sub`) or by image with `-i`. Note: `-s/--subcontainer` matches the internal **Guid**, not the name, so passing a name to `-s` fails with "no matching subcontainers".
+- **This package is a reference and a smoke test, so keep it minimal.** Its value is being the simplest thing that installs, starts, publishes an address, and backs up — resist adding actions, config, or state to demonstrate a feature. Demonstrate those in the packaging guide instead.
+- **riscv64 is declared here and almost nowhere else.** That is deliberate: this is what gets installed first on a new StartOS platform to prove the packaging runtime works there. Don't drop it to match the rest of the fleet.
+- **The `main` volume is mounted but unused**, so the volume and backup paths are exercised. Don't remove it, and don't invent a store for it.
