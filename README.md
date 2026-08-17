@@ -9,9 +9,10 @@
 > upstream documentation is accurate and fully applicable — see the
 > Documentation section of `instructions.md` for links.
 
-A minimal reference service for StartOS. It serves a single static web page and does nothing else, which makes it the smallest complete package to read end to end. To start a package of your own, scaffold it with `start-cli s9pk init-package` and follow the [Packaging Guide](https://docs.start9.com/packaging) — don't copy this repository.
+[Hello World](https://github.com/Start9Labs/hello-world) is Start9's demonstration service: a single page that proves a package installs, starts, publishes an address, and can be backed up. It exists to be the simplest possible working example of a StartOS package, and this repository is the reference a new package is measured against.
 
 - **Upstream repo:** <https://github.com/Start9Labs/hello-world>
+- **Wrapper repo:** <https://github.com/Start9Labs/hello-world-startos>
 
 ---
 
@@ -24,6 +25,7 @@ A minimal reference service for StartOS. It serves a single static web page and 
 - [Network Access and Interfaces](#network-access-and-interfaces)
 - [Installation and First-Run Flow](#installation-and-first-run-flow)
 - [Actions](#actions)
+- [Tasks](#tasks)
 - [Health Checks](#health-checks)
 - [Backups and Restore](#backups-and-restore)
 - [Limitations and Differences](#limitations-and-differences)
@@ -33,26 +35,33 @@ A minimal reference service for StartOS. It serves a single static web page and 
 
 ## Image and Container Runtime
 
-The upstream image is used unmodified. One subcontainer runs the whole service.
+One image, and it is the only package here built for every architecture StartOS supports.
 
-| Property      | Value                                                                |
-| ------------- | -------------------------------------------------------------------- |
-| Image         | `ghcr.io/start9labs/hello-world`                                     |
-| Architectures | x86_64, aarch64, riscv64                                             |
-| Command       | `hello-world`                                                        |
-| Subcontainer  | `hello-world-sub` — the `primary` daemon, and the one to `attach` to |
+| Property      | Value                            |
+| ------------- | -------------------------------- |
+| Image         | `ghcr.io/start9labs/hello-world` |
+| Architectures | x86_64, aarch64, **riscv64**     |
+| Command       | `hello-world`                    |
+
+| Subcontainer      | Purpose                                       |
+| ----------------- | --------------------------------------------- |
+| `hello-world-sub` | The `primary` daemon — the one to `attach` to |
+
+riscv64 is included because this package doubles as the smoke test for a new StartOS platform: if Hello World installs and starts, the packaging runtime works there.
 
 ## Volume and Data Layout
 
-One volume, which the web server does not currently write to — it exists so the package demonstrates the shape a real service needs.
+One volume, and effectively nothing in it.
 
-| Volume | Mount Point | Purpose                    |
-| ------ | ----------- | -------------------------- |
-| `main` | `/data`     | Service data (unused here) |
+| Volume | Mount Point | Purpose                             |
+| ------ | ----------- | ----------------------------------- |
+| `main` | `/data`     | Mounted, but the app writes nothing |
+
+The volume is here to demonstrate the shape a package takes, not because there is state to keep.
 
 ## File Models
 
-None. The service takes no configuration, so the package writes no config file and keeps no `store.json` — there is nothing on disk to inspect or correct.
+None. There is no configuration file and nothing for the package to write.
 
 ## Dependencies
 
@@ -60,39 +69,47 @@ None.
 
 ## Network Access and Interfaces
 
-One interface, serving the static page. Nothing is exported for dependent services.
+One interface, serving the page.
 
-| Interface | Id   | Type | Port | Description               |
-| --------- | ---- | ---- | ---- | ------------------------- |
-| Web UI    | `ui` | ui   | 80   | The static page it serves |
+| Interface | Id   | Type | Port | Description                      |
+| --------- | ---- | ---- | ---- | -------------------------------- |
+| Web UI    | `ui` | ui   | 80   | The web interface of Hello World |
 
 The port is bound on the `ui-multi` MultiHost and is not masked.
 
 ## Installation and First-Run Flow
 
-Nothing differs from a plain start. There is no setup wizard to skip, no credential to generate, and no task raised on install — the service is usable as soon as it is running.
+Nothing to configure and nothing to reveal. Install it, start it, open the address, and you should see the page. There is no task, no account, and no credential.
+
+**That is the whole test.** If the page loads, StartOS installed a package, started its daemon, published an address, and routed a request to it.
 
 ## Actions
 
 None.
 
+## Tasks
+
+None. This package raises no tasks, so the service is never held on a prompt and its ordinary controls are always available.
+
 ## Health Checks
 
-One check, on the primary daemon.
+One check, on the only daemon.
 
-| Check                     | Method               | Grace Period |
-| ------------------------- | -------------------- | ------------ |
-| `primary` "Web Interface" | Port 80 is listening | SDK default  |
+| Check     | Displayed       | Method               |
+| --------- | --------------- | -------------------- |
+| `primary` | "Web Interface" | Port 80 is listening |
 
-It confirms the port is open, not that the page renders. For a static server the two are equivalent in practice; a real service should probe an endpoint that only answers once the application is actually serving.
+A failure means the container did not start, which on a working StartOS should not happen — the service logs will say why.
 
 ## Backups and Restore
 
-The `main` volume is copied wholesale — `sdk.Backups.ofVolumes('main')`. No dump step and nothing excluded. Since the service stores no state, a restore is indistinguishable from a fresh install.
+The `main` volume is copied wholesale — `sdk.Backups.ofVolumes('main')`. In practice **the backup is empty**, because the app writes nothing. It is here so the backup and restore paths are exercised, not because there is anything to lose.
 
 ## Limitations and Differences
 
-1. **It does nothing.** Hello World serves one static page. It has no configuration, no accounts, and no data — by design, as the smallest complete example of a StartOS package.
+1. **It does nothing.** That is the point — it is a demonstration and a smoke test, not a useful service.
+2. **No configuration, no actions, no state.**
+3. **The volume is mounted but unused.**
 
 ---
 
@@ -106,9 +123,9 @@ architectures:
   - aarch64
   - riscv64
 subcontainers:
-  - hello-world-sub
+  - hello-world-sub # the only container
 volumes:
-  main: /data
+  main: /data # mounted but unused
 file_models: []
 startos_managed_env_vars: []
 dependencies: []
@@ -117,5 +134,5 @@ interfaces:
 actions: []
 tasks: []
 health_checks:
-  - primary # the daemon's ready check, displayed "Web Interface"
+  - primary # displayed "Web Interface"
 ```
