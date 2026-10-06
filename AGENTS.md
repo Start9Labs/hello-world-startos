@@ -18,14 +18,22 @@ Freshly scaffolded? Work the
 guide page, not a file in this repo — read it, don't copy it in.
 
 Keep `README.md` (technical reference for an AI support or administering agent) and
-`instructions.md` (end-user docs) in sync with your changes.
+`instructions.md` (end-user docs) in sync with your changes. This file restates neither:
+whoever changes the package has both, so it carries only what they don't — repo mechanics,
+a change that looks right and is not, where the next thing gets added, a naming trap, a
+build or test invocation particular to this repo.
 
-**Bugs and feature requests are GitHub issues on this repo** — file them as you find them.
+**Fix a defect you spot rather than reporting it** — you have the package open and the
+context to be sure. File **a GitHub issue on this repo** only when the call isn't yours to
+make: you can't pin the cause down, two defensible fixes exist, or it's too large to ride on
+the work in hand. An open issue is a report, not a queue — implement one when you're asked
+to or when it's labelled `Approved`, then close it with `Closes #<n>`.
+
 Don't record work in the repo instead: no `TODO.md`, no `NOTES.md`, no `PLAN.md`. What you
 verified, tried, and decided belongs in the commit message and the PR body.
 
 ## This repo
 
-- **This package is a reference and a smoke test, so keep it minimal.** Its value is being the simplest thing that installs, starts, publishes an address, and backs up — resist adding actions, config, or state to demonstrate a feature. Demonstrate those in the packaging guide instead.
-- **riscv64 is declared here and almost nowhere else.** That is deliberate: this is what gets installed first on a new StartOS platform to prove the packaging runtime works there. Don't drop it to match the rest of the fleet.
-- **The `main` volume is mounted but unused**, so the volume and backup paths are exercised. Don't remove it, and don't invent a store for it.
+- **Keep it minimal** — no actions, config, or state added to demonstrate a feature; demonstrate those in the packaging guide.
+- **Don't drop riscv64 to match the fleet** — this package is what proves the packaging runtime on a new StartOS platform.
+- **Don't remove the unused `main` volume or invent a store for it** — it is there so the volume and backup paths are exercised.
