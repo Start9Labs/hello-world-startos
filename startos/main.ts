@@ -6,16 +6,16 @@ export const main = sdk.setupMain(async ({ effects }) => {
   /**
    * ======================== Setup (optional) ========================
    *
-   * In this section, we fetch any resources or run any desired preliminary commands.
+   * Fetch any resources or run any preliminary commands here.
    */
   console.info(i18n('Starting Hello World!'))
 
   /**
    * ======================== Daemons ========================
    *
-   * In this section, we create one or more daemons that define the service runtime.
-   *
-   * Each daemon defines its own health check, which can optionally be exposed to the user.
+   * Define one or more daemons that make up the service runtime. Each daemon
+   * declares a `ready` health check, run on every polling interval, that reports
+   * its state to the user.
    */
   return sdk.Daemons.of(effects).addDaemon('primary', {
     subcontainer: sdk.SubContainer.of(
